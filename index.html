@@ -11,27 +11,32 @@
 :root{
   --blue:#2563eb;--blue-lt:#eff6ff;--blue-bd:#bfdbfe;
   --red:#dc2626;--red-lt:#fff8f8;--red-bd:#fecaca;
-  --amber:#d97706;--green:#16a34a;
   --g50:#f8fafc;--g100:#f1f5f9;--g200:#e2e8f0;
   --g400:#94a3b8;--g600:#475569;--g800:#1e293b;
   --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:var(--font);height:100vh;display:flex;flex-direction:column;overflow:hidden;background:#f0f4f8}
+body{font-family:var(--font);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 a{color:var(--blue);text-decoration:none}
 a:hover{text-decoration:underline}
-header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.2);z-index:1000}
+
+/* HEADER */
+header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.25);z-index:1000}
 .hdr-title{font-size:16px;font-weight:700;line-height:1}
-.hdr-sub{font-size:10.5px;opacity:.8;margin-top:1px}
-.hdr-right{margin-left:auto;display:flex;align-items:center;gap:14px}
-.weather-widget{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);padding:5px 10px;border-radius:6px;font-size:11px;min-width:180px}
-.weather-label{opacity:.8;font-size:9.5px;white-space:nowrap}
+.hdr-sub{font-size:10px;opacity:.8;margin-top:2px}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:12px}
+.weather-widget{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.15);padding:5px 11px;border-radius:6px;font-size:11px}
+.weather-label{opacity:.75;font-size:9.5px;white-space:nowrap}
 .weather-precip{font-weight:700;font-size:14px}
-.weather-alert{background:#dc2626;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;animation:pulse 2s infinite;white-space:nowrap}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-.news-status{font-size:10px;opacity:.75;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.rain-alert{background:#dc2626;color:#fff;font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.55}}
+.status-row{font-size:10px;opacity:.75;display:flex;align-items:center;gap:5px;white-space:nowrap}
 .sdot{width:6px;height:6px;border-radius:50%;background:#94a3b8;flex-shrink:0}
+
+/* LAYOUT */
 .layout{display:flex;flex:1;overflow:hidden}
+
+/* SIDEBAR */
 .sidebar{width:320px;background:#fff;border-right:1px solid var(--g200);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;z-index:500}
 .tabs{display:grid;grid-template-columns:repeat(5,1fr);border-bottom:2px solid var(--g200);flex-shrink:0}
 .tab{padding:7px 2px;text-align:center;font-size:9.5px;font-weight:600;color:var(--g400);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;line-height:1.3}
@@ -40,35 +45,74 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 .tab-panel{display:none;flex-direction:column;flex:1;overflow:hidden}
 .tab-panel.active{display:flex}
 .scroll{flex:1;overflow-y:auto;padding:12px}
-.fi-card{background:linear-gradient(135deg,var(--blue-lt),#dbeafe);border:1px solid var(--blue-bd);border-radius:8px;padding:11px;margin-bottom:11px}
+
+/* Flood index panel */
+.fi-card{background:linear-gradient(135deg,var(--blue-lt),#dbeafe);border:1px solid var(--blue-bd);border-radius:8px;padding:11px;margin-bottom:10px}
 .fi-card h3{font-size:13px;font-weight:700;color:#1e3a8a;margin-bottom:4px}
 .fi-card p{font-size:11px;color:#3730a3;line-height:1.5}
-.ws-list{display:flex;flex-direction:column;gap:4px}
-.ws-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:7px;cursor:pointer;border:1px solid var(--g200);background:#fff;transition:all .15s}
-.ws-item:hover{background:var(--blue-lt);border-color:#93c5fd}
-.ws-item.selected{background:var(--blue-lt);border-color:var(--blue)}
-.ws-badge{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;color:#fff;flex-shrink:0}
-.ws-info{flex:1;min-width:0}
-.ws-name{font-size:11px;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ws-sub{font-size:9.5px;color:var(--g400);margin-top:1px}
-.ws-num{font-size:15px;font-weight:800;width:20px;text-align:right}
-.detail-panel{border-top:1px solid var(--g200);padding:10px;flex-shrink:0;min-height:95px;max-height:250px;overflow-y:auto;background:var(--g50)}
-.dh{font-size:11px;color:var(--g400);text-align:center;padding:16px 8px;line-height:1.6}
-.detail-name{font-size:12.5px;font-weight:700;color:var(--g800);margin-bottom:6px;display:flex;align-items:center;flex-wrap:wrap;gap:4px}
-.dg{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px}
+.fi-card code{font-family:var(--mono);font-size:10px;background:#dbeafe;padding:1px 4px;border-radius:3px}
+
+/* Search */
+.search-wrap{position:relative;margin-bottom:10px}
+.search-input{width:100%;padding:7px 10px 7px 30px;border:1px solid var(--g200);border-radius:6px;font-size:11px;font-family:var(--font);color:var(--g800);outline:none;transition:border .15s}
+.search-input:focus{border-color:var(--blue)}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--g400);font-size:12px}
+
+/* Category filter */
+.cat-filter{display:flex;gap:4px;margin-bottom:10px}
+.cat-btn{flex:1;padding:5px 4px;border:1px solid var(--g200);border-radius:5px;font-size:10px;font-weight:600;cursor:pointer;font-family:var(--font);background:#fff;color:var(--g600);transition:all .15s;text-align:center}
+.cat-btn.active-high{background:#fef2f2;border-color:#dc2626;color:#dc2626}
+.cat-btn.active-mod{background:#fffbeb;border-color:#d97706;color:#d97706}
+.cat-btn.active-low{background:#f0fdf4;border-color:#16a34a;color:#16a34a}
+.cat-btn.active-all{background:var(--blue-lt);border-color:var(--blue);color:var(--blue)}
+
+/* Neighborhood list */
+.nbh-list{display:flex;flex-direction:column;gap:3px}
+.nbh-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border-radius:7px;cursor:pointer;border:1px solid var(--g200);background:#fff;transition:all .15s}
+.nbh-item:hover{background:var(--blue-lt);border-color:#93c5fd}
+.nbh-item.selected{background:var(--blue-lt);border-color:var(--blue)}
+.nbh-score-badge{width:36px;height:36px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:#fff;flex-shrink:0;font-family:var(--mono)}
+.nbh-info{flex:1;min-width:0}
+.nbh-name{font-size:11px;font-weight:600;color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nbh-sub{font-size:9px;color:var(--g400);margin-top:1px}
+.nbh-bar-wrap{width:40px;flex-shrink:0}
+.nbh-bar-bg{height:4px;background:var(--g200);border-radius:2px;overflow:hidden}
+.nbh-bar-fill{height:100%;border-radius:2px}
+
+/* Detail panel */
+.detail-panel{border-top:1px solid var(--g200);padding:10px;flex-shrink:0;min-height:100px;max-height:280px;overflow-y:auto;background:var(--g50)}
+.dh{font-size:11px;color:var(--g400);text-align:center;padding:18px 8px;line-height:1.6}
+.detail-name{font-size:13px;font-weight:700;color:var(--g800);margin-bottom:6px;display:flex;align-items:center;flex-wrap:wrap;gap:5px}
+.cat-tag{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;color:#fff}
+.dg2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-bottom:7px}
+.dg2-wide{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:7px}
 .dc{background:#fff;border:1px solid var(--g200);border-radius:5px;padding:6px}
-.dc-v{font-size:14px;font-weight:700;color:var(--g800)}
-.dc-l{font-size:9px;color:var(--g400);text-transform:uppercase;letter-spacing:.4px;margin-top:1px}
-.score-row{display:flex;align-items:center;gap:5px;margin-bottom:4px;font-size:10px}
-.score-lbl{width:110px;color:var(--g600);flex-shrink:0}
+.dc-v{font-size:13px;font-weight:700;color:var(--g800);font-family:var(--mono)}
+.dc-l{font-size:9px;color:var(--g400);text-transform:uppercase;letter-spacing:.3px;margin-top:1px}
+.formula-box{background:#fff;border:1px solid var(--g200);border-radius:6px;padding:8px;margin-bottom:7px;font-family:var(--mono);font-size:10px;color:var(--g600);line-height:1.8}
+.formula-box b{color:var(--g800)}
+.score-row{display:flex;align-items:center;gap:5px;margin-bottom:3px;font-size:10px}
+.score-lbl{width:95px;color:var(--g600);flex-shrink:0}
 .score-bg{flex:1;height:5px;background:var(--g200);border-radius:3px;overflow:hidden}
 .score-fill{height:100%;border-radius:3px}
-.score-pct{width:28px;text-align:right;font-weight:600;color:var(--g800);font-size:9.5px}
-.detail-note{font-size:10.5px;color:var(--g600);line-height:1.55;margin-top:5px}
-.precip-banner{background:linear-gradient(90deg,#7f1d1d,#dc2626);color:#fff;padding:7px 12px;font-size:11px;font-weight:600;border-radius:6px;margin-bottom:8px;display:none}
+.score-val{width:34px;text-align:right;font-weight:600;color:var(--g800);font-size:9.5px;font-family:var(--mono)}
+.fema-box{background:#fffbeb;border:1px solid #fde68a;border-radius:5px;padding:7px;margin-top:6px;font-size:10.5px;line-height:1.5}
+.penalty-badge{display:inline-block;background:#fef2f2;border:1px solid #fecaca;border-radius:5px;padding:3px 8px;font-size:10px;color:#dc2626;font-weight:600;margin-top:4px}
+.rain-mod-box{background:#fef2f2;border:1px solid #fecaca;border-radius:5px;padding:5px 8px;margin-top:5px;font-size:10px;color:#dc2626;font-weight:600}
+
+/* PCA reference box */
+.pca-box{background:var(--g50);border:1px solid var(--g200);border-radius:6px;padding:8px;margin-bottom:10px}
+.pca-box h4{font-size:11px;font-weight:700;color:var(--g800);margin-bottom:5px}
+.pca-row{display:flex;justify-content:space-between;font-size:10.5px;padding:2px 0;border-bottom:1px solid var(--g100);color:var(--g600)}
+.pca-row:last-child{border-bottom:none}
+.pca-row b{color:var(--g800);font-family:var(--mono)}
+
+/* Precip banner */
+.precip-banner{background:linear-gradient(90deg,#7f1d1d,#dc2626);color:#fff;padding:7px 12px;font-size:11px;font-weight:600;border-radius:6px;margin-bottom:9px;display:none}
+
+/* News */
 .news-toolbar{display:flex;align-items:center;justify-content:space-between;padding:7px 11px;border-bottom:1px solid var(--g200);font-size:10.5px;color:var(--g400);flex-shrink:0}
-.refresh-btn{background:var(--blue);color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:600;cursor:pointer;font-family:var(--font);transition:opacity .15s}
-.refresh-btn:hover{opacity:.85}
+.refresh-btn{background:var(--blue);color:#fff;border:none;border-radius:5px;padding:4px 9px;font-size:10px;font-weight:600;cursor:pointer;font-family:var(--font)}
 .refresh-btn:disabled{opacity:.5;cursor:not-allowed}
 .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--g200);border-top-color:var(--blue);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -87,6 +131,8 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 .news-full-text{font-size:11px;color:var(--g600);line-height:1.7;margin:9px 0 9px}
 .news-read-link{display:inline-block;font-size:11px;font-weight:600;color:var(--blue);padding:5px 11px;border:1px solid var(--blue-bd);border-radius:6px;background:var(--blue-lt)}
 .news-read-link:hover{background:var(--blue);color:#fff;text-decoration:none}
+
+/* Sewers */
 .sewer-card{background:#fff;border:1px solid var(--g200);border-radius:8px;padding:11px;margin-bottom:8px}
 .sewer-card h3{font-size:12px;font-weight:700;color:var(--g800);margin-bottom:5px}
 .sewer-card p{font-size:11px;color:var(--g600);line-height:1.55;margin-bottom:5px}
@@ -95,7 +141,9 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 .fac-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.1)}
 .fac-name{font-size:11px;font-weight:600;margin-bottom:2px}
 .fac-desc{font-size:10.5px;color:var(--g400);line-height:1.45;margin-bottom:3px}
-.eq-formula{background:var(--blue-lt);border:1px solid var(--blue-bd);border-radius:8px;padding:12px;margin-bottom:10px;font-family:var(--mono);font-size:11px;color:#1e3a8a;line-height:2.1}
+
+/* Equation */
+.eq-formula{background:var(--blue-lt);border:1px solid var(--blue-bd);border-radius:8px;padding:13px;margin-bottom:10px;font-family:var(--mono);font-size:11.5px;color:#1e3a8a;line-height:2.3}
 .eq-card{background:#fff;border:1px solid var(--g200);border-radius:7px;padding:10px;margin-bottom:6px}
 .eq-card h4{font-size:11px;font-weight:700;color:#374151;margin-bottom:3px}
 .eq-card p{font-size:10.5px;color:var(--g600);line-height:1.5}
@@ -103,6 +151,8 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 .paper-card h5{font-size:11px;font-weight:600;color:var(--g800);margin-bottom:3px}
 .paper-card p{font-size:10px;color:var(--g600);line-height:1.45}
 .paper-card a{font-size:10px}
+
+/* Layers */
 .layer-sec{font-size:9.5px;font-weight:700;color:#374151;letter-spacing:.5px;text-transform:uppercase;margin:10px 0 5px;padding-left:4px}
 .layer-row{display:flex;align-items:center;gap:8px;padding:5px 7px;border-radius:6px;cursor:pointer;transition:background .1s}
 .layer-row:hover{background:var(--g50)}
@@ -110,6 +160,8 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 .lchk.on{background:var(--blue);border-color:var(--blue)}
 .layer-lbl{font-size:11px;font-weight:500;color:#374151}
 .layer-note{margin-top:10px;padding:9px;background:var(--g50);border-radius:6px;font-size:10px;color:var(--g600);line-height:1.7}
+
+/* MAP */
 .map-area{flex:1;position:relative}
 #map{width:100%;height:100%}
 .map-toolbar{position:absolute;top:10px;left:10px;display:flex;gap:5px;z-index:400}
@@ -119,33 +171,33 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 .zbtn:hover{background:var(--g50)}
 .zoom-ctrl{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:3px;z-index:400}
 .leaflet-control-zoom{display:none}
-.map-legend{position:absolute;bottom:14px;right:10px;background:rgba(255,255,255,.97);border:1px solid var(--g200);border-radius:8px;padding:9px 12px;z-index:400;box-shadow:0 2px 8px rgba(0,0,0,.12);min-width:145px}
+
+/* LEGEND */
+.map-legend{position:absolute;bottom:14px;right:10px;background:rgba(255,255,255,.97);border:1px solid var(--g200);border-radius:8px;padding:10px 12px;z-index:400;box-shadow:0 2px 8px rgba(0,0,0,.12);min-width:152px}
 .leg-title{font-size:11px;font-weight:700;color:var(--g800);margin-bottom:5px}
 .leg-sec{margin-bottom:6px}
-.leg-sec-ttl{font-size:8.5px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
-.leg-row{display:flex;align-items:center;gap:5px;margin-bottom:2px}
-.leg-c{border-radius:50%;flex-shrink:0}
+.leg-sec-ttl{font-size:8.5px;font-weight:600;color:var(--g400);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.leg-row{display:flex;align-items:center;gap:6px;margin-bottom:2px}
+.leg-c{border-radius:4px;flex-shrink:0}
 .leg-l{border-radius:2px;flex-shrink:0}
 .leg-s{border-radius:2px;border:2px dashed;flex-shrink:0}
 .leg-lbl{font-size:10px;color:#374151}
+
+/* POPUP */
 .leaflet-popup-content-wrapper{border-radius:9px!important;box-shadow:0 4px 24px rgba(0,0,0,.15)!important;font-family:var(--font)!important;padding:0!important;border:1px solid var(--g200)!important}
 .leaflet-popup-content{margin:0!important;width:auto!important}
 .leaflet-popup-close-button{top:8px!important;right:10px!important;font-size:18px!important;color:var(--g400)!important}
-.pbox{padding:12px 14px;min-width:200px;max-width:280px}
+.pbox{padding:12px 14px;min-width:210px;max-width:290px}
 .pbox-title{font-size:13px;font-weight:700;color:var(--g800);margin-bottom:6px;padding-right:16px;line-height:1.3}
 .pbox-row{display:flex;justify-content:space-between;font-size:11px;padding:2px 0;color:var(--g400);gap:10px}
-.pbox-row b{color:var(--g800)}
+.pbox-row b{color:var(--g800);font-family:var(--mono)}
 .pbox-note{font-size:10.5px;color:var(--g600);line-height:1.55;margin-top:6px;border-top:1px solid var(--g100);padding-top:6px}
-.pbox-bars{margin:7px 0 3px}
-.pbox-bar-row{display:flex;align-items:center;gap:5px;margin-bottom:3px;font-size:10px}
-.pbox-bar-lbl{width:75px;color:var(--g400);flex-shrink:0}
-.pbox-bar-bg{flex:1;height:5px;background:var(--g200);border-radius:3px;overflow:hidden}
-.pbox-bar-fill{height:100%;border-radius:3px}
-.pbox-bar-val{width:28px;text-align:right;font-weight:600;color:var(--g800);font-size:9.5px}
-.pbox-badge{display:inline-block;padding:2px 7px;border-radius:7px;font-size:9.5px;font-weight:700;margin-top:5px}
+.pbox-formula{font-family:var(--mono);font-size:10px;color:var(--g600);background:var(--g50);border-radius:5px;padding:6px 8px;margin-top:6px;line-height:1.8}
+.pbox-formula b{color:var(--g800)}
 .pbox-link{display:inline-block;font-size:10.5px;font-weight:600;color:var(--blue);margin-top:6px;padding:5px 10px;border:1px solid var(--blue-bd);border-radius:6px;background:var(--blue-lt)}
 .pbox-link:hover{background:var(--blue);color:#fff;text-decoration:none}
-.precip-alert-box{background:#fef2f2;border:1px solid #fecaca;border-radius:6px;padding:7px 9px;margin-top:7px;font-size:10.5px;color:#dc2626;font-weight:600}
+.pbox-badge{display:inline-block;padding:2px 8px;border-radius:8px;font-size:9.5px;font-weight:700;margin:4px 2px 0 0;color:#fff}
+
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--g200);border-radius:2px}
@@ -155,17 +207,17 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
 <header>
   <div>
     <div class="hdr-title">Atlanta FloodXPlain</div>
-    <div class="hdr-sub">Flood risk and stormwater infrastructure — City of Atlanta shapefile data</div>
+    <div class="hdr-sub">Flood risk index — PCA formula by Aarushi Wagh &middot; COA stormwater shapefile data</div>
   </div>
   <div class="hdr-right">
-    <div class="weather-widget" id="weather-widget">
+    <div class="weather-widget">
       <div>
-        <div class="weather-label">NWS KATL — Precip last hour</div>
+        <div class="weather-label">NWS KATL &mdash; Precip last hour</div>
         <div class="weather-precip" id="precip-display">Loading...</div>
       </div>
-      <div id="precip-alert-badge" style="display:none" class="weather-alert">HIGH RAIN</div>
+      <div id="precip-alert-badge" style="display:none" class="rain-alert">HIGH RAIN</div>
     </div>
-    <div class="news-status">
+    <div class="status-row">
       <div class="sdot" id="status-dot"></div>
       <span id="status-text">Loading...</span>
     </div>
@@ -178,7 +230,7 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
     <div class="tab active" onclick="switchTab('flood')">Flood<br>Index</div>
     <div class="tab" onclick="switchTab('news')">News<br>Reports</div>
     <div class="tab" onclick="switchTab('sewers')">Sewer<br>Systems</div>
-    <div class="tab" onclick="switchTab('equation')">Risk<br>Score</div>
+    <div class="tab" onclick="switchTab('equation')">Formula &amp;<br>Papers</div>
     <div class="tab" onclick="switchTab('layers')">Layers</div>
   </div>
 
@@ -187,13 +239,25 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
     <div class="scroll">
       <div class="precip-banner" id="precip-banner"></div>
       <div class="fi-card">
-        <h3>Neighborhood Flood Index</h3>
-        <p>Ranks Atlanta watersheds 1–10. Score combines FEMA zone overlap (30%), impervious surface (20%), historic flood events (20%), combined sewer presence (15%), and elevation (15%). Adjusts live when NWS shows current rainfall.</p>
+        <h3>Neighborhood Flood Risk Index</h3>
+        <p>PCA-derived formula: <code>0.363&#183;I + 0.359&#183;D&#x209B;&#x1D422;&#x1D42C;&#x1D424; + 0.279&#183;E</code><br>
+        Categories: Low &lt; 0.33 &middot; Moderate &lt; 0.66 &middot; High &ge; 0.66<br>
+        Scores increase live when NWS shows rain in CSO areas.</p>
       </div>
-      <div class="ws-list" id="ws-list"></div>
+      <div class="cat-filter">
+        <button class="cat-btn active-all" id="filt-all"  onclick="setFilter('all')">All</button>
+        <button class="cat-btn" id="filt-high" onclick="setFilter('High')">High</button>
+        <button class="cat-btn" id="filt-mod"  onclick="setFilter('Moderate')">Moderate</button>
+        <button class="cat-btn" id="filt-low"  onclick="setFilter('Low')">Low</button>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">&#128269;</span>
+        <input class="search-input" id="nbh-search" type="text" placeholder="Search neighborhood..." oninput="filterList()">
+      </div>
+      <div class="nbh-list" id="nbh-list"></div>
     </div>
     <div class="detail-panel" id="detail-panel">
-      <div class="dh">Click any bubble, pipe, outlet, or sewer marker for details</div>
+      <div class="dh">Click a neighborhood bubble on the map or select from the list above</div>
     </div>
   </div>
 
@@ -213,20 +277,18 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
     <div class="scroll">
       <div class="sewer-card" style="border-color:var(--red-bd);background:var(--red-lt)">
         <h3>Combined Sewer System (CSO)</h3>
-        <p><span class="badge" style="background:var(--red-bd);color:var(--red)">COMBINED</span> A single pipe carries both stormwater and raw sewage. During heavy rain the system overflows — raw sewage discharges directly into creeks (Combined Sewer Overflow).</p>
-        <p>Atlanta's combined sewer core covers roughly 13 square miles — about 10% of the collection system — spanning downtown, Midtown, Georgia Tech, and east Atlanta near Grant Park. Under federal consent decree through 2027.</p>
+        <p><span class="badge" style="background:var(--red-bd);color:var(--red)">COMBINED</span> A single pipe carries both stormwater and raw sewage. During heavy rain the system overflows — raw sewage discharges directly into creeks. Combined sewer presence contributes 15% to the PCA flood risk score via the D&#x209B;&#x1D422;&#x1D42C;&#x1D424; penalty term.</p>
+        <p>Atlanta's combined sewer core covers roughly 13 square miles — about 10% of the collection system — spanning downtown, Midtown, Georgia Tech, and east Atlanta near Grant Park.</p>
         <a href="https://cleanwateratlanta.h2o4atl.com/index.php/history-3/" target="_blank">Clean Water Atlanta: consent decree history</a>
       </div>
       <div class="sewer-card" style="border-color:var(--blue-bd);background:#f0f7ff">
         <h3>Sanitary Sewer System (SSO)</h3>
-        <p><span class="badge" style="background:var(--blue-bd);color:#1d4ed8">SANITARY</span> A separate pipe carries only household sewage to treatment plants. Stormwater drains through a separate system (MS4 — Municipal Separate Storm Sewer).</p>
-        <p>About 90% of Atlanta's collection system uses separate sanitary piping. These still overflow (SSOs) when pipes collapse or block. A 1999 Second Consent Decree addressed SSOs with a 2014 deadline.</p>
+        <p><span class="badge" style="background:var(--blue-bd);color:#1d4ed8">SANITARY</span> A separate pipe carries only household sewage to treatment plants. Stormwater drains through a separate system (MS4). These overflow (SSOs) when pipes collapse or block — also a Clean Water Act violation.</p>
         <a href="https://cleanwateratlanta.h2o4atl.com/" target="_blank">Clean Water Atlanta: Consent Decree Program</a>
       </div>
       <div class="sewer-card" style="border-color:#fde68a;background:#fffbeb">
-        <h3>Key Difference</h3>
-        <p>When a combined sewer overflows, raw sewage contaminates streets, yards, and creeks. When a sanitary sewer overflows, the same happens but the storm drain still works separately. Both violate the Clean Water Act.</p>
-        <p>Proctor Creek and Intrenchment Creek are most affected by CSOs. The 2002 Vine City flood and 2012 Peoplestown disaster both involved combined sewer overflows mixing sewage with stormwater.</p>
+        <h3>Penalty Term in Risk Formula</h3>
+        <p>The drainage risk formula includes a <b>penalty of +0.20</b> when a neighborhood has <b>no storm outlets</b> (<code>1&#8203;_no&#8203;_outlet = 1</code>). This directly reflects neighborhoods like Peoplestown, where zero outlet density plays a major documented role in flooding. The penalty is embedded in D&#x209B;&#x1D422;&#x1D42C;&#x1D424; = 1 &minus; (density terms) + 0.2&#8203;&middot;1&#8203;_no&#8203;_outlet.</p>
         <a href="https://cleanwateratlanta.h2o4atl.com/index.php/frequently-asked-questions/" target="_blank">CSO Frequently Asked Questions</a>
       </div>
       <div style="font-size:9.5px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px">CSO Facilities</div>
@@ -234,64 +296,67 @@ header{background:var(--blue);color:#fff;padding:9px 16px;display:flex;align-ite
       <div style="font-size:9.5px;font-weight:700;color:#374151;text-transform:uppercase;letter-spacing:.5px;margin:12px 0 6px">Sanitary Sewer Problem Sites</div>
       <div id="sso-facility-list"></div>
       <div style="font-size:9.5px;color:var(--g400);margin-top:10px;line-height:1.7">
-        Sources: <a href="https://cleanwateratlanta.h2o4atl.com/" target="_blank">Clean Water Atlanta</a> · <a href="https://www.epa.gov/urbanwaterspartners/urban-waters-and-proctor-creek-watershedatlanta-georgia" target="_blank">EPA Urban Waters</a> · <a href="https://www.southriverga.org/history" target="_blank">South River Watershed Alliance</a>
+        Sources: <a href="https://cleanwateratlanta.h2o4atl.com/" target="_blank">Clean Water Atlanta</a> &middot; <a href="https://www.epa.gov/urbanwaterspartners/urban-waters-and-proctor-creek-watershedatlanta-georgia" target="_blank">EPA Urban Waters</a> &middot; <a href="https://www.southriverga.org/history" target="_blank">South River Watershed Alliance</a>
       </div>
     </div>
   </div>
 
-  <!-- EQUATION -->
+  <!-- FORMULA & PAPERS -->
   <div class="tab-panel" id="tab-equation">
     <div class="scroll">
-      <div style="font-size:13px;font-weight:700;color:var(--g800);margin-bottom:8px">Flood Risk Score Formula</div>
+      <div style="font-size:13px;font-weight:700;color:var(--g800);margin-bottom:6px">PCA Flood Risk Formula</div>
+      <div style="font-size:10.5px;color:var(--g600);margin-bottom:10px">Developed by Aarushi Wagh using Principal Component Analysis on COA stormwater infrastructure data. Peoplestown reference score: 0.672 (High).</div>
       <div class="eq-formula">
-Score (0–100) =<br>
-&nbsp;FEMA zone overlap &nbsp;&nbsp;&nbsp;&times; <b>30%</b><br>
-+ Impervious surface % &nbsp;&times; <b>20%</b><br>
-+ Historic flood events &nbsp;&times; <b>20%</b><br>
-+ Combined sewer (CSO) &times; <b>15%</b><br>
-+ Low elevation score &nbsp;&nbsp;&times; <b>15%</b><br><br>
-&plusmn; Pipe material modifier<br>
-&nbsp;&nbsp;VCP / CMP pipes: <b>+5 to +10 pts</b><br><br>
-+ Live precipitation modifier<br>
-&nbsp;&nbsp;Precip &gt; 0.5&Prime;/hr: CSO areas <b>+8 pts</b><br>
-&nbsp;&nbsp;Precip &gt; 1.0&Prime;/hr: CSO areas <b>+15 pts</b>
+<b>Flood Risk</b> = 0.363&#183;I + 0.359&#183;D&#x209B;&#x1D422;&#x1D42C;&#x1D424; + 0.279&#183;E<br><br>
+where <b>D&#x209B;&#x1D422;&#x1D42C;&#x1D424;</b> = 1 &minus; (0.493&#183;D<sub>d</sub> + 0.492&#183;D<sub>i</sub> + 0.015&#183;D<sub>o</sub>) + penalty<br>
+penalty = 0.2 &middot; 1<sub>no outlet</sub>
       </div>
-      <div class="eq-card"><h4>FEMA Zone Overlap (30%)</h4><p>Percent of watershed intersecting FEMA Zone AE (1% annual chance flood) from the National Flood Hazard Layer. <a href="https://msc.fema.gov/portal/home" target="_blank">FEMA Map Service Center</a></p></div>
-      <div class="eq-card"><h4>Impervious Surface (20%)</h4><p>Percent impervious cover from USGS NLCD 2021. High imperviousness increases runoff speed and volume, overwhelming stormwater capacity. <a href="https://www.mrlc.gov/data" target="_blank">USGS NLCD</a></p></div>
-      <div class="eq-card"><h4>Historic Flood Events (20%)</h4><p>Normalized count of NOAA Storm Events flood reports within each watershed, 2000–2025. <a href="https://www.ncdc.noaa.gov/stormevents/" target="_blank">NOAA Storm Events Database</a></p></div>
-      <div class="eq-card"><h4>Combined Sewer Presence (15%)</h4><p>Watersheds with combined sewer infrastructure receive a base risk premium. The combined sewer system was not designed for modern impervious surface coverage, and any rainfall event can trigger raw sewage discharge. <a href="https://cleanwateratlanta.h2o4atl.com/index.php/frequently-asked-questions/" target="_blank">Clean Water Atlanta: CSO FAQ</a></p></div>
-      <div class="eq-card"><h4>Elevation / Topography (15%)</h4><p>Low-lying areas relative to watershed average, from USGS 3DEP elevation data. <a href="https://www.usgs.gov/3d-elevation-program" target="_blank">USGS 3DEP</a></p></div>
-      <div class="eq-card"><h4>Live Precipitation Modifier</h4><p>Current 1-hour precipitation from NWS KATL station (api.weather.gov, no key required). CSO watersheds receive additional risk points when precipitation exceeds known failure thresholds documented in the 2020 Intrenchment Creek study (1" = 35M gallons of stormwater into the creek). <a href="https://www.weather.gov/documentation/services-web-api" target="_blank">NWS API</a></p></div>
+
+      <div class="pca-box">
+        <h4>Top 10 Highest Risk Neighborhoods (PCA Run)</h4>
+        <div class="pca-row"><span>Atlanta Industrial Park</span><b>0.860</b></div>
+        <div class="pca-row"><span>Atlantic Station</span><b>0.844</b></div>
+        <div class="pca-row"><span>Bankhead/Bolton</span><b>0.822</b></div>
+        <div class="pca-row"><span>Chattahoochee</span><b>0.782</b></div>
+        <div class="pca-row"><span>Oakland</span><b>0.780</b></div>
+        <div class="pca-row"><span>Edmund Park</span><b>0.774</b></div>
+        <div class="pca-row"><span>Bankhead Courts</span><b>0.764</b></div>
+        <div class="pca-row"><span>Bolton Hills</span><b>0.753</b></div>
+        <div class="pca-row"><span>Cascade Green</span><b>0.747</b></div>
+        <div class="pca-row"><span>Rebel Valley Forest</span><b>0.745</b></div>
+      </div>
+
+      <div class="eq-card"><h4>I — Impervious Surface (weight: 0.363)</h4><p>Percent impervious cover from USGS NLCD 2021, normalized 0–1. High imperviousness prevents infiltration and concentrates runoff directly into storm pipes. The highest PCA weight reflects its dominant role in urban flooding. <a href="https://www.mrlc.gov/data" target="_blank">USGS NLCD</a></p></div>
+      <div class="eq-card"><h4>D&#x209B;&#x1D422;&#x1D42C;&#x1D424; — Drainage Risk (weight: 0.359)</h4><p>Composite drainage failure risk. Computed as 1 minus a weighted drainage capacity index, plus a penalty for absent outlets. Components: D<sub>d</sub> = pipe density (0.493 weight), D<sub>i</sub> = inlet density (0.492 weight), D<sub>o</sub> = outlet density (0.015 weight). Penalty of +0.20 applies when no outlets exist. <a href="https://gis.atlantaga.gov/?page=OPEN-DATA-HUB" target="_blank">COA GIS Open Data</a></p></div>
+      <div class="eq-card"><h4>E — Elevation (weight: 0.279)</h4><p>Normalized low-elevation score derived from USGS 3DEP digital elevation model. Low-lying areas accumulate runoff from surrounding terrain. <a href="https://www.usgs.gov/3d-elevation-program" target="_blank">USGS 3DEP</a></p></div>
+      <div class="eq-card"><h4>Live Precipitation Modifier</h4><p>Current 1-hour precipitation from NWS KATL (api.weather.gov). Neighborhoods with combined sewers (CSO) receive a score boost when precipitation exceeds documented failure thresholds from the 2020 Intrenchment Creek study (1" = 35M gallons). Precip &gt; 0.5": +0.05 · Precip &gt; 1.0": +0.10 to final score.</p></div>
+      <div class="eq-card"><h4>FEMA SFHA Data (image 1)</h4><p>Percent of neighborhood area in FEMA Special Flood Hazard Area (Zone AE) from the National Flood Hazard Layer. Shown in neighborhood popups for the top 10 neighborhoods. Zone AE = 1% annual chance flood. <a href="https://msc.fema.gov/portal/home" target="_blank">FEMA Map Service Center</a></p></div>
+
       <div style="font-size:12px;font-weight:700;color:var(--g800);margin:14px 0 8px">Academic Sources</div>
       <div class="paper-card">
         <h5>Urbanization impacts on flood risks based on urban growth data and coupled flood models</h5>
-        <p>Li et al. (2021) — Natural Hazards. Demonstrates that increasing impervious surface area reduces hydrologic response time and increases flood risk nonlinearly. Justifies the 20% weight on impervious surface coverage.</p>
+        <p>Li et al. (2021) — Natural Hazards. Demonstrates impervious surface area as the dominant predictor of urban flood risk. Validates the highest PCA weight assigned to I (0.363).</p>
         <a href="https://link.springer.com/article/10.1007/s11069-020-04480-0" target="_blank">doi:10.1007/s11069-020-04480-0</a>
       </div>
       <div class="paper-card">
-        <h5>How does increasing impervious surfaces affect urban flooding in response to climate variability?</h5>
-        <p>Sohn et al. (2020) — Science of the Total Environment. Establishes that directly connected impervious area (DCIA) is the strongest predictor of urban runoff yield. Informs the impervious surface weighting and its interaction with combined sewers.</p>
+        <h5>How does increasing impervious surfaces affect urban flooding?</h5>
+        <p>Sohn et al. (2020) — Science of the Total Environment. Establishes directly connected impervious area (DCIA) as the strongest runoff predictor. Informs the interaction between I and D&#x209B;&#x1D422;&#x1D42C;&#x1D424; in the formula.</p>
         <a href="https://www.sciencedirect.com/science/article/abs/pii/S1470160X20307123" target="_blank">doi:10.1016/j.ecolind.2020.106929</a>
       </div>
       <div class="paper-card">
         <h5>Recent advances and future challenges in urban pluvial flood modelling</h5>
-        <p>Blanc et al. (2024) — Urban Water Journal. Reviews how combined sewer networks, when surcharged, produce overflows through manholes onto surfaces. Supports including combined sewer presence as an independent risk factor (15% weight).</p>
+        <p>Blanc et al. (2024) — Urban Water Journal. Documents how combined sewer surcharge produces manhole overflows. Supports inclusion of the no-outlet penalty in D&#x209B;&#x1D422;&#x1D42C;&#x1D424;.</p>
         <a href="https://www.tandfonline.com/doi/full/10.1080/1573062X.2024.2446528" target="_blank">doi:10.1080/1573062X.2024.2446528</a>
       </div>
       <div class="paper-card">
-        <h5>Urban Flood Risk Assessment using FAHP-EWM combination weighting</h5>
-        <p>Zhang et al. (2023) — Geomatics, Natural Hazards and Risk. Applies analytic hierarchy process to weight flood risk factors including elevation, land use, and drainage infrastructure. Validates multi-factor composite scoring methodology used here.</p>
-        <a href="https://www.tandfonline.com/doi/full/10.1080/19475705.2023.2240943" target="_blank">doi:10.1080/19475705.2023.2240943</a>
-      </div>
-      <div class="paper-card">
-        <h5>Navigating the definition of urban flooding: A conceptual and systematic review</h5>
-        <p>Blanc et al. (2024) — Water Science and Technology. Documents that combined sewer systems cause chronic sewer backups during storms as a distinct and compounding flood risk category. Justifies treating CSO presence as its own formula factor.</p>
-        <a href="https://iwaponline.com/wst/article/90/10/2796/105425/" target="_blank">doi:10.2166/wst.2024.313</a>
-      </div>
-      <div class="paper-card">
         <h5>Intrenchment Creek One Water Management Plan</h5>
-        <p>American Rivers / Intrenchment Creek One Water Management Task Force (2020). Documents that 1 inch of rain sends 35 million gallons of stormwater into Intrenchment Creek. Directly informs the precipitation threshold modifiers for CSO watersheds.</p>
+        <p>American Rivers / Intrenchment Creek Task Force (2020). Documents that 1 inch of rain sends 35 million gallons of stormwater into Intrenchment Creek. Directly informs the live precipitation modifier thresholds.</p>
         <a href="https://www.americanrivers.org/intrenchment-creek/" target="_blank">americanrivers.org/intrenchment-creek</a>
+      </div>
+      <div class="paper-card">
+        <h5>Urban Flood Risk Assessment using FAHP-EWM combination weighting</h5>
+        <p>Zhang et al. (2023) — Geomatics, Natural Hazards and Risk. Applies PCA/AHP to derive objective factor weights for multi-variable urban flood risk. Validates the PCA methodology used here.</p>
+        <a href="https://www.tandfonline.com/doi/full/10.1080/19475705.2023.2240943" target="_blank">doi:10.1080/19475705.2023.2240943</a>
       </div>
     </div>
   </div>
@@ -300,29 +365,30 @@ Score (0–100) =<br>
   <div class="tab-panel" id="tab-layers">
     <div class="scroll">
       <div class="layer-sec">Risk</div>
-      <div class="layer-row" onclick="toggleLayer('zones')"><div class="lchk on" id="chk-zones">&#10003;</div><span class="layer-lbl">Flood Index Bubbles</span></div>
+      <div class="layer-row" onclick="toggleLayer('bubbles')"><div class="lchk on" id="chk-bubbles">&#10003;</div><span class="layer-lbl">Neighborhood risk bubbles</span></div>
       <div class="layer-row" onclick="toggleLayer('fema')"><div class="lchk" id="chk-fema"></div><span class="layer-lbl">FEMA Flood Zones (estimated)</span></div>
-      <div class="layer-sec">Waterways — USGS NHD</div>
+      <div class="layer-sec">Waterways &mdash; USGS NHD</div>
       <div class="layer-row" onclick="toggleLayer('nhd')"><div class="lchk on" id="chk-nhd">&#10003;</div><span class="layer-lbl">All rivers and streams (live NHD)</span></div>
-      <div class="layer-row" onclick="toggleLayer('major')"><div class="lchk on" id="chk-major">&#10003;</div><span class="layer-lbl">Major waterway labels</span></div>
-      <div class="layer-sec">Infrastructure — COA Shapefile</div>
-      <div class="layer-row" onclick="toggleLayer('pipes')"><div class="lchk on" id="chk-pipes">&#10003;</div><span class="layer-lbl">Storm Pipes (41,581 total)</span></div>
-      <div class="layer-row" onclick="toggleLayer('outlets')"><div class="lchk on" id="chk-outlets">&#10003;</div><span class="layer-lbl">Storm Outlets — discharge points</span></div>
-      <div class="layer-row" onclick="toggleLayer('inlets')"><div class="lchk" id="chk-inlets"></div><span class="layer-lbl">Storm Inlets (40,698 total)</span></div>
-      <div class="layer-row" onclick="toggleLayer('manholes')"><div class="lchk" id="chk-manholes"></div><span class="layer-lbl">Storm Manholes (8,216 total)</span></div>
-      <div class="layer-row" onclick="toggleLayer('gauges')"><div class="lchk" id="chk-gauges"></div><span class="layer-lbl">Rain Gauges (22 total)</span></div>
+      <div class="layer-row" onclick="toggleLayer('labels')"><div class="lchk on" id="chk-labels">&#10003;</div><span class="layer-lbl">Major waterway labels</span></div>
+      <div class="layer-sec">Infrastructure &mdash; COA Shapefile</div>
+      <div class="layer-row" onclick="toggleLayer('pipes')"><div class="lchk on" id="chk-pipes">&#10003;</div><span class="layer-lbl">Storm pipes (41,581 total)</span></div>
+      <div class="layer-row" onclick="toggleLayer('outlets')"><div class="lchk on" id="chk-outlets">&#10003;</div><span class="layer-lbl">Storm outlets &mdash; discharge points</span></div>
+      <div class="layer-row" onclick="toggleLayer('inlets')"><div class="lchk" id="chk-inlets"></div><span class="layer-lbl">Storm inlets (40,698 total)</span></div>
+      <div class="layer-row" onclick="toggleLayer('manholes')"><div class="lchk" id="chk-manholes"></div><span class="layer-lbl">Storm manholes (8,216 total)</span></div>
+      <div class="layer-row" onclick="toggleLayer('gauges')"><div class="lchk" id="chk-gauges"></div><span class="layer-lbl">Rain gauges (22 total)</span></div>
       <div class="layer-sec">Sewer Systems</div>
-      <div class="layer-row" onclick="toggleLayer('cso')"><div class="lchk on" id="chk-cso">&#10003;</div><span class="layer-lbl">Combined Sewer (CSO) Areas</span></div>
-      <div class="layer-row" onclick="toggleLayer('sso')"><div class="lchk on" id="chk-sso">&#10003;</div><span class="layer-lbl">Sanitary Sewer (SSO) Areas</span></div>
+      <div class="layer-row" onclick="toggleLayer('cso')"><div class="lchk on" id="chk-cso">&#10003;</div><span class="layer-lbl">Combined sewer (CSO) areas</span></div>
+      <div class="layer-row" onclick="toggleLayer('sso')"><div class="lchk on" id="chk-sso">&#10003;</div><span class="layer-lbl">Sanitary sewer (SSO) areas</span></div>
       <div class="layer-note">
-        <b>Brown/amber dots</b> = Storm outlet discharge points from COA stormoutlet.shp — where storm pipes empty into waterways.<br><br>
-        <b>Pipe colors:</b> Green = RCP concrete · Red = VCP aging clay · Amber = CMP corrugated metal · Blue = PVC · Gray = unknown<br><br>
-        <b>Blue lines</b> = USGS National Hydrography Dataset (NHD), streamed live. Includes Chattahoochee River, Flint River, South River, Intrenchment Creek, Peachtree Creek, and all minor tributaries.
+        <b>Brown/amber dots</b> = Storm outlet discharge points from COA stormoutlet.shp.<br><br>
+        <b>Pipe colors:</b> Green = RCP concrete &middot; Red = VCP aging clay &middot; Amber = CMP metal &middot; Blue = PVC &middot; Gray = unknown<br><br>
+        <b>Blue lines</b> = USGS NHD live tile service. Includes Chattahoochee, Flint River, South River, Intrenchment Creek, and all tributaries.
       </div>
     </div>
   </div>
 </div>
 
+<!-- MAP -->
 <div class="map-area">
   <div id="map"></div>
   <div class="map-toolbar">
@@ -335,16 +401,15 @@ Score (0–100) =<br>
   </div>
   <div class="map-legend">
     <div class="leg-title">Map Legend</div>
-    <div class="leg-sec"><div class="leg-sec-ttl">Flood Index</div>
-      <div class="leg-row"><div class="leg-c" style="width:12px;height:12px;background:#dc2626"></div><span class="leg-lbl">Critical (9–10)</span></div>
-      <div class="leg-row"><div class="leg-c" style="width:12px;height:12px;background:#f97316"></div><span class="leg-lbl">High (7–8)</span></div>
-      <div class="leg-row"><div class="leg-c" style="width:12px;height:12px;background:#eab308"></div><span class="leg-lbl">Moderate (5–6)</span></div>
-      <div class="leg-row"><div class="leg-c" style="width:12px;height:12px;background:#22c55e"></div><span class="leg-lbl">Low (1–4)</span></div>
+    <div class="leg-sec"><div class="leg-sec-ttl">Flood Risk Index</div>
+      <div class="leg-row"><div class="leg-c" style="width:13px;height:13px;background:#dc2626"></div><span class="leg-lbl">High (&ge; 0.66)</span></div>
+      <div class="leg-row"><div class="leg-c" style="width:13px;height:13px;background:#d97706"></div><span class="leg-lbl">Moderate (0.33&ndash;0.66)</span></div>
+      <div class="leg-row"><div class="leg-c" style="width:13px;height:13px;background:#16a34a"></div><span class="leg-lbl">Low (&lt; 0.33)</span></div>
     </div>
     <div class="leg-sec"><div class="leg-sec-ttl">Storm Pipes</div>
-      <div class="leg-row"><div class="leg-l" style="width:20px;height:3px;background:#16a34a"></div><span class="leg-lbl">RCP / PVC (sound)</span></div>
+      <div class="leg-row"><div class="leg-l" style="width:20px;height:3px;background:#16a34a"></div><span class="leg-lbl">RCP / PVC</span></div>
       <div class="leg-row"><div class="leg-l" style="width:20px;height:3px;background:#dc2626"></div><span class="leg-lbl">VCP aging clay</span></div>
-      <div class="leg-row"><div class="leg-l" style="width:20px;height:3px;background:#b45309"></div><span class="leg-lbl">CMP corrugated metal</span></div>
+      <div class="leg-row"><div class="leg-l" style="width:20px;height:3px;background:#b45309"></div><span class="leg-lbl">CMP metal</span></div>
     </div>
     <div class="leg-sec"><div class="leg-sec-ttl">Sewer Areas</div>
       <div class="leg-row"><div class="leg-s" style="width:12px;height:12px;border-color:#dc2626;background:rgba(220,38,38,.12)"></div><span class="leg-lbl">Combined sewer</span></div>
@@ -365,38 +430,25 @@ const OUTLETS_DATA  = [{"lat":33.884875105560916,"lng":-84.36775775813867,"w":"N
 const INLETS_DATA   = [{"lat":33.84487994491875,"lng":-84.43184892867656,"t":"DI"},{"lat":33.8444051457733,"lng":-84.43265885885621,"t":"DI"},{"lat":33.847049284525205,"lng":-84.43052407113105,"t":"DI"},{"lat":33.844733502773416,"lng":-84.4319939509833,"t":"SI"},{"lat":33.84664483108486,"lng":-84.44518789822558,"t":"HW"},{"lat":33.86137106283245,"lng":-84.42342707031524,"t":"SI"},{"lat":33.85570148043013,"lng":-84.42325921935502,"t":"DI"},{"lat":33.86153870877737,"lng":-84.43209794117885,"t":"Catchbasin"},{"lat":33.82038747421874,"lng":-84.44531476821462,"t":"DI"},{"lat":33.823523800758984,"lng":-84.44920676760745,"t":"HW"},{"lat":33.86861412090942,"lng":-84.39074103992792,"t":"CB"},{"lat":33.864560704837615,"lng":-84.38460849293287,"t":"CB"},{"lat":33.770181389455985,"lng":-84.3893969715859,"t":"DI"},{"lat":33.775388977466,"lng":-84.38922776719988,"t":"Catchbasin"},{"lat":33.82376727026938,"lng":-84.4203514483087,"t":"DI"},{"lat":33.82470580287502,"lng":-84.41356147058289,"t":"DI"},{"lat":33.876700479295465,"lng":-84.36244234849393,"t":"DI"},{"lat":33.865776611651,"lng":-84.36299639676245,"t":"SWCB"},{"lat":33.864486986888394,"lng":-84.36844333846044,"t":"UNK"},{"lat":33.872541986051246,"lng":-84.3604264386478,"t":"UNK"},{"lat":33.84524710207204,"lng":-84.37471315708055,"t":"Catchbasin"},{"lat":33.845962817108166,"lng":-84.37076321013302,"t":"Catchbasin"},{"lat":33.848409631723065,"lng":-84.37016918823214,"t":"SWCB"},{"lat":33.84134844166411,"lng":-84.36644022074749,"t":"DI"},{"lat":33.85923159080132,"lng":-84.39040565317252,"t":"DI"},{"lat":33.851945791159025,"lng":-84.3931767853025,"t":"HW"},{"lat":33.848175558066835,"lng":-84.38951319613199,"t":"CB"},{"lat":33.84565826741858,"lng":-84.39589606742952,"t":"HW"},{"lat":33.84180850658701,"lng":-84.43773364295697,"t":"DI"},{"lat":33.8455982064472,"lng":-84.43350951549645,"t":"DI"},{"lat":33.85681788669582,"lng":-84.44947025986264,"t":"DI"},{"lat":33.84670212665312,"lng":-84.45240585463117,"t":"Catchbasin"},{"lat":33.831834008140724,"lng":-84.38082437513204,"t":"CB"},{"lat":33.8468015223273,"lng":-84.36955958052748,"t":"CB"},{"lat":33.84274840153049,"lng":-84.36984073867579,"t":"CB"},{"lat":33.8486570599548,"lng":-84.37025860471995,"t":"Catchbasin"},{"lat":33.83225383828124,"lng":-84.37195951244841,"t":"Other"},{"lat":33.82996318443194,"lng":-84.3792499734662,"t":"SI"},{"lat":33.8283121858333,"lng":-84.3650633478861,"t":"SI"},{"lat":33.87065457501475,"lng":-84.38957894669767,"t":"Catchbasin"},{"lat":33.806725598881684,"lng":-84.36695461649528,"t":"DI"},{"lat":33.809203879629685,"lng":-84.36981584420458,"t":"SI"},{"lat":33.770077094253246,"lng":-84.36055512113323,"t":"Catchbasin"},{"lat":33.86278737380651,"lng":-84.37067846284515,"t":"CB"},{"lat":33.86111575992192,"lng":-84.37019301589937,"t":"UNK"},{"lat":33.85752355627278,"lng":-84.36875350606515,"t":"SWCB"},{"lat":33.8597947810271,"lng":-84.36849679521048,"t":"Catchbasin"},{"lat":33.83288489186575,"lng":-84.39917292291649,"t":"DI"},{"lat":33.83150399658245,"lng":-84.43497287440535,"t":"DI"},{"lat":33.79409128970832,"lng":-84.36911344596206,"t":"DI"},{"lat":33.823349654691356,"lng":-84.42867644515111,"t":"DI"},{"lat":33.86483524440529,"lng":-84.39208648429248,"t":"HW"},{"lat":33.867339134659524,"lng":-84.38645008082612,"t":"CB"},{"lat":33.86825062007523,"lng":-84.38746657731674,"t":"DI"},{"lat":33.78148656708996,"lng":-84.36977707652458,"t":"UNK"},{"lat":33.84318863415531,"lng":-84.40068942459969,"t":"Catchbasin"},{"lat":33.83966078925609,"lng":-84.38809722020738,"t":"Catchbasin"},{"lat":33.875260206246075,"lng":-84.35493244934872,"t":"HW"},{"lat":33.81159126047804,"lng":-84.38310393422118,"t":"Catchbasin"},{"lat":33.81021687753582,"lng":-84.39411242471238,"t":"CB"},{"lat":33.80887809661305,"lng":-84.38977606519286,"t":"CB"},{"lat":33.826289375936526,"lng":-84.38837202986115,"t":"UNK"},{"lat":33.77797501322523,"lng":-84.4103975654934,"t":"Catchbasin"},{"lat":33.787474807217706,"lng":-84.45487097219929,"t":"Catchbasin"},{"lat":33.77814482893226,"lng":-84.4603413467162,"t":"Catchbasin"},{"lat":33.87559200472721,"lng":-84.36613048604875,"t":"Catchbasin"},{"lat":33.869084375874465,"lng":-84.36766634243405,"t":"UNK"},{"lat":33.8691800083196,"lng":-84.35820152917867,"t":"Catchbasin"},{"lat":33.822535166094944,"lng":-84.44359003876546,"t":"DI"},{"lat":33.80148152811816,"lng":-84.3618635377667,"t":"DI"},{"lat":33.790808969026145,"lng":-84.36392162383262,"t":"DI"},{"lat":33.83312187448978,"lng":-84.39345559220058,"t":"DI"},{"lat":33.85164062444649,"lng":-84.45098086022887,"t":"Catchbasin"},{"lat":33.83988015312636,"lng":-84.44977895035416,"t":"DI"},{"lat":33.84528154131891,"lng":-84.45678925104811,"t":"Catchbasin"},{"lat":33.83194713410236,"lng":-84.44692965966988,"t":"SI"},{"lat":33.77497272015296,"lng":-84.36916447653587,"t":"Catchbasin"},{"lat":33.83962063592882,"lng":-84.40000191047275,"t":"HW"},{"lat":33.81658470793072,"lng":-84.38979737510759,"t":"Other"},{"lat":33.86554100867392,"lng":-84.37017407626371,"t":"UNK"},{"lat":33.87552207342532,"lng":-84.35769576181748,"t":"UNK"},{"lat":33.880836260801246,"lng":-84.35886155853447,"t":"SWCB"},{"lat":33.87960351618557,"lng":-84.35790897038056,"t":"UNK"},{"lat":33.77626897842118,"lng":-84.36462228450479,"t":"DI"},{"lat":33.82072251359754,"lng":-84.37787748199368,"t":"Catchbasin"},{"lat":33.82067391845986,"lng":-84.37761564643633,"t":"DI"},{"lat":33.82061445618403,"lng":-84.37021735139862,"t":"UNK"},{"lat":33.817648382154175,"lng":-84.3756025909152,"t":"UNK"},{"lat":33.85296172145135,"lng":-84.42972518124262,"t":"DWCB"},{"lat":33.847551371153436,"lng":-84.43097029370482,"t":"DI"},{"lat":33.839595164896416,"lng":-84.42560396290209,"t":"DI"},{"lat":33.845227099736235,"lng":-84.43299317167184,"t":"DI"},{"lat":33.840796627671345,"lng":-84.43467049316136,"t":"DI"},{"lat":33.82707162763023,"lng":-84.4173832500128,"t":"DI"},{"lat":33.855455042896935,"lng":-84.35052195468386,"t":"UNK"},{"lat":33.85896121461118,"lng":-84.35705566992183,"t":"HW"},{"lat":33.772913264592304,"lng":-84.3760920493769,"t":"Catchbasin"},{"lat":33.77608512391512,"lng":-84.36520198839787,"t":"DI"},{"lat":33.77581318582203,"lng":-84.37362196885117,"t":"DI"},{"lat":33.80589021092444,"lng":-84.36313677841248,"t":"Catchbasin"},{"lat":33.768541609271004,"lng":-84.37747906579577,"t":"DI"},{"lat":33.845924599359435,"lng":-84.37140768579616,"t":"Catchbasin"},{"lat":33.84349361657546,"lng":-84.36566872643256,"t":"Catchbasin"},{"lat":33.84788640340488,"lng":-84.44649469384034,"t":"DI"},{"lat":33.86205904543692,"lng":-84.38431689152299,"t":"CB"},{"lat":33.859046036936746,"lng":-84.38761994614552,"t":"DI"},{"lat":33.858801546182185,"lng":-84.39208366207863,"t":"Catchbasin"},{"lat":33.81683464294541,"lng":-84.3589104555003,"t":"Catchbasin"},{"lat":33.817625086993104,"lng":-84.37589794814106,"t":"Catchbasin"},{"lat":33.82164582732248,"lng":-84.36081771070812,"t":"Catchbasin"},{"lat":33.8058599706917,"lng":-84.36300726341561,"t":"Catchbasin"},{"lat":33.858125318577294,"lng":-84.3895347213104,"t":"CB"},{"lat":33.77809215085408,"lng":-84.46029719149776,"t":"Catchbasin"},{"lat":33.816971685163814,"lng":-84.43883422905138,"t":"HW"},{"lat":33.829744253292304,"lng":-84.39922704805429,"t":"Catchbasin"},{"lat":33.83592537723195,"lng":-84.35878969614537,"t":"Catchbasin"},{"lat":33.810718889836174,"lng":-84.40011839309739,"t":"SWCB"},{"lat":33.81066359093778,"lng":-84.39671588665604,"t":"Catchbasin"},{"lat":33.80080215837996,"lng":-84.3972060670241,"t":"Catchbasin"},{"lat":33.797332285126934,"lng":-84.39948521580405,"t":"SI"},{"lat":33.862298196804936,"lng":-84.35379415048523,"t":"UNK"},{"lat":33.79167019354592,"lng":-84.40041506212347,"t":"DI"},{"lat":33.794819125274074,"lng":-84.39213424190692,"t":"Catchbasin"},{"lat":33.77463534708348,"lng":-84.3760967935029,"t":"UNK"},{"lat":33.77738001373642,"lng":-84.37799788812589,"t":"DI"},{"lat":33.85511131225127,"lng":-84.4377531368074,"t":"Catchbasin"},{"lat":33.85445576407821,"lng":-84.40832797649773,"t":"HW"},{"lat":33.83540476057021,"lng":-84.42781815438083,"t":"DI"},{"lat":33.79572428264108,"lng":-84.37837433672502,"t":"Catchbasin"},{"lat":33.81289239383834,"lng":-84.37011130608906,"t":"Catchbasin"},{"lat":33.762138560714085,"lng":-84.41068343446726,"t":"CB"},{"lat":33.78600053070657,"lng":-84.41071475354832,"t":"Catchbasin"},{"lat":33.78352921844858,"lng":-84.41532479764187,"t":"Catchbasin"},{"lat":33.85077461341721,"lng":-84.36434271645335,"t":"DI"},{"lat":33.847406086689716,"lng":-84.3675651601807,"t":"Catchbasin"},{"lat":33.8508096228503,"lng":-84.3659098907304,"t":"SWCB"},{"lat":33.84257926088317,"lng":-84.36974365475743,"t":"DI"},{"lat":33.86194441255461,"lng":-84.35590540192216,"t":"UNK"},{"lat":33.79044457829417,"lng":-84.39060568783644,"t":"Catchbasin"},{"lat":33.79205660772017,"lng":-84.38594692755096,"t":"Catchbasin"},{"lat":33.79799918713281,"lng":-84.39454513681446,"t":"DI"},{"lat":33.79094389748289,"lng":-84.38141735520428,"t":"CB"},{"lat":33.80076030263959,"lng":-84.39358147150098,"t":"CB"},{"lat":33.77169287367167,"lng":-84.38724667655086,"t":"DI"},{"lat":33.76957035653469,"lng":-84.39243528756468,"t":"Catchbasin"},{"lat":33.790534325603126,"lng":-84.37434657255288,"t":"Catchbasin"},{"lat":33.829383669571435,"lng":-84.43312784586115,"t":"DI"},{"lat":33.79563337866868,"lng":-84.36803448137951,"t":"DI"},{"lat":33.81649792660824,"lng":-84.43676144440104,"t":"DI"},{"lat":33.828280309369774,"lng":-84.3814418536379,"t":"SI"},{"lat":33.81733260997822,"lng":-84.44149195647051,"t":"SI"},{"lat":33.786377832083396,"lng":-84.46372417020808,"t":"Catchbasin"},{"lat":33.83624125428144,"lng":-84.44496533580161,"t":"DI"},{"lat":33.8341156988665,"lng":-84.44895998028935,"t":"UNK"},{"lat":33.82715870728229,"lng":-84.44607297564671,"t":"HW"},{"lat":33.84822713548203,"lng":-84.45501977886526,"t":"Catchbasin"},{"lat":33.8229061964417,"lng":-84.3998496976456,"t":"DI"},{"lat":33.845427722807734,"lng":-84.42620323557163,"t":"Catchbasin"},{"lat":33.846231271974446,"lng":-84.43318441025754,"t":"CB"},{"lat":33.85515322610289,"lng":-84.37602512162347,"t":"Other"},{"lat":33.84868488096893,"lng":-84.37151893192373,"t":"Catchbasin"},{"lat":33.84535208353463,"lng":-84.37066584672866,"t":"DWCB"},{"lat":33.84977114169349,"lng":-84.35909533964498,"t":"SWCB"},{"lat":33.871887944798935,"lng":-84.3632459361256,"t":"UNK"},{"lat":33.86864131471873,"lng":-84.35919039818188,"t":"UNK"},{"lat":33.87166912667832,"lng":-84.3582325996956,"t":"UNK"},{"lat":33.861948256220565,"lng":-84.35786071444853,"t":"DWCB"},{"lat":33.859149889227005,"lng":-84.38275414739617,"t":"Catchbasin"},{"lat":33.86095987406756,"lng":-84.38647328292048,"t":"DI"},{"lat":33.863480713106775,"lng":-84.38393760168114,"t":"CB"},{"lat":33.832443603378216,"lng":-84.37176629248543,"t":"Catchbasin"},{"lat":33.83157020538296,"lng":-84.37674841925018,"t":"CB"},{"lat":33.83589401800876,"lng":-84.37545139731994,"t":"DI"},{"lat":33.83200432072434,"lng":-84.36675310233959,"t":"Catchbasin"},{"lat":33.76986895796031,"lng":-84.36071503825924,"t":"CB"},{"lat":33.77256717581935,"lng":-84.368014038466,"t":"Catchbasin"},{"lat":33.86361100065502,"lng":-84.43687892960735,"t":"CB"},{"lat":33.85434935511374,"lng":-84.43309662787078,"t":"Catchbasin"},{"lat":33.80202829189021,"lng":-84.39741043312618,"t":"DI"},{"lat":33.79875453316487,"lng":-84.40073420420171,"t":"CB"},{"lat":33.790562467347044,"lng":-84.38614032471992,"t":"CB"},{"lat":33.84364476988437,"lng":-84.36742158049739,"t":"DI"},{"lat":33.87033649765747,"lng":-84.3737579584086,"t":"CB"},{"lat":33.87116678550272,"lng":-84.36476721047805,"t":"UNK"},{"lat":33.87537089466169,"lng":-84.35797037523646,"t":"Catchbasin"},{"lat":33.81008899189693,"lng":-84.37693158009611,"t":"DI"},{"lat":33.81147908041459,"lng":-84.36946029521096,"t":"DI"},{"lat":33.80262971921031,"lng":-84.37496755593196,"t":"Catchbasin"},{"lat":33.855469819883425,"lng":-84.38074874860186,"t":"UNK"},{"lat":33.81823218868409,"lng":-84.37193037692596,"t":"SI"},{"lat":33.82544845004573,"lng":-84.37399305726582,"t":"HW"},{"lat":33.8089751402691,"lng":-84.37462385357641,"t":"DI"},{"lat":33.802632490722544,"lng":-84.37413267300529,"t":"UNK"},{"lat":33.85352256678634,"lng":-84.39254703200983,"t":"DI"},{"lat":33.85236480165684,"lng":-84.38916391119243,"t":"DI"},{"lat":33.859649288852694,"lng":-84.38019773900012,"t":"DI"},{"lat":33.872514659877304,"lng":-84.36031136534613,"t":"SWCB"},{"lat":33.8007873427023,"lng":-84.38999623355173,"t":"Catchbasin"},{"lat":33.80114589208019,"lng":-84.38939006768729,"t":"CB"},{"lat":33.794893099807105,"lng":-84.43283945437757,"t":"CB"},{"lat":33.86792098728349,"lng":-84.37226913773138,"t":"UNK"},{"lat":33.855245164481495,"lng":-84.37902044173204,"t":"Catchbasin"},{"lat":33.860611056546325,"lng":-84.36481267511807,"t":"Catchbasin"},{"lat":33.855318953704014,"lng":-84.36897752895207,"t":"CB"},{"lat":33.86219002739057,"lng":-84.37544947897568,"t":"DI"},{"lat":33.82314193076524,"lng":-84.43587704131421,"t":"Catchbasin"},{"lat":33.78795823653865,"lng":-84.40525110453471,"t":"DI"},{"lat":33.79991135443255,"lng":-84.36901870377949,"t":"DI"},{"lat":33.833842367889964,"lng":-84.37301419742894,"t":"CB"},{"lat":33.78306158328555,"lng":-84.44966002014583,"t":"Catchbasin"},{"lat":33.7847821466378,"lng":-84.46221211651468,"t":"Catchbasin"},{"lat":33.7835131127246,"lng":-84.45839313908047,"t":"DI"},{"lat":33.84515268839987,"lng":-84.36467706732664,"t":"DI"},{"lat":33.808651529051,"lng":-84.42701913961567,"t":"DI"},{"lat":33.83814258702505,"lng":-84.43052662456265,"t":"CB"},{"lat":33.821159256886425,"lng":-84.4424250329344,"t":"HW"},{"lat":33.821038531157186,"lng":-84.42746062282063,"t":"UNK"},{"lat":33.82299135171529,"lng":-84.43460426806416,"t":"DI"},{"lat":33.78639039756192,"lng":-84.37677603365525,"t":"DI"},{"lat":33.782672238761485,"lng":-84.36127404116029,"t":"UNK"},{"lat":33.780190127584014,"lng":-84.36155803460477,"t":"CB"},{"lat":33.797138183560236,"lng":-84.37540725994101,"t":"DI"},{"lat":33.83843441952584,"lng":-84.43848090643127,"t":"DI"},{"lat":33.83135999911046,"lng":-84.39098252890525,"t":"DI"},{"lat":33.83716290224808,"lng":-84.43615399171173,"t":"Catchbasin"},{"lat":33.78860878641868,"lng":-84.36433900939876,"t":"SI"},{"lat":33.83137325695795,"lng":-84.3668264644386,"t":"Catchbasin"},{"lat":33.8295644807086,"lng":-84.37713323577877,"t":"Catchbasin"},{"lat":33.773810657244944,"lng":-84.3604811298934,"t":"Catchbasin"},{"lat":33.81693937393331,"lng":-84.42741883193472,"t":"DI"},{"lat":33.83580419637196,"lng":-84.36204411069133,"t":"Other"},{"lat":33.860020677602215,"lng":-84.4358948523022,"t":"SWCB"},{"lat":33.840086335513334,"lng":-84.42665577452875,"t":"HW"},{"lat":33.80115831501221,"lng":-84.38518065902936,"t":"DI"},{"lat":33.833201649649254,"lng":-84.42012233996607,"t":"DI"},{"lat":33.839186626479204,"lng":-84.41714332615703,"t":"DI"},{"lat":33.8809754890729,"lng":-84.3551007272684,"t":"Catchbasin"},{"lat":33.86788750818944,"lng":-84.40812588077334,"t":"HW"},{"lat":33.870406596960656,"lng":-84.41101630347018,"t":"Catchbasin"},{"lat":33.803347039931516,"lng":-84.40498575340038,"t":"Catchbasin"},{"lat":33.80938699798459,"lng":-84.40278007137802,"t":"DI"},{"lat":33.824667712400064,"lng":-84.41187411257312,"t":"DI"},{"lat":33.82454254634571,"lng":-84.4126996927789,"t":"DI"},{"lat":33.81920278102747,"lng":-84.4090532914021,"t":"DI"},{"lat":33.803165123040365,"lng":-84.40901567853444,"t":"Catchbasin"},{"lat":33.849552749176176,"lng":-84.3709109404806,"t":"UNK"},{"lat":33.84548914611687,"lng":-84.36981389850638,"t":"Catchbasin"},{"lat":33.858492118346,"lng":-84.42754495266345,"t":"Catchbasin"},{"lat":33.85444753303307,"lng":-84.42531528122878,"t":"Catchbasin"},{"lat":33.78846930869055,"lng":-84.38455831152076,"t":"DI"},{"lat":33.76514060331167,"lng":-84.38340801497787,"t":"Catchbasin"},{"lat":33.769481448214016,"lng":-84.38588303586442,"t":"UNK"},{"lat":33.80601878893227,"lng":-84.41460246074993,"t":"UNK"},{"lat":33.85365583152118,"lng":-84.40960590537233,"t":"DI"},{"lat":33.85281721895728,"lng":-84.40847220197209,"t":"HW"},{"lat":33.80503687126539,"lng":-84.40426256021094,"t":"Catchbasin"},{"lat":33.79324304201575,"lng":-84.40507518653843,"t":"DI"},{"lat":33.788695181847274,"lng":-84.40023089037076,"t":"Catchbasin"},{"lat":33.779673679390754,"lng":-84.3799038327228,"t":"CB"},{"lat":33.80423929479919,"lng":-84.40657352995743,"t":"DI"},{"lat":33.79592040327789,"lng":-84.38370563425632,"t":"Catchbasin"},{"lat":33.798000088230665,"lng":-84.39407935141075,"t":"DI"},{"lat":33.801898078669765,"lng":-84.38659430511116,"t":"DI"},{"lat":33.76839421002736,"lng":-84.38211745333655,"t":"CB"},{"lat":33.77716221889641,"lng":-84.42322847113896,"t":"Catchbasin"},{"lat":33.77294292852968,"lng":-84.46111917049684,"t":"Catchbasin"},{"lat":33.80257900318356,"lng":-84.41682268199025,"t":"Catchbasin"},{"lat":33.80635045504877,"lng":-84.41195866481543,"t":"UNK"},{"lat":33.825090030996094,"lng":-84.35042979685471,"t":"Catchbasin"},{"lat":33.818850189077196,"lng":-84.39593702818259,"t":"DI"},{"lat":33.80389680634485,"lng":-84.41618173260778,"t":"UNK"},{"lat":33.81360639729761,"lng":-84.40288939202553,"t":"Catchbasin"},{"lat":33.8122791300635,"lng":-84.3511512465273,"t":"Catchbasin"},{"lat":33.804271872795404,"lng":-84.40513075786758,"t":"Catchbasin"},{"lat":33.82247206379106,"lng":-84.35721503640099,"t":"Catchbasin"},{"lat":33.81532282476347,"lng":-84.3571030231736,"t":"DI"},{"lat":33.80772673691472,"lng":-84.39408862796698,"t":"UNK"},{"lat":33.8103898944312,"lng":-84.3939224491655,"t":"CB"},{"lat":33.771597253444774,"lng":-84.39327711958343,"t":"DI"},{"lat":33.78034653475152,"lng":-84.37750870082506,"t":"DI"},{"lat":33.81628337979325,"lng":-84.387674514893,"t":"Catchbasin"},{"lat":33.81848461724522,"lng":-84.39629286855522,"t":"DI"},{"lat":33.81937500780763,"lng":-84.38462968034949,"t":"Catchbasin"},{"lat":33.813289293329596,"lng":-84.39197240524733,"t":"HW"},{"lat":33.802864211342474,"lng":-84.39789653299879,"t":"SI"},{"lat":33.81284120333519,"lng":-84.38731013176351,"t":"UNK"},{"lat":33.81253201986453,"lng":-84.38712559370575,"t":"UNK"},{"lat":33.814374350554,"lng":-84.39370280409953,"t":"UNK"},{"lat":33.805554282666066,"lng":-84.388680835715,"t":"Catchbasin"},{"lat":33.803733469378564,"lng":-84.3996880762497,"t":"SI"},{"lat":33.778096694016334,"lng":-84.36245352436559,"t":"UNK"},{"lat":33.84466527897554,"lng":-84.38837947370291,"t":"Catchbasin"},{"lat":33.84445506863031,"lng":-84.39713274298275,"t":"HW"},{"lat":33.85150555547961,"lng":-84.39605093953612,"t":"Catchbasin"},{"lat":33.80321391570685,"lng":-84.39406494063739,"t":"CB"},{"lat":33.81017135529456,"lng":-84.39809333395033,"t":"DI"},{"lat":33.785869436752094,"lng":-84.39337477436682,"t":"UNK"},{"lat":33.77790546781721,"lng":-84.38404030148396,"t":"UNK"},{"lat":33.84892440295798,"lng":-84.35174961057005,"t":"Catchbasin"},{"lat":33.78635271945375,"lng":-84.37985309947453,"t":"Catchbasin"},{"lat":33.785240027543914,"lng":-84.38378335514744,"t":"Catchbasin"},{"lat":33.8249232963309,"lng":-84.40346986539706,"t":"DI"},{"lat":33.7893058879297,"lng":-84.36942008966471,"t":"Catchbasin"},{"lat":33.848215196190125,"lng":-84.34894498055763,"t":"Other"},{"lat":33.84872601175824,"lng":-84.34882708861,"t":"DI"},{"lat":33.84450868344299,"lng":-84.34849910644938,"t":"Catchbasin"},{"lat":33.84403436386488,"lng":-84.35145002299666,"t":"DI"},{"lat":33.82468105679365,"lng":-84.33767937484905,"t":"DI"},{"lat":33.8011679195952,"lng":-84.38160663382014,"t":"Catchbasin"},{"lat":33.78614756340194,"lng":-84.38972785802221,"t":"UNK"},{"lat":33.78904880827823,"lng":-84.3588833964993,"t":"Catchbasin"},{"lat":33.842489256990405,"lng":-84.36497516232593,"t":"Catchbasin"},{"lat":33.829460588708926,"lng":-84.35227996199458,"t":"Catchbasin"},{"lat":33.84197488794039,"lng":-84.35408135623464,"t":"DI"},{"lat":33.84453548423108,"lng":-84.3488860494501,"t":"Catchbasin"},{"lat":33.84921084108997,"lng":-84.35304442872352,"t":"DI"},{"lat":33.83714786358687,"lng":-84.35333549137958,"t":"Catchbasin"},{"lat":33.8126263123721,"lng":-84.34947015613947,"t":"Catchbasin"},{"lat":33.79884343435822,"lng":-84.39215715856879,"t":"Catchbasin"},{"lat":33.784027466501776,"lng":-84.38266715470597,"t":"DI"},{"lat":33.77817060033066,"lng":-84.36492147841916,"t":"Catchbasin"},{"lat":33.842233607895366,"lng":-84.3685407030541,"t":"DI"},{"lat":33.85058301252429,"lng":-84.36478766290597,"t":"DI"},{"lat":33.81889433676243,"lng":-84.35190807912615,"t":"Catchbasin"},{"lat":33.833102243793235,"lng":-84.34788896355876,"t":"Catchbasin"},{"lat":33.83370818576623,"lng":-84.34781356537458,"t":"DI"},{"lat":33.8385105230934,"lng":-84.34780845732215,"t":"DI"},{"lat":33.821282666563555,"lng":-84.35211762939603,"t":"Catchbasin"},{"lat":33.79703578117204,"lng":-84.33625732634798,"t":"Catchbasin"},{"lat":33.7884309769046,"lng":-84.39652324826179,"t":"DI"},{"lat":33.78784587320106,"lng":-84.37993183602966,"t":"UNK"},{"lat":33.79929027605211,"lng":-84.39502990229013,"t":"DI"},{"lat":33.80103116043348,"lng":-84.39849936287091,"t":"Catchbasin"},{"lat":33.80103865634572,"lng":-84.39081509776867,"t":"Catchbasin"},{"lat":33.835816655958766,"lng":-84.41973689786457,"t":"Catchbasin"},{"lat":33.87808710189558,"lng":-84.3553064658251,"t":"SWCB"},{"lat":33.87249680592167,"lng":-84.34802310850864,"t":"DWCB"},{"lat":33.79108327848297,"lng":-84.38563921942294,"t":"DI"},{"lat":33.88241599121494,"lng":-84.34961236217887,"t":"UNK"},{"lat":33.87971515660847,"lng":-84.35198314311646,"t":"Catchbasin"},{"lat":33.81101989418936,"lng":-84.39335252490343,"t":"CB"},{"lat":33.7801519882359,"lng":-84.37050829393517,"t":"Catchbasin"},{"lat":33.78032863497736,"lng":-84.4001747921808,"t":"UNK"},{"lat":33.839119027849776,"lng":-84.41116419913072,"t":"SI"},{"lat":33.85047348586307,"lng":-84.36203924168859,"t":"DI"},{"lat":33.79879283542333,"lng":-84.39771855037414,"t":"DI"},{"lat":33.800998891966934,"lng":-84.39192857232976,"t":"DI"},{"lat":33.79351427653982,"lng":-84.39920736986204,"t":"DI"},{"lat":33.79035074193557,"lng":-84.34579104657676,"t":"Catchbasin"},{"lat":33.821404214990025,"lng":-84.40866640191997,"t":"CB"},{"lat":33.87401688467625,"lng":-84.3558777922743,"t":"UNK"},{"lat":33.873915493350424,"lng":-84.3483955099128,"t":"Catchbasin"},{"lat":33.82245173665279,"lng":-84.40210237493979,"t":"DI"},{"lat":33.79898935417228,"lng":-84.40419003300198,"t":"DI"},{"lat":33.798929287091774,"lng":-84.40907117612684,"t":"Catchbasin"},{"lat":33.79911419746046,"lng":-84.40541619274619,"t":"DI"},{"lat":33.79729218983649,"lng":-84.4056718915048,"t":"DI"},{"lat":33.78633092001324,"lng":-84.39882314203798,"t":"DI"},{"lat":33.77954803886006,"lng":-84.38778062085699,"t":"DI"},{"lat":33.78835808267081,"lng":-84.39615863678627,"t":"DI"},{"lat":33.80214860627083,"lng":-84.39405513008451,"t":"DI"},{"lat":33.79865200248477,"lng":-84.42906920978555,"t":"UNK"},{"lat":33.858106391449766,"lng":-84.40455546866383,"t":"SI"},{"lat":33.854553099954714,"lng":-84.43621408119948,"t":"SI"},{"lat":33.8524838707915,"lng":-84.42466726144542,"t":"CB"},{"lat":33.83402287764298,"lng":-84.39197719099892,"t":"CB"},{"lat":33.82406397277125,"lng":-84.41309596704377,"t":"CB"},{"lat":33.794617917761784,"lng":-84.40295771505161,"t":"DI"},{"lat":33.79929663159192,"lng":-84.40435577532962,"t":"DI"},{"lat":33.79849874559612,"lng":-84.40692822027495,"t":"Catchbasin"},{"lat":33.867369872787044,"lng":-84.35269648888463,"t":"Catchbasin"},{"lat":33.780438391749456,"lng":-84.39555228420143,"t":"UNK"},{"lat":33.78301385768186,"lng":-84.39237549778106,"t":"Catchbasin"},{"lat":33.78263017632866,"lng":-84.38973487252588,"t":"DI"},{"lat":33.787943774172824,"lng":-84.39682181541399,"t":"Catchbasin"},{"lat":33.768707669894596,"lng":-84.38271503243995,"t":"UNK"},{"lat":33.849562407723255,"lng":-84.41775233921065,"t":"Catchbasin"},{"lat":33.86262406127679,"lng":-84.43357127357501,"t":"SI"},{"lat":33.79157096587306,"lng":-84.36701578824793,"t":"UNK"},{"lat":33.81982695470442,"lng":-84.43447810689915,"t":"DI"},{"lat":33.80621703351271,"lng":-84.41645157811469,"t":"DI"},{"lat":33.7989137637723,"lng":-84.40803135147584,"t":"Catchbasin"},{"lat":33.794666968030235,"lng":-84.40612556505612,"t":"DI"},{"lat":33.81276403474126,"lng":-84.39182479382997,"t":"DI"},{"lat":33.787920361919845,"lng":-84.38095636744514,"t":"CB"},{"lat":33.77772937802548,"lng":-84.3827722652241,"t":"UNK"},{"lat":33.7854991059017,"lng":-84.39668713527816,"t":"Catchbasin"},{"lat":33.786851680239714,"lng":-84.39288041003402,"t":"UNK"},{"lat":33.81751994771109,"lng":-84.41385429459535,"t":"SI"},{"lat":33.777637864157455,"lng":-84.38899240193898,"t":"Catchbasin"},{"lat":33.871229572167806,"lng":-84.41407520388941,"t":"Catchbasin"},{"lat":33.78497780807106,"lng":-84.41822226814286,"t":"Catchbasin"},{"lat":33.766581082035366,"lng":-84.38871066222197,"t":"Catchbasin"},{"lat":33.773415858278916,"lng":-84.38497795438228,"t":"Catchbasin"},{"lat":33.80001477093761,"lng":-84.40519461030715,"t":"DI"},{"lat":33.79193597668253,"lng":-84.40181448058448,"t":"CB"},{"lat":33.798628397794026,"lng":-84.41292443400428,"t":"DI"},{"lat":33.88380905488279,"lng":-84.34890412208452,"t":"UNK"},{"lat":33.78623132477393,"lng":-84.38444139836876,"t":"UNK"},{"lat":33.78376333181417,"lng":-84.39619417313251,"t":"UNK"},{"lat":33.78763600089477,"lng":-84.37983724369913,"t":"UNK"},{"lat":33.86046800802712,"lng":-84.40996162681475,"t":"DI"},{"lat":33.85794505318978,"lng":-84.41265423289607,"t":"HW"},{"lat":33.860449666358676,"lng":-84.4184135899797,"t":"CB"},{"lat":33.8555413833433,"lng":-84.41258464326326,"t":"CB"},{"lat":33.831073280976334,"lng":-84.41901779825291,"t":"UNK"},{"lat":33.8186320511073,"lng":-84.41740193632714,"t":"Catchbasin"},{"lat":33.82306805906937,"lng":-84.40934445871673,"t":"DI"},{"lat":33.81538615310546,"lng":-84.41586762603455,"t":"DI"},{"lat":33.87328287379023,"lng":-84.40551242036705,"t":"Catchbasin"},{"lat":33.80666221861202,"lng":-84.38868967460809,"t":"DI"},{"lat":33.79711163833771,"lng":-84.38976957279279,"t":"DI"},{"lat":33.787835092609,"lng":-84.39332935254164,"t":"UNK"},{"lat":33.77924814738816,"lng":-84.38471597610865,"t":"UNK"},{"lat":33.7881201999671,"lng":-84.38965830763635,"t":"DI"},{"lat":33.830980606372094,"lng":-84.42014238565267,"t":"Catchbasin"},{"lat":33.85192138617115,"lng":-84.36695767538025,"t":"DI"},{"lat":33.85671597405687,"lng":-84.41138878693616,"t":"UNK"},{"lat":33.856631111003644,"lng":-84.40859887572628,"t":"SI"},{"lat":33.845182460265406,"lng":-84.4134042412796,"t":"CB"},{"lat":33.83218022724196,"lng":-84.42009728256045,"t":"DI"},{"lat":33.82382366677614,"lng":-84.40675622697556,"t":"DI"},{"lat":33.80924320924148,"lng":-84.40648601397433,"t":"SWCB"},{"lat":33.80501598005004,"lng":-84.41404000887287,"t":"DI"},{"lat":33.873242184895204,"lng":-84.4052857536616,"t":"Catchbasin"},{"lat":33.802388037641,"lng":-84.39946683395105,"t":"DI"},{"lat":33.803426491306695,"lng":-84.37948684914076,"t":"Catchbasin"},{"lat":33.81332963604014,"lng":-84.39159845775049,"t":"DI"},{"lat":33.78950626358106,"lng":-84.38623886672265,"t":"CB"},{"lat":33.824818412614526,"lng":-84.40172528411753,"t":"DI"},{"lat":33.823102325224006,"lng":-84.40416861248217,"t":"DI"},{"lat":33.82231958174471,"lng":-84.40251027938972,"t":"DI"},{"lat":33.801304084134166,"lng":-84.39453452467198,"t":"DI"},{"lat":33.85137838562804,"lng":-84.40407809113272,"t":"DI"},{"lat":33.84488574452702,"lng":-84.41562596222984,"t":"Catchbasin"},{"lat":33.82492525838238,"lng":-84.41344794932046,"t":"DI"},{"lat":33.80504928401546,"lng":-84.40414111938591,"t":"Catchbasin"},{"lat":33.80893034806977,"lng":-84.40288203143494,"t":"SWCB"},{"lat":33.82306745630107,"lng":-84.35143799201678,"t":"Catchbasin"},{"lat":33.855831824997026,"lng":-84.40307675705435,"t":"Catchbasin"},{"lat":33.835985792533315,"lng":-84.39247496625006,"t":"Catchbasin"},{"lat":33.837608220730225,"lng":-84.43426970073787,"t":"DI"},{"lat":33.77838143482618,"lng":-84.35883184382189,"t":"SI"},{"lat":33.81829441229029,"lng":-84.41372561448854,"t":"DI"},{"lat":33.82068965661738,"lng":-84.40738247182708,"t":"SI"},{"lat":33.815854149725816,"lng":-84.40806120652606,"t":"Catchbasin"},{"lat":33.84859796931813,"lng":-84.34951503445359,"t":"DI"},{"lat":33.78269268400977,"lng":-84.41461067288083,"t":"DI"},{"lat":33.85008254278125,"lng":-84.41284327484082,"t":"DI"},{"lat":33.83274275869903,"lng":-84.41749128621406,"t":"Catchbasin"},{"lat":33.77360597261497,"lng":-84.38275021675278,"t":"DI"},{"lat":33.77639687729651,"lng":-84.39449786205665,"t":"DI"},{"lat":33.81186220481808,"lng":-84.41227870481676,"t":"DI"},{"lat":33.79119311772842,"lng":-84.40267622152012,"t":"Catchbasin"},{"lat":33.83378628600373,"lng":-84.39973874765425,"t":"UNK"},{"lat":33.815395124374525,"lng":-84.42721424581174,"t":"DI"},{"lat":33.79087687514885,"lng":-84.37663281433045,"t":"DI"},{"lat":33.77500177928573,"lng":-84.38898423738019,"t":"DI"},{"lat":33.821471070341,"lng":-84.3807750964002,"t":"Catchbasin"},{"lat":33.7859178618521,"lng":-84.38241850375152,"t":"HW"},{"lat":33.81482106090143,"lng":-84.3623477311881,"t":"UNK"},{"lat":33.83044659949823,"lng":-84.37890295771503,"t":"HW"},{"lat":33.82860174878934,"lng":-84.4343285105366,"t":"DI"},{"lat":33.82115090467667,"lng":-84.44409815737686,"t":"HW"},{"lat":33.785023777297646,"lng":-84.38263568458356,"t":"CB"},{"lat":33.83014165271467,"lng":-84.38891658512048,"t":"Catchbasin"},{"lat":33.78115436744213,"lng":-84.37001934330546,"t":"Catchbasin"},{"lat":33.869746193041145,"lng":-84.36837141660624,"t":"UNK"},{"lat":33.79993323125546,"lng":-84.3743304860529,"t":"Catchbasin"},{"lat":33.78331181968434,"lng":-84.36879683234004,"t":"CB"},{"lat":33.83243524607754,"lng":-84.43393962183768,"t":"CB"},{"lat":33.786435821038815,"lng":-84.36559105549209,"t":"DI"},{"lat":33.80089629103178,"lng":-84.36710301166273,"t":"Catchbasin"},{"lat":33.84399674073892,"lng":-84.38671463631735,"t":"DI"},{"lat":33.7790037431797,"lng":-84.38374242293764,"t":"UNK"},{"lat":33.82197085382416,"lng":-84.36203135661579,"t":"SI"},{"lat":33.82523699139993,"lng":-84.37475078659844,"t":"Catchbasin"},{"lat":33.79400772077417,"lng":-84.36445974377835,"t":"Catchbasin"},{"lat":33.80228982815779,"lng":-84.36307850974622,"t":"DI"},{"lat":33.79920218126497,"lng":-84.36584778180772,"t":"DI"},{"lat":33.85180879475909,"lng":-84.44068910263823,"t":"DI"},{"lat":33.79142164836014,"lng":-84.36226432543297,"t":"DI"},{"lat":33.78899681951442,"lng":-84.36891769278564,"t":"Catchbasin"},{"lat":33.8764830051852,"lng":-84.36224758600616,"t":"UNK"},{"lat":33.814942651073665,"lng":-84.42723811391527,"t":"DI"},{"lat":33.837690239979715,"lng":-84.39856201768325,"t":"Catchbasin"},{"lat":33.865510805096,"lng":-84.37641231534562,"t":"Catchbasin"},{"lat":33.84325293995937,"lng":-84.43148557548267,"t":"CB"},{"lat":33.843244753714515,"lng":-84.4329103011027,"t":"CB"},{"lat":33.84079592919325,"lng":-84.43224251155081,"t":"DI"},{"lat":33.837658286133745,"lng":-84.44639890626125,"t":"Catchbasin"},{"lat":33.830613427836845,"lng":-84.36319781577401,"t":"DI"},{"lat":33.781994048086915,"lng":-84.37522920595822,"t":"Catchbasin"},{"lat":33.86898430921331,"lng":-84.3717746604149,"t":"UNK"},{"lat":33.86454441176677,"lng":-84.37664814681293,"t":"Catchbasin"},{"lat":33.87052617519015,"lng":-84.37398550044038,"t":"CB"},{"lat":33.871870474700835,"lng":-84.36042836293856,"t":"UNK"},{"lat":33.81494403784796,"lng":-84.36204631446807,"t":"DI"},{"lat":33.852499500002736,"lng":-84.37366194486209,"t":"Catchbasin"},{"lat":33.86482543312977,"lng":-84.37429146861946,"t":"DI"}];
 const MANHOLES_DATA = [{"lat":33.867746607870444,"lng":-84.38775231150557,"type":"SM"},{"lat":33.85845890481948,"lng":-84.38969249254151,"type":"SM"},{"lat":33.821454028720765,"lng":-84.4263501734501,"type":"SM"},{"lat":33.87211488280205,"lng":-84.36282203160079,"type":"SM"},{"lat":33.84978783982386,"lng":-84.41267355033588,"type":"SM"},{"lat":33.80120111443438,"lng":-84.38768410622038,"type":"SM"},{"lat":33.79498883796407,"lng":-84.39489010538281,"type":"SM"},{"lat":33.7998083440052,"lng":-84.39541267401452,"type":"SM"},{"lat":33.7947435377487,"lng":-84.39475438817557,"type":"SM"},{"lat":33.844128987104135,"lng":-84.4539938686547,"type":"SM"},{"lat":33.803989819826285,"lng":-84.40071793415528,"type":"SM"},{"lat":33.8208038117888,"lng":-84.41269391356614,"type":"SM"},{"lat":33.78949595015811,"lng":-84.39289667929258,"type":"SM"},{"lat":33.87116355867977,"lng":-84.37419773813905,"type":"SM"},{"lat":33.832912714736274,"lng":-84.4366047368074,"type":"SM"},{"lat":33.82695750162637,"lng":-84.44549569515733,"type":"SM"},{"lat":33.79327447844138,"lng":-84.40277433022294,"type":"SM"},{"lat":33.822894261042585,"lng":-84.42855028359219,"type":"SM"},{"lat":33.8147004877207,"lng":-84.4274798023014,"type":"SM"},{"lat":33.80793505630183,"lng":-84.39402473707584,"type":"SM"},{"lat":33.81811655677774,"lng":-84.351826770906,"type":"SM"},{"lat":33.84747524093295,"lng":-84.4137258935806,"type":"SM"},{"lat":33.80424070379372,"lng":-84.41471940086194,"type":"SM"},{"lat":33.803396694824634,"lng":-84.40504375407974,"type":"SM"},{"lat":33.80649923783215,"lng":-84.38043792054054,"type":"SM"},{"lat":33.80285081891397,"lng":-84.39556967616113,"type":"SM"},{"lat":33.804390108870955,"lng":-84.39096960079766,"type":"SM"},{"lat":33.79150462656433,"lng":-84.38505543582976,"type":"SM"},{"lat":33.79447893571208,"lng":-84.40004253663798,"type":"SM"},{"lat":33.79080413651812,"lng":-84.38139422764202,"type":"SM"},{"lat":33.79563317790534,"lng":-84.38887663725886,"type":"SM"},{"lat":33.80195909350489,"lng":-84.38497821682411,"type":"SM"},{"lat":33.8488195628438,"lng":-84.37216158161425,"type":"SM"},{"lat":33.83407789534103,"lng":-84.3719976030216,"type":"SM"},{"lat":33.83420855860128,"lng":-84.36814698896266,"type":"SM"},{"lat":33.7743489912449,"lng":-84.42722601237261,"type":"SM"},{"lat":33.8107856920613,"lng":-84.38505524910931,"type":"SM"},{"lat":33.866489813615075,"lng":-84.35433440840218,"type":"SM"},{"lat":33.860138126617166,"lng":-84.35738394901404,"type":"SM"},{"lat":33.794197259653096,"lng":-84.39612250539504,"type":"SM"},{"lat":33.82406374248043,"lng":-84.41975564681798,"type":"SM"},{"lat":33.7951973845874,"lng":-84.39770243612627,"type":"SM"},{"lat":33.795106985637084,"lng":-84.39287034933375,"type":"SM"},{"lat":33.868337596710155,"lng":-84.40300027740065,"type":"SM"},{"lat":33.84579770220273,"lng":-84.38907430640093,"type":"SM"},{"lat":33.863481883844926,"lng":-84.37861008454726,"type":"SM"},{"lat":33.81410702977103,"lng":-84.38772724339624,"type":"SM"},{"lat":33.79066728775568,"lng":-84.38432282931434,"type":"SM"},{"lat":33.79882633062845,"lng":-84.41458187948345,"type":"SM"},{"lat":33.82974627829153,"lng":-84.4244477158869,"type":"SM"},{"lat":33.80317908427696,"lng":-84.37826430685956,"type":"SM"},{"lat":33.803050563287755,"lng":-84.37477328185342,"type":"SM"},{"lat":33.81774140887208,"lng":-84.35163793471048,"type":"SM"},{"lat":33.792358847975585,"lng":-84.39746874659198,"type":"SM"},{"lat":33.79889985206708,"lng":-84.39922533982258,"type":"SM"},{"lat":33.818654101860666,"lng":-84.41453173850762,"type":"SM"},{"lat":33.84588775496861,"lng":-84.43406658538765,"type":"SM"},{"lat":33.818071186246705,"lng":-84.39074872361475,"type":"SM"},{"lat":33.803359443337925,"lng":-84.40323383254375,"type":"SM"},{"lat":33.798605911913704,"lng":-84.41126689853961,"type":"SM"},{"lat":33.80543275645982,"lng":-84.36267505289213,"type":"SM"},{"lat":33.8026381577862,"lng":-84.38295414955498,"type":"SM"},{"lat":33.8055705725024,"lng":-84.38812223797207,"type":"SM"},{"lat":33.806685025880334,"lng":-84.37932559603455,"type":"SM"},{"lat":33.85699115388585,"lng":-84.35190726049237,"type":"SM"},{"lat":33.844430127894775,"lng":-84.3488461884075,"type":"SM"},{"lat":33.820255045237666,"lng":-84.42048845789337,"type":"SM"},{"lat":33.85382332048491,"lng":-84.36814112332478,"type":"SM"},{"lat":33.817711028129146,"lng":-84.36945558874868,"type":"SM"},{"lat":33.861104105543184,"lng":-84.38871434271798,"type":"SM"},{"lat":33.85167066798872,"lng":-84.39049697214975,"type":"SM"},{"lat":33.785369784435424,"lng":-84.39410816542768,"type":"SM"},{"lat":33.78418686798511,"lng":-84.45783181307854,"type":"SM"},{"lat":33.85797360610233,"lng":-84.36908879252526,"type":"SM"},{"lat":33.853404776317944,"lng":-84.39179456137708,"type":"SM"},{"lat":33.86214909293189,"lng":-84.38448581840763,"type":"SM"},{"lat":33.772517207982084,"lng":-84.40067601125683,"type":"SM"},{"lat":33.8543876714469,"lng":-84.4251324089893,"type":"SM"},{"lat":33.797145707801825,"lng":-84.38151554596894,"type":"SM"},{"lat":33.82237439478663,"lng":-84.44443225096697,"type":"SM"},{"lat":33.835344520217475,"lng":-84.4379133425399,"type":"SM"},{"lat":33.854800179785585,"lng":-84.36872627897863,"type":"SM"},{"lat":33.81042712944689,"lng":-84.39280445961974,"type":"SM"},{"lat":33.79170792034726,"lng":-84.38253708628969,"type":"SM"},{"lat":33.797024803889414,"lng":-84.37981146518254,"type":"SM"},{"lat":33.793348601630065,"lng":-84.3857161680631,"type":"SM"},{"lat":33.792163889093196,"lng":-84.38854040966687,"type":"SM"},{"lat":33.79675094039964,"lng":-84.37980115036558,"type":"SM"},{"lat":33.77927810845699,"lng":-84.39938939809846,"type":"SM"},{"lat":33.797797910203634,"lng":-84.40636496165715,"type":"SM"},{"lat":33.87113027813266,"lng":-84.35637917547406,"type":"SM"},{"lat":33.79260364927799,"lng":-84.40191031890963,"type":"SM"},{"lat":33.81364544978191,"lng":-84.35631226296024,"type":"SM"},{"lat":33.80244485651654,"lng":-84.34882744500668,"type":"SM"},{"lat":33.795912663838344,"lng":-84.35472720276914,"type":"SM"},{"lat":33.793485277300285,"lng":-84.40074439018012,"type":"SM"},{"lat":33.79980691446687,"lng":-84.40044252271466,"type":"SM"},{"lat":33.78187750591906,"lng":-84.35298968951192,"type":"SM"},{"lat":33.86093628548785,"lng":-84.37033579835636,"type":"SM"},{"lat":33.82188900545058,"lng":-84.37405422386732,"type":"SM"},{"lat":33.798825736005675,"lng":-84.41370807188886,"type":"SM"},{"lat":33.846073365851794,"lng":-84.36846198037665,"type":"SM"},{"lat":33.866132409700505,"lng":-84.37712935231352,"type":"SM"},{"lat":33.87546700649423,"lng":-84.36168569865364,"type":"SM"},{"lat":33.80318878864257,"lng":-84.4091952330225,"type":"SM"},{"lat":33.85066737037545,"lng":-84.36095104178143,"type":"SM"},{"lat":33.84425048563932,"lng":-84.3713713082194,"type":"SM"},{"lat":33.79625325235079,"lng":-84.4093231103504,"type":"SM"},{"lat":33.79676941850549,"lng":-84.35886506301377,"type":"SM"},{"lat":33.83564191203379,"lng":-84.36723781865996,"type":"SM"},{"lat":33.800102317758814,"lng":-84.38688019390924,"type":"SM"},{"lat":33.822376604258196,"lng":-84.40247516009458,"type":"SM"},{"lat":33.87684842207242,"lng":-84.35883607139687,"type":"SM"},{"lat":33.86314519499888,"lng":-84.3877740876267,"type":"SM"},{"lat":33.851520460578,"lng":-84.42430819767021,"type":"SM"},{"lat":33.86476638609536,"lng":-84.37489496053888,"type":"SM"},{"lat":33.875108149622996,"lng":-84.35794260344957,"type":"SM"},{"lat":33.818921705520424,"lng":-84.41726136875207,"type":"SM"},{"lat":33.84081706866694,"lng":-84.43934004478,"type":"SM"},{"lat":33.87368020379576,"lng":-84.36529908143672,"type":"SM"},{"lat":33.86565801477637,"lng":-84.38756969417065,"type":"SM"},{"lat":33.82293685802501,"lng":-84.43759386032127,"type":"SM"},{"lat":33.81829989607982,"lng":-84.38859124757374,"type":"SM"},{"lat":33.785984663059054,"lng":-84.39509032914576,"type":"SM"},{"lat":33.86294972193068,"lng":-84.39630644047665,"type":"SM"},{"lat":33.800075789845515,"lng":-84.36356831271158,"type":"SM"},{"lat":33.82175335102465,"lng":-84.38583266733795,"type":"SM"},{"lat":33.78649037036964,"lng":-84.39610964785022,"type":"SM"},{"lat":33.85760034184748,"lng":-84.3690814033914,"type":"SM"},{"lat":33.83344826111293,"lng":-84.43898453622266,"type":"SM"},{"lat":33.78165297779084,"lng":-84.39045636818732,"type":"SM"},{"lat":33.84104265876689,"lng":-84.39429734414217,"type":"SM"},{"lat":33.873067545843824,"lng":-84.40480765739807,"type":"SM"},{"lat":33.81887712510458,"lng":-84.38161655339488,"type":"SM"},{"lat":33.776246906944024,"lng":-84.35394119421159,"type":"SM"},{"lat":33.81844168408026,"lng":-84.39496657988538,"type":"SM"},{"lat":33.82061921196791,"lng":-84.4449924514952,"type":"SM"},{"lat":33.870428864588426,"lng":-84.405374998496,"type":"SM"},{"lat":33.80393383161351,"lng":-84.38025952879593,"type":"SM"},{"lat":33.80675381375527,"lng":-84.39617937544207,"type":"SM"},{"lat":33.86760953408808,"lng":-84.38783852520287,"type":"SM"},{"lat":33.78684090659502,"lng":-84.39416785412062,"type":"SM"},{"lat":33.799661624912254,"lng":-84.35003789882758,"type":"SM"},{"lat":33.78511495498309,"lng":-84.43034747246006,"type":"SM"},{"lat":33.8328700261168,"lng":-84.43672259307594,"type":"SM"},{"lat":33.83554844833259,"lng":-84.36773476139966,"type":"SM"},{"lat":33.866684457876914,"lng":-84.38889935887516,"type":"SM"},{"lat":33.793038827609415,"lng":-84.40359245826185,"type":"SM"},{"lat":33.79376921068568,"lng":-84.4179930606942,"type":"SM"},{"lat":33.7952024541537,"lng":-84.41504329420202,"type":"SM"},{"lat":33.79375763692386,"lng":-84.41691953597937,"type":"SM"},{"lat":33.82964731942078,"lng":-84.42946522082072,"type":"SM"},{"lat":33.842791085897225,"lng":-84.37211228742149,"type":"SM"},{"lat":33.83370610033392,"lng":-84.36736096256557,"type":"SM"},{"lat":33.81716535891094,"lng":-84.37013377755798,"type":"SM"},{"lat":33.806879460395095,"lng":-84.37409777848822,"type":"SM"},{"lat":33.7987334788592,"lng":-84.39206083303121,"type":"SM"},{"lat":33.79490411949377,"lng":-84.39371991062676,"type":"SM"},{"lat":33.79353562474233,"lng":-84.38907024969153,"type":"SM"},{"lat":33.80141727711639,"lng":-84.39842621920953,"type":"SM"},{"lat":33.7914194611088,"lng":-84.38540361115048,"type":"SM"},{"lat":33.77891840139739,"lng":-84.38429920858566,"type":"SM"},{"lat":33.81480502728896,"lng":-84.39315476141257,"type":"SM"},{"lat":33.787972130574715,"lng":-84.39622243531329,"type":"SM"},{"lat":33.813326759535485,"lng":-84.38045126148624,"type":"SM"},{"lat":33.80696209157656,"lng":-84.3890280520643,"type":"SM"},{"lat":33.782270202323424,"lng":-84.39428272643026,"type":"SM"},{"lat":33.78172233279739,"lng":-84.35321806524446,"type":"SM"},{"lat":33.80648266475915,"lng":-84.39908995205201,"type":"SM"},{"lat":33.80641710861818,"lng":-84.39979049379396,"type":"SM"},{"lat":33.783191148757396,"lng":-84.39330736314147,"type":"SM"},{"lat":33.79632822572786,"lng":-84.3888022690103,"type":"SM"},{"lat":33.79243802443956,"lng":-84.40369938008706,"type":"SM"},{"lat":33.794105306945326,"lng":-84.41022796229727,"type":"SM"},{"lat":33.841296431338364,"lng":-84.39416029015939,"type":"SM"},{"lat":33.801435044525874,"lng":-84.38959126628401,"type":"SM"},{"lat":33.8000841970375,"lng":-84.3899685033904,"type":"SM"},{"lat":33.78803562080889,"lng":-84.40782723949046,"type":"SM"},{"lat":33.78892267578198,"lng":-84.4437449414,"type":"SM"},{"lat":33.83189387853068,"lng":-84.42812611186835,"type":"SM"},{"lat":33.80449687012906,"lng":-84.36883897367613,"type":"SM"},{"lat":33.798168199308286,"lng":-84.39755838429001,"type":"SM"},{"lat":33.863097901107594,"lng":-84.35149155659938,"type":"SM"},{"lat":33.84849578566076,"lng":-84.414583279292,"type":"SM"},{"lat":33.777588711890076,"lng":-84.42905856275934,"type":"SM"},{"lat":33.80572372553578,"lng":-84.36857956191642,"type":"SM"},{"lat":33.817494384861654,"lng":-84.38508727106793,"type":"SM"},{"lat":33.80310650568197,"lng":-84.40219412087646,"type":"SM"},{"lat":33.87967435247809,"lng":-84.3579886960411,"type":"SM"},{"lat":33.86445736146222,"lng":-84.43317243715954,"type":"SM"},{"lat":33.806062727708714,"lng":-84.34898425567567,"type":"SM"},{"lat":33.82320336916725,"lng":-84.41999655065867,"type":"SM"},{"lat":33.86458917425864,"lng":-84.38560425592634,"type":"SM"},{"lat":33.78163233195923,"lng":-84.35326881514295,"type":"SM"},{"lat":33.811871942603965,"lng":-84.41911974483355,"type":"SM"},{"lat":33.829016930714126,"lng":-84.39529210851582,"type":"SM"},{"lat":33.757595514366365,"lng":-84.42296320642976,"type":"SM"},{"lat":33.79629144871748,"lng":-84.40787748274626,"type":"SM"},{"lat":33.818578679461986,"lng":-84.4612699331708,"type":"SM"},{"lat":33.823264901422654,"lng":-84.44016461526833,"type":"SM"},{"lat":33.777374878826016,"lng":-84.42887101933523,"type":"SM"},{"lat":33.811899756490796,"lng":-84.43726367795178,"type":"SM"},{"lat":33.87357700721963,"lng":-84.36383908944198,"type":"SM"},{"lat":33.82006449613465,"lng":-84.42612512895266,"type":"SM"},{"lat":33.783947602579836,"lng":-84.39091460271213,"type":"SM"},{"lat":33.79408816979528,"lng":-84.3651319761689,"type":"SM"},{"lat":33.78835020170294,"lng":-84.40569969937219,"type":"SM"},{"lat":33.78134259692912,"lng":-84.38483855470186,"type":"SM"},{"lat":33.77827865247326,"lng":-84.4289742257807,"type":"SM"},{"lat":33.762264137937045,"lng":-84.39120412522198,"type":"SM"},{"lat":33.7419831032888,"lng":-84.3761640005697,"type":"SM"},{"lat":33.77320815351843,"lng":-84.40142743372054,"type":"SM"},{"lat":33.77526069149861,"lng":-84.47418026040948,"type":"SM"},{"lat":33.76253775502495,"lng":-84.42138734905816,"type":"SM"},{"lat":33.802454680010335,"lng":-84.42887015946982,"type":"SM"},{"lat":33.75861916355448,"lng":-84.4258956602515,"type":"SM"},{"lat":33.75852048875861,"lng":-84.42671036428975,"type":"SM"},{"lat":33.76731243323007,"lng":-84.45312535345442,"type":"SM"},{"lat":33.80479794066457,"lng":-84.50027576616618,"type":"SM"},{"lat":33.761480867035495,"lng":-84.42320027952843,"type":"SM"},{"lat":33.80493993128474,"lng":-84.4117693643982,"type":"SM"},{"lat":33.7905787643107,"lng":-84.44637329424694,"type":"SM"},{"lat":33.76167624643027,"lng":-84.35190541231694,"type":"SM"},{"lat":33.783235123350416,"lng":-84.46043399057595,"type":"SM"},{"lat":33.78407529679904,"lng":-84.46616081667969,"type":"SM"},{"lat":33.767554143308715,"lng":-84.4116059994854,"type":"SM"},{"lat":33.80325969944294,"lng":-84.39550148039038,"type":"SM"},{"lat":33.8040364926219,"lng":-84.43388813417795,"type":"SM"},{"lat":33.818215492230195,"lng":-84.35446312299877,"type":"SM"},{"lat":33.764076968617665,"lng":-84.43989569860636,"type":"SM"},{"lat":33.774129811666995,"lng":-84.42790172148707,"type":"SM"},{"lat":33.79655683679657,"lng":-84.34989010187908,"type":"SM"},{"lat":33.793212164216285,"lng":-84.4180328975568,"type":"SM"},{"lat":33.78698129356649,"lng":-84.40023994770148,"type":"SM"},{"lat":33.790800330525144,"lng":-84.4475893829811,"type":"SM"},{"lat":33.77371110560785,"lng":-84.40142743372054,"type":"SM"},{"lat":33.855438784264564,"lng":-84.35725922928317,"type":"SM"},{"lat":33.793282162718704,"lng":-84.44675497458596,"type":"SM"},{"lat":33.88130573768938,"lng":-84.35200194915636,"type":"SM"},{"lat":33.79826558507605,"lng":-84.42752474245921,"type":"SM"},{"lat":33.7694813227967,"lng":-84.39848916777949,"type":"SM"},{"lat":33.77299552599093,"lng":-84.41072612882881,"type":"SM"},{"lat":33.7632075863624,"lng":-84.40027749991478,"type":"SM"},{"lat":33.77764577429292,"lng":-84.4405691623185,"type":"SM"},{"lat":33.80645558498708,"lng":-84.4120019383671,"type":"SM"},{"lat":33.80422828595265,"lng":-84.34818483892643,"type":"SM"},{"lat":33.78023492673068,"lng":-84.44454304515976,"type":"SM"},{"lat":33.81432007781085,"lng":-84.45772859355074,"type":"SM"},{"lat":33.80479730327783,"lng":-84.50027481234592,"type":"SM"},{"lat":33.809073630592664,"lng":-84.39255410082748,"type":"SM"},{"lat":33.77246418270121,"lng":-84.40416510602569,"type":"SM"},{"lat":33.76888195221972,"lng":-84.40115581020702,"type":"SM"},{"lat":33.79889397507639,"lng":-84.42907304608012,"type":"SM"},{"lat":33.75616001764464,"lng":-84.43668718398501,"type":"SM"},{"lat":33.813712615680686,"lng":-84.46092019510716,"type":"SM"},{"lat":33.77189897645993,"lng":-84.42200978219653,"type":"SM"},{"lat":33.659890260075926,"lng":-84.52911148338801,"type":"SM"},{"lat":33.76093247517821,"lng":-84.36295284055834,"type":"SM"},{"lat":33.788442667578266,"lng":-84.43505252157193,"type":"SM"},{"lat":33.808535816707675,"lng":-84.48245558842899,"type":"SM"},{"lat":33.73207068997491,"lng":-84.37301387473413,"type":"SM"},{"lat":33.6952214930381,"lng":-84.50286822230838,"type":"SM"},{"lat":33.82227087137165,"lng":-84.48390449969618,"type":"SM"},{"lat":33.743441724115755,"lng":-84.37294862486462,"type":"SM"},{"lat":33.804723535437304,"lng":-84.49005567472979,"type":"SM"},{"lat":33.818179421843425,"lng":-84.48124131100192,"type":"SM"},{"lat":33.77787189588794,"lng":-84.46862348904271,"type":"SM"},{"lat":33.785010712726205,"lng":-84.42151531320515,"type":"SM"},{"lat":33.76397176417155,"lng":-84.36215635781731,"type":"SM"},{"lat":33.75397930384157,"lng":-84.36942800645475,"type":"SM"},{"lat":33.768384121624294,"lng":-84.44827800553756,"type":"SM"},{"lat":33.735192753714465,"lng":-84.3496215289254,"type":"SM"},{"lat":33.772742758372665,"lng":-84.42233241844428,"type":"SM"},{"lat":33.754169621815535,"lng":-84.36942576105243,"type":"SM"},{"lat":33.66991140789948,"lng":-84.53209514498958,"type":"SM"},{"lat":33.74233702601293,"lng":-84.34880861835471,"type":"SM"},{"lat":33.75958698031284,"lng":-84.3629714329178,"type":"SM"},{"lat":33.804997202416445,"lng":-84.47235928549993,"type":"SM"},{"lat":33.728045517465944,"lng":-84.3674096252389,"type":"SM"},{"lat":33.779953599910776,"lng":-84.47809371956909,"type":"SM"},{"lat":33.76630145133947,"lng":-84.36278644292526,"type":"SM"},{"lat":33.75291720170295,"lng":-84.34849387550486,"type":"SM"},{"lat":33.72673896530035,"lng":-84.3678301255872,"type":"SM"},{"lat":33.74769655133783,"lng":-84.37249549958156,"type":"SM"},{"lat":33.76392448249854,"lng":-84.39982074963896,"type":"SM"},{"lat":33.803542662493626,"lng":-84.35641808230243,"type":"SM"},{"lat":33.7647190583598,"lng":-84.36553612599215,"type":"SM"},{"lat":33.7636886209013,"lng":-84.38949312507607,"type":"SM"},{"lat":33.664294046408166,"lng":-84.53028435645237,"type":"SM"},{"lat":33.75274369098563,"lng":-84.36708996700354,"type":"SM"},{"lat":33.81783575941645,"lng":-84.50861460410626,"type":"SM"},{"lat":33.753419310731296,"lng":-84.37996300010751,"type":"SM"},{"lat":33.76458402197501,"lng":-84.4458023448065,"type":"SM"},{"lat":33.74166965563981,"lng":-84.38286662524675,"type":"SM"},{"lat":33.73145620640887,"lng":-84.37441312550352,"type":"SM"},{"lat":33.772249759087146,"lng":-84.43838478307505,"type":"SM"},{"lat":33.762723448381436,"lng":-84.3853570000232,"type":"SM"},{"lat":33.909506775843255,"lng":-84.39813056109021,"type":"SM"},{"lat":33.80332229672474,"lng":-84.43572953059358,"type":"SM"},{"lat":33.73602137885601,"lng":-84.3813549997021,"type":"SM"},{"lat":33.830982986719555,"lng":-84.48913089364791,"type":"SM"},{"lat":33.76142188738153,"lng":-84.36454429800534,"type":"SM"},{"lat":33.77689075509976,"lng":-84.47535564884775,"type":"SM"},{"lat":33.75443103488215,"lng":-84.40716137541864,"type":"SM"},{"lat":33.662419944128686,"lng":-84.53325131430617,"type":"SM"},{"lat":33.7557110357161,"lng":-84.42083855869414,"type":"SM"},{"lat":33.750886896912085,"lng":-84.37203150050958,"type":"SM"},{"lat":33.74531290826372,"lng":-84.34870532627946,"type":"SM"},{"lat":33.79265878322964,"lng":-84.49875961532712,"type":"SM"},{"lat":33.7567151723177,"lng":-84.39516262444079,"type":"SM"},{"lat":33.749691097308016,"lng":-84.41998502513219,"type":"SM"},{"lat":33.7627203449394,"lng":-84.39783787503683,"type":"SM"},{"lat":33.74598655170326,"lng":-84.37254987447284,"type":"SM"},{"lat":33.7469237932445,"lng":-84.37298849978487,"type":"SM"},{"lat":33.766298620772226,"lng":-84.39311449996916,"type":"SM"},{"lat":33.74012413843489,"lng":-84.38415712504437,"type":"SM"},{"lat":33.72811689663353,"lng":-84.36781924941965,"type":"SM"},{"lat":33.88084152975275,"lng":-84.37762505817906,"type":"SM"},{"lat":33.891991765394145,"lng":-84.3824751997665,"type":"SM"},{"lat":33.688316446435515,"lng":-84.52395945054906,"type":"SM"},{"lat":33.76446448243673,"lng":-84.39964674998697,"type":"SM"},{"lat":33.744974827552426,"lng":-84.37319875055367,"type":"SM"},{"lat":33.75619999991602,"lng":-84.3951843755866,"type":"SM"},{"lat":33.69884821128014,"lng":-84.5366280009993,"type":"SM"},{"lat":33.750849655607254,"lng":-84.37547887456132,"type":"SM"},{"lat":33.69578830903725,"lng":-84.52360409303309,"type":"SM"},{"lat":33.684990512617674,"lng":-84.53143703635665,"type":"SM"},{"lat":33.74710999976861,"lng":-84.37300299975588,"type":"SM"},{"lat":33.736033792624305,"lng":-84.3806662498903,"type":"SM"},{"lat":33.89087259067079,"lng":-84.38604434407995,"type":"SM"},{"lat":33.761271034438614,"lng":-84.40252862516972,"type":"SM"},{"lat":33.791349748717664,"lng":-84.50832939757365,"type":"SM"},{"lat":33.791645289465166,"lng":-84.50967884037183,"type":"SM"},{"lat":33.75950048102887,"lng":-84.40975778717954,"type":"SM"},{"lat":33.6710043642392,"lng":-84.53807282820317,"type":"SM"},{"lat":33.749950648105774,"lng":-84.4193022848638,"type":"SM"},{"lat":33.758898518141045,"lng":-84.4136148163339,"type":"SM"},{"lat":33.743205862518515,"lng":-84.36693474999934,"type":"SM"},{"lat":33.88525859836904,"lng":-84.38125595581391,"type":"SM"},{"lat":33.751346207356455,"lng":-84.36713412460061,"type":"SM"},{"lat":33.759089310591385,"lng":-84.3972723749785,"type":"SM"},{"lat":33.725420551225234,"lng":-84.39158063685414,"type":"SM"},{"lat":33.76504718830364,"lng":-84.31105037513775,"type":"SM"},{"lat":33.88139079012585,"lng":-84.3624184336137,"type":"SM"},{"lat":33.868735054169406,"lng":-84.4409297325455,"type":"SM"},{"lat":33.90139804579414,"lng":-84.38110118836589,"type":"SM"},{"lat":33.90437632893613,"lng":-84.3619496368971,"type":"SM"},{"lat":33.76431806880066,"lng":-84.49082427904067,"type":"SM"},{"lat":33.6973770585749,"lng":-84.5113906777864,"type":"SM"},{"lat":33.73374466504128,"lng":-84.40131669661426,"type":"SM"},{"lat":33.87622085375111,"lng":-84.38471193803414,"type":"SM"},{"lat":33.73431991470538,"lng":-84.47295432187546,"type":"SM"},{"lat":33.90161256511802,"lng":-84.41459058874261,"type":"SM"},{"lat":33.77209525287974,"lng":-84.3546492012027,"type":"SM"},{"lat":33.86731176655981,"lng":-84.38429194194993,"type":"SM"},{"lat":33.87412876113921,"lng":-84.37389227065613,"type":"SM"},{"lat":33.80050259356697,"lng":-84.50824188991567,"type":"SM"},{"lat":33.69950398040035,"lng":-84.4166558570038,"type":"SM"},{"lat":33.7623507288581,"lng":-84.46978524332191,"type":"SM"},{"lat":33.72499275985983,"lng":-84.4172389408934,"type":"SM"},{"lat":33.71653986236165,"lng":-84.42803386008437,"type":"SM"},{"lat":33.73652857883268,"lng":-84.43466245308534,"type":"SM"},{"lat":33.88529294801528,"lng":-84.38145039481151,"type":"SM"},{"lat":33.89586449352973,"lng":-84.38552711184671,"type":"SM"},{"lat":33.86945562087924,"lng":-84.38662258751008,"type":"SM"},{"lat":33.888742603076295,"lng":-84.35942136500975,"type":"SM"},{"lat":33.81564990375561,"lng":-84.51661328381097,"type":"SM"},{"lat":33.771360531297326,"lng":-84.47988706699122,"type":"SM"},{"lat":33.89565372827111,"lng":-84.44527795892122,"type":"SM"},{"lat":33.729224741960614,"lng":-84.45636524900053,"type":"SM"},{"lat":33.768872496292424,"lng":-84.48220887960483,"type":"SM"},{"lat":33.76624628378758,"lng":-84.3017312038155,"type":"SM"},{"lat":33.77048905157137,"lng":-84.47883124979515,"type":"SM"},{"lat":33.869564357425276,"lng":-84.43460267281611,"type":"SM"},{"lat":33.72659567037923,"lng":-84.45843927052505,"type":"SM"},{"lat":33.752761775052086,"lng":-84.43768210653586,"type":"SM"},{"lat":33.730801655043535,"lng":-84.54115763281109,"type":"SM"},{"lat":33.72872592372121,"lng":-84.46122863703457,"type":"SM"},{"lat":33.75581035706242,"lng":-84.54134916039717,"type":"SM"},{"lat":33.90531232319503,"lng":-84.38330381982841,"type":"SM"},{"lat":33.75909725959802,"lng":-84.54013162785031,"type":"SM"},{"lat":33.70528925154767,"lng":-84.533603836526,"type":"SM"},{"lat":33.76353538335822,"lng":-84.50345036189213,"type":"SM"},{"lat":33.74021167219955,"lng":-84.50964498926662,"type":"SM"},{"lat":33.70909362759354,"lng":-84.50414604176716,"type":"SM"},{"lat":33.76289073796,"lng":-84.47084070610597,"type":"SM"},{"lat":33.77048489328483,"lng":-84.49379963574576,"type":"SM"},{"lat":33.72840100820216,"lng":-84.4357951979081,"type":"SM"},{"lat":33.76370349970671,"lng":-84.5036167000601,"type":"SM"},{"lat":33.74799884879189,"lng":-84.42293464890813,"type":"SM"},{"lat":33.75653146850369,"lng":-84.48785367359739,"type":"SM"},{"lat":33.72036985300463,"lng":-84.47134734522557,"type":"SM"},{"lat":33.70842294504948,"lng":-84.51283764335537,"type":"SM"},{"lat":33.87731490057198,"lng":-84.44053764819188,"type":"SM"},{"lat":33.72025631569437,"lng":-84.49221174977295,"type":"SM"},{"lat":33.9054352471957,"lng":-84.35150719592178,"type":"SM"},{"lat":33.742051157048955,"lng":-84.49487192001853,"type":"SM"},{"lat":33.75102438815217,"lng":-84.43715593431885,"type":"SM"},{"lat":33.75061377059167,"lng":-84.44183192283428,"type":"SM"},{"lat":33.65862628249259,"lng":-84.52403358688372,"type":"SM"},{"lat":33.7116767767851,"lng":-84.48841576154798,"type":"SM"},{"lat":33.87794875214163,"lng":-84.45068504115986,"type":"SM"},{"lat":33.71599619897706,"lng":-84.46516059222017,"type":"SM"},{"lat":33.73718763161447,"lng":-84.42689235961966,"type":"SM"},{"lat":33.68971184148721,"lng":-84.35653807336504,"type":""},{"lat":33.70791754919027,"lng":-84.36506717191996,"type":""},{"lat":33.65659827205854,"lng":-84.3792462863422,"type":""},{"lat":33.72351652802936,"lng":-84.38057151716501,"type":""},{"lat":33.718790210231234,"lng":-84.37784061303086,"type":""},{"lat":33.7276512620662,"lng":-84.38274664775673,"type":""},{"lat":33.659984926128075,"lng":-84.39640212537788,"type":""},{"lat":33.66678791070721,"lng":-84.39694216903375,"type":""},{"lat":33.7061855512425,"lng":-84.3982973274534,"type":""},{"lat":33.72685247608097,"lng":-84.41064456414313,"type":""},{"lat":33.71549293432208,"lng":-84.41706877525738,"type":""},{"lat":33.720449872084124,"lng":-84.43101446261899,"type":""},{"lat":33.724990772262274,"lng":-84.41446644432388,"type":""},{"lat":33.7307414188141,"lng":-84.42426590178924,"type":""},{"lat":33.72960483476235,"lng":-84.42214455304791,"type":""},{"lat":33.733973019029605,"lng":-84.41713327375098,"type":""},{"lat":33.73643732398661,"lng":-84.41333164940185,"type":""},{"lat":33.73623742052045,"lng":-84.40647559281547,"type":""},{"lat":33.73879573364903,"lng":-84.41324653375162,"type":""},{"lat":33.744549574764946,"lng":-84.41479130602184,"type":""},{"lat":33.74066009021024,"lng":-84.41331375665115,"type":""},{"lat":33.73817565684088,"lng":-84.41329133640374,"type":""},{"lat":33.73974404596108,"lng":-84.40280014514208,"type":""},{"lat":33.74342550698865,"lng":-84.41230698560076,"type":""},{"lat":33.746356056557886,"lng":-84.40640361645987,"type":""},{"lat":33.744956137376725,"lng":-84.41005205938558,"type":""},{"lat":33.747917979600466,"lng":-84.41136714980823,"type":""},{"lat":33.746386734090464,"lng":-84.40827864535022,"type":""},{"lat":33.75068316262725,"lng":-84.40536530872873,"type":""},{"lat":33.751986415590636,"lng":-84.4063944767517,"type":""},{"lat":33.75202031690168,"lng":-84.41005332214742,"type":""},{"lat":33.75077265806731,"lng":-84.41161787362877,"type":""},{"lat":33.75327570483278,"lng":-84.41354546841494,"type":""},{"lat":33.75625850835303,"lng":-84.4144916815226,"type":""},{"lat":33.75761057498365,"lng":-84.41364177094262,"type":""},{"lat":33.75299600287517,"lng":-84.41798893891139,"type":""},{"lat":33.75062867843111,"lng":-84.4079886065182,"type":""},{"lat":33.7315736955405,"lng":-84.32715865654741,"type":""},{"lat":33.75243288196321,"lng":-84.34247049239477,"type":""},{"lat":33.7607853244921,"lng":-84.33138041273281,"type":""},{"lat":33.759319659682646,"lng":-84.34679180979758,"type":""},{"lat":33.758138859799516,"lng":-84.28391144507702,"type":""},{"lat":33.764186111955354,"lng":-84.30330545074716,"type":""},{"lat":33.766406769670446,"lng":-84.30864312713653,"type":""},{"lat":33.76521861891914,"lng":-84.30985833610009,"type":""},{"lat":33.77879151261228,"lng":-84.30951604826222,"type":""},{"lat":33.77823738347888,"lng":-84.31542444401914,"type":""},{"lat":33.76970354947219,"lng":-84.33286759430464,"type":""},{"lat":33.77137313011193,"lng":-84.35201845304735,"type":""},{"lat":33.77211766809675,"lng":-84.34268094970149,"type":""},{"lat":33.767101463893916,"lng":-84.34427059506469,"type":""},{"lat":33.74999591910722,"lng":-84.45552524006904,"type":""},{"lat":33.749228355799126,"lng":-84.45256160275343,"type":""},{"lat":33.74739064849893,"lng":-84.44910804082396,"type":""},{"lat":33.741606404829575,"lng":-84.4514383816715,"type":""},{"lat":33.77635050283048,"lng":-84.39237537171502,"type":"CSM"},{"lat":33.770276214476745,"lng":-84.37753714774159,"type":"CSM"},{"lat":33.778392428219824,"lng":-84.40606478458383,"type":"CSM"},{"lat":33.76531981283649,"lng":-84.37876678500508,"type":"CSM"},{"lat":33.76942871108083,"lng":-84.37872632851611,"type":"CSM"},{"lat":33.77522291276959,"lng":-84.3761015376289,"type":"CSM"},{"lat":33.775737296074254,"lng":-84.37121457049176,"type":"CSM"},{"lat":33.77290686934308,"lng":-84.42393575979165,"type":"CSM"},{"lat":33.78490792462408,"lng":-84.41671317343302,"type":"CSM"},{"lat":33.791242081450726,"lng":-84.36693766656201,"type":"CSM"},{"lat":33.791681084102464,"lng":-84.36558430263487,"type":"CSM"},{"lat":33.76891260296293,"lng":-84.36595754844349,"type":"CSM"},{"lat":33.78110800519437,"lng":-84.37540981218328,"type":"CSM"},{"lat":33.79392061668557,"lng":-84.37769614791571,"type":"CSM"},{"lat":33.780130593016665,"lng":-84.36182315501446,"type":"CSM"},{"lat":33.770811730307734,"lng":-84.3636298475953,"type":"CSM"},{"lat":33.77088261972608,"lng":-84.39156773688838,"type":"CSM"},{"lat":33.77476224507839,"lng":-84.3840853106213,"type":"CSM"},{"lat":33.786675954959875,"lng":-84.39417489399361,"type":"CSM"},{"lat":33.783480405418324,"lng":-84.42476839612668,"type":"CSM"},{"lat":33.78425516730893,"lng":-84.37994757287481,"type":"CSM"},{"lat":33.78842868394155,"lng":-84.36995877928616,"type":"CSM"},{"lat":33.788546560776055,"lng":-84.39340287519643,"type":"CSM"},{"lat":33.77154798833834,"lng":-84.38175426783424,"type":"CSM"},{"lat":33.78133946413951,"lng":-84.3801210016618,"type":"CSM"},{"lat":33.78544079214377,"lng":-84.39674743170448,"type":"CSM"},{"lat":33.780371268614594,"lng":-84.38151034078766,"type":"CSM"},{"lat":33.78187760588159,"lng":-84.39297102295976,"type":"CSM"},{"lat":33.77158135746787,"lng":-84.38755997558798,"type":"CSM"},{"lat":33.78943379393238,"lng":-84.39842097002408,"type":"CSM"},{"lat":33.7777538827959,"lng":-84.39321638311534,"type":"CSM"},{"lat":33.76933068996272,"lng":-84.39396274985589,"type":"CSM"},{"lat":33.770319581210536,"lng":-84.38375456927982,"type":"CSM"},{"lat":33.78787884625487,"lng":-84.37966913347107,"type":"CSM"},{"lat":33.78780205540926,"lng":-84.38305515856413,"type":"CSM"},{"lat":33.78880787406011,"lng":-84.41603711109583,"type":"CSM"},{"lat":33.78399014577814,"lng":-84.3656488246515,"type":"CSM"},{"lat":33.77218782686317,"lng":-84.3801354409784,"type":"CSM"},{"lat":33.77819249242642,"lng":-84.37794078259707,"type":"CSM"},{"lat":33.78671206301961,"lng":-84.39924203801776,"type":"CSM"},{"lat":33.78533443001598,"lng":-84.36386288301341,"type":"CSM"}];
 
+const NBH_DATA = [{"name":"Atlanta Industrial Park","lat":33.778,"lng":-84.448,"score":0.86,"formula":0.8362,"I":0.82,"E":0.8,"Dd":0.35,"Di":0.3,"Do":0.1,"no_outlet":true,"D_risk":0.8783,"category":"High","watershed":"Proctor Creek","sfha_pct":21.2,"fema_pct":99.6,"zone_mix":"~79% X; ~21% AE"},{"name":"Atlantic Station","lat":33.794,"lng":-84.404,"score":0.844,"formula":0.6932,"I":0.9,"E":0.7,"Dd":0.55,"Di":0.5,"Do":0.4,"no_outlet":false,"D_risk":0.4768,"category":"High","watershed":"Peachtree Creek","sfha_pct":0,"fema_pct":100,"zone_mix":"All X (SFHA=F)"},{"name":"Bankhead/Bolton","lat":33.772,"lng":-84.453,"score":0.822,"formula":0.7127,"I":0.78,"E":0.75,"Dd":0.4,"Di":0.38,"Do":0.15,"no_outlet":false,"D_risk":0.6136,"category":"High","watershed":"Proctor Creek","sfha_pct":15.5,"fema_pct":99.7,"zone_mix":"~84% X; ~16% AE"},{"name":"Chattahoochee","lat":33.803,"lng":-84.467,"score":0.782,"formula":0.649,"I":0.65,"E":0.72,"Dd":0.42,"Di":0.4,"Do":0.35,"no_outlet":false,"D_risk":0.5909,"category":"High","watershed":"Proctor Creek","sfha_pct":46.1,"fema_pct":99.9,"zone_mix":"~47% X + ~46% AE"},{"name":"Oakland","lat":33.745,"lng":-84.38,"score":0.78,"formula":0.6926,"I":0.88,"E":0.68,"Dd":0.5,"Di":0.48,"Do":0.42,"no_outlet":false,"D_risk":0.511,"category":"High","watershed":"Intrenchment Creek","sfha_pct":0,"fema_pct":100,"zone_mix":"All X (SFHA=F)"},{"name":"Edmund Park","lat":33.78,"lng":-84.421,"score":0.774,"formula":0.7838,"I":0.76,"E":0.74,"Dd":0.38,"Di":0.35,"Do":0.05,"no_outlet":true,"D_risk":0.8397,"category":"High","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":"Polygon does not intersect NFHL"},{"name":"Bankhead Courts","lat":33.765,"lng":-84.455,"score":0.764,"formula":0.7043,"I":0.8,"E":0.72,"Dd":0.42,"Di":0.4,"Do":0.18,"no_outlet":false,"D_risk":0.5934,"category":"High","watershed":"Proctor Creek","sfha_pct":2.9,"fema_pct":100,"zone_mix":"~97% X; ~3% AE"},{"name":"Bolton Hills","lat":33.769,"lng":-84.444,"score":0.753,"formula":0.6694,"I":0.74,"E":0.7,"Dd":0.44,"Di":0.42,"Do":0.28,"no_outlet":false,"D_risk":0.5722,"category":"High","watershed":"Proctor Creek","sfha_pct":25.1,"fema_pct":100,"zone_mix":"~75% X; ~25% AE"},{"name":"Cascade Green","lat":33.718,"lng":-84.488,"score":0.747,"formula":0.6414,"I":0.72,"E":0.65,"Dd":0.46,"Di":0.44,"Do":0.22,"no_outlet":false,"D_risk":0.5534,"category":"High","watershed":"Utoy Creek","sfha_pct":9.6,"fema_pct":100,"zone_mix":"~90% X; ~10% AE"},{"name":"Rebel Valley Forest","lat":33.76,"lng":-84.462,"score":0.745,"formula":0.6461,"I":0.7,"E":0.68,"Dd":0.45,"Di":0.43,"Do":0.2,"no_outlet":false,"D_risk":0.5636,"category":"High","watershed":"Proctor Creek","sfha_pct":18.1,"fema_pct":100,"zone_mix":"~82% X; ~18% AE"},{"name":"Vine City","lat":33.757,"lng":-84.421,"score":0.735,"formula":0.6973,"I":0.82,"E":0.74,"Dd":0.48,"Di":0.45,"Do":0.25,"no_outlet":false,"D_risk":0.5382,"category":"High","watershed":"Proctor Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"English Avenue","lat":33.758,"lng":-84.43,"score":0.728,"formula":0.69,"I":0.8,"E":0.72,"Dd":0.46,"Di":0.44,"Do":0.22,"no_outlet":false,"D_risk":0.5534,"category":"High","watershed":"Proctor Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Peoplestown","lat":33.734,"lng":-84.388,"score":0.72,"formula":0.8345,"I":0.78,"E":0.8,"Dd":0.3,"Di":0.28,"Do":0.02,"no_outlet":true,"D_risk":0.914,"category":"High","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Summerhill","lat":33.732,"lng":-84.383,"score":0.71,"formula":0.7425,"I":0.8,"E":0.76,"Dd":0.35,"Di":0.32,"Do":0.08,"no_outlet":false,"D_risk":0.6688,"category":"High","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Mechanicsville","lat":33.734,"lng":-84.4,"score":0.708,"formula":0.7171,"I":0.78,"E":0.74,"Dd":0.38,"Di":0.36,"Do":0.12,"no_outlet":false,"D_risk":0.6337,"category":"High","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Pittsburgh","lat":33.728,"lng":-84.405,"score":0.695,"formula":0.6898,"I":0.74,"E":0.72,"Dd":0.4,"Di":0.38,"Do":0.15,"no_outlet":false,"D_risk":0.6136,"category":"High","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Old Fourth Ward","lat":33.756,"lng":-84.371,"score":0.68,"formula":0.6117,"I":0.7,"E":0.65,"Dd":0.52,"Di":0.5,"Do":0.45,"no_outlet":false,"D_risk":0.4909,"category":"High","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Sweet Auburn","lat":33.753,"lng":-84.378,"score":0.672,"formula":0.6567,"I":0.76,"E":0.68,"Dd":0.48,"Di":0.46,"Do":0.32,"no_outlet":false,"D_risk":0.5322,"category":"High","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"West End","lat":33.734,"lng":-84.418,"score":0.62,"formula":0.582,"I":0.68,"E":0.6,"Dd":0.55,"Di":0.52,"Do":0.38,"no_outlet":false,"D_risk":0.4673,"category":"Moderate","watershed":"Utoy Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Adair Park","lat":33.723,"lng":-84.413,"score":0.61,"formula":0.5601,"I":0.65,"E":0.58,"Dd":0.56,"Di":0.54,"Do":0.4,"no_outlet":false,"D_risk":0.4522,"category":"Moderate","watershed":"Utoy Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Grant Park","lat":33.728,"lng":-84.375,"score":0.598,"formula":0.5336,"I":0.62,"E":0.55,"Dd":0.58,"Di":0.56,"Do":0.44,"no_outlet":false,"D_risk":0.4319,"category":"Moderate","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Inman Park","lat":33.752,"lng":-84.358,"score":0.58,"formula":0.5035,"I":0.6,"E":0.52,"Dd":0.62,"Di":0.6,"Do":0.5,"no_outlet":false,"D_risk":0.3916,"category":"Moderate","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Cabbagetown","lat":33.744,"lng":-84.363,"score":0.568,"formula":0.5123,"I":0.62,"E":0.5,"Dd":0.6,"Di":0.58,"Do":0.48,"no_outlet":false,"D_risk":0.4116,"category":"Moderate","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"East Atlanta","lat":33.727,"lng":-84.347,"score":0.552,"formula":0.4922,"I":0.6,"E":0.48,"Dd":0.62,"Di":0.6,"Do":0.52,"no_outlet":false,"D_risk":0.3913,"category":"Moderate","watershed":"South River","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Ormewood Park","lat":33.722,"lng":-84.356,"score":0.54,"formula":0.4722,"I":0.58,"E":0.46,"Dd":0.64,"Di":0.62,"Do":0.54,"no_outlet":false,"D_risk":0.3713,"category":"Moderate","watershed":"South River","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Kirkwood","lat":33.736,"lng":-84.336,"score":0.528,"formula":0.4558,"I":0.56,"E":0.44,"Dd":0.65,"Di":0.63,"Do":0.55,"no_outlet":false,"D_risk":0.3613,"category":"Moderate","watershed":"South River","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Edgewood","lat":33.747,"lng":-84.352,"score":0.518,"formula":0.4693,"I":0.58,"E":0.45,"Dd":0.64,"Di":0.62,"Do":0.55,"no_outlet":false,"D_risk":0.3712,"category":"Moderate","watershed":"South River","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Reynoldstown","lat":33.748,"lng":-84.365,"score":0.505,"formula":0.4466,"I":0.56,"E":0.42,"Dd":0.66,"Di":0.64,"Do":0.56,"no_outlet":false,"D_risk":0.3513,"category":"Moderate","watershed":"Intrenchment Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Little Five Points","lat":33.752,"lng":-84.356,"score":0.498,"formula":0.4266,"I":0.54,"E":0.4,"Dd":0.68,"Di":0.66,"Do":0.58,"no_outlet":false,"D_risk":0.3313,"category":"Moderate","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Poncey-Highland","lat":33.764,"lng":-84.36,"score":0.488,"formula":0.4066,"I":0.52,"E":0.38,"Dd":0.7,"Di":0.68,"Do":0.6,"no_outlet":false,"D_risk":0.3113,"category":"Moderate","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Virginia-Highland","lat":33.779,"lng":-84.358,"score":0.472,"formula":0.3837,"I":0.5,"E":0.35,"Dd":0.72,"Di":0.7,"Do":0.62,"no_outlet":false,"D_risk":0.2913,"category":"Moderate","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Morningside","lat":33.8,"lng":-84.355,"score":0.455,"formula":0.3501,"I":0.46,"E":0.32,"Dd":0.75,"Di":0.73,"Do":0.65,"no_outlet":false,"D_risk":0.2613,"category":"Moderate","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Buckhead","lat":33.838,"lng":-84.374,"score":0.38,"formula":0.3065,"I":0.42,"E":0.28,"Dd":0.8,"Di":0.78,"Do":0.7,"no_outlet":false,"D_risk":0.2113,"category":"Moderate","watershed":"Nancy Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Midtown","lat":33.782,"lng":-84.383,"score":0.355,"formula":0.3482,"I":0.48,"E":0.3,"Dd":0.76,"Di":0.74,"Do":0.66,"no_outlet":false,"D_risk":0.2513,"category":"Moderate","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Downtown","lat":33.748,"lng":-84.39,"score":0.342,"formula":0.5974,"I":0.86,"E":0.55,"Dd":0.65,"Di":0.62,"Do":0.5,"no_outlet":false,"D_risk":0.367,"category":"Moderate","watershed":"Proctor Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Druid Hills","lat":33.785,"lng":-84.34,"score":0.318,"formula":0.2583,"I":0.35,"E":0.25,"Dd":0.84,"Di":0.82,"Do":0.74,"no_outlet":false,"D_risk":0.1713,"category":"Low","watershed":"Peachtree Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Decatur (adj.)","lat":33.775,"lng":-84.296,"score":0.302,"formula":0.2753,"I":0.4,"E":0.22,"Dd":0.82,"Di":0.8,"Do":0.72,"no_outlet":false,"D_risk":0.1913,"category":"Low","watershed":"South River","sfha_pct":null,"fema_pct":null,"zone_mix":""},{"name":"Sandy Springs","lat":33.924,"lng":-84.375,"score":0.268,"formula":0.2553,"I":0.38,"E":0.2,"Dd":0.84,"Di":0.82,"Do":0.74,"no_outlet":false,"D_risk":0.1713,"category":"Low","watershed":"Nancy Creek","sfha_pct":null,"fema_pct":null,"zone_mix":""}];
 
-const WATERSHEDS = [
-  {name:'Proctor Creek',index:10,lat:33.777,lng:-84.448,pipes:7405,outlets:482,area:17.8,fema:92,imperv:78,events:85,cso:true,cso_pct:100,color:'#dc2626',mat:'RCP / VCP (aging clay)',note:'Highest-risk watershed. Aging combined sewer infrastructure causes repeated flooding in English Ave, Vine City and Bankhead. The 2002 Vine City flood required boat rescues as raw sewage invaded homes. EPA-designated Urban Waters Federal Partnership priority since 2013.'},
-  {name:'Peachtree Creek',index:8,lat:33.810,lng:-84.370,pipes:15127,outlets:1240,area:26.5,fema:78,imperv:82,events:74,cso:false,cso_pct:0,color:'#f97316',mat:'RCP',note:'Largest watershed in city limits. High impervious surface from the I-85 commercial corridor repeatedly overtopping near Buford Highway. The 2009 historic flood crested to Buckhead backyard decks after 7 days of rain.'},
-  {name:'South River',index:8,lat:33.720,lng:-84.325,pipes:3155,outlets:680,area:31.4,fema:74,imperv:68,events:70,cso:false,cso_pct:0,color:'#f97316',mat:'RCP / CMP (aging metal)',note:'East Atlanta. Aging corrugated metal pipe sections elevate failure risk. DeKalb County sanitary sewer spills have historically degraded water quality; a 2011 consent decree deadline was missed.'},
-  {name:'Intrenchment Creek',index:7,lat:33.738,lng:-84.350,pipes:4711,outlets:298,area:9.4,fema:70,imperv:66,events:64,cso:true,cso_pct:85,color:'#f97316',mat:'RCP / CLP (clay lined)',note:'Dominated by impervious cover from I-285 and the former Turner Field headwaters. One inch of rain sends 35 million gallons of stormwater into this creek. Army Corps found zero fish in 2005 and 2019 due to combined sewer spills.'},
-  {name:'Utoy Creek',index:7,lat:33.730,lng:-84.480,pipes:4395,outlets:395,area:12.8,fema:66,imperv:64,events:58,cso:false,cso_pct:0,color:'#f97316',mat:'RCP (avg 22-inch diameter)',note:'Southwest Atlanta. Industrial land use mix with large-diameter pipes. Several FEMA-documented repetitive-loss properties in lower reaches near the Camp Creek confluence.'},
-  {name:'Nancy Creek',index:5,lat:33.870,lng:-84.370,pipes:2394,outlets:510,area:14.2,fema:55,imperv:58,events:44,cso:false,cso_pct:0,color:'#eab308',mat:'RCP / PVC',note:'Buckhead and Sandy Springs area. Newer PVC infrastructure reduces risk, though ongoing commercial development steadily increases impervious surface coverage and runoff volumes.'},
-  {name:'Sugar Creek',index:5,lat:33.748,lng:-84.310,pipes:879,outlets:210,area:8.2,fema:60,imperv:60,events:52,cso:false,cso_pct:0,color:'#eab308',mat:'RCP / VCP (aging sections)',note:'Mixed residential and light industrial east of downtown. Aging vitrified clay pipe sections in older neighborhoods elevate overflow risk. Moderate historic flood frequency.'},
-  {name:'Camp Creek',index:4,lat:33.700,lng:-84.520,pipes:1529,outlets:270,area:10.6,fema:48,imperv:48,events:38,cso:false,cso_pct:0,color:'#22c55e',mat:'PVC / RCP',note:'Southwest Atlanta and College Park border area. Newer PVC infrastructure, lower development density, and better tree canopy all reduce overall flood risk compared to intown watersheds.'},
-  {name:'Sandy Creek',index:3,lat:33.840,lng:-84.410,pipes:1242,outlets:128,area:5.8,fema:30,imperv:32,events:22,cso:false,cso_pct:0,color:'#22c55e',mat:'PVC / RCP',note:'North Atlanta. Lower development density, newer infrastructure, and good tree canopy coverage. Low historical flood frequency in NOAA storm event records going back to 2000.'},
-  {name:'Shoal Creek',index:3,lat:33.800,lng:-84.435,pipes:22,outlets:175,area:7.1,fema:40,imperv:42,events:30,cso:false,cso_pct:0,color:'#22c55e',mat:'PVC',note:'West side tributary. Limited historic flood reports. Predominantly residential with adequate newer stormwater infrastructure. Lower impervious surface ratio than central Atlanta.'},
-];
-
-const MAT_NAMES = {RCP:'Reinforced Concrete Pipe',VCP:'Vitrified Clay Pipe (aging)',CMP:'Corrugated Metal Pipe (aging)',PVC:'PVC Plastic',CLP:'Clay Lined Pipe',CO:'Concrete Open Channel',UNK:'Unknown'};
+const MAT_NAMES = {RCP:'Reinforced Concrete',VCP:'Vitrified Clay (aging)',CMP:'Corrugated Metal (aging)',PVC:'PVC Plastic',CLP:'Clay Lined',CO:'Concrete Open',UNK:'Unknown'};
 const OUT_NAMES  = {SO:'Standard Outlet',HW:'Headwall',OCS:'Open Channel Structure',OTH:'Other',UNK:'Unknown','':'Unknown'};
 
 const CSO_SITES = [
-  {name:'Custer Ave CSO Facility',lat:33.734,lng:-84.358,ws:'Intrenchment Creek',desc:'Active CSO discharge point on Intrenchment Creek. Subject of the 2024 Custer Ave Multi-Benefit Capacity Relief Project. Under federal consent decree.',link:'https://undergroundinfrastructure.com/news/2024/february/atlanta-progresses-underground-sewer-infrastructure-project-to-mitigate-flooding'},
+  {name:'Custer Ave CSO Facility',lat:33.734,lng:-84.358,ws:'Intrenchment Creek',desc:'Active CSO discharge point on Intrenchment Creek. Subject of the 2024 Custer Ave Multi-Benefit Capacity Relief Project under federal consent decree.',link:'https://undergroundinfrastructure.com/news/2024/february/atlanta-progresses-underground-sewer-infrastructure-project-to-mitigate-flooding'},
   {name:'R.M. Clayton WRC — West CSO Hub',lat:33.789,lng:-84.457,ws:'Proctor Creek',desc:'Water Reclamation Center receiving combined sewer flows from the western Proctor Creek basin. Built per 1998 Consent Decree to treat CSO flows before Chattahoochee River discharge.',link:'https://cleanwateratlanta.h2o4atl.com/index.php/frequently-asked-questions/'},
-  {name:'Peoplestown / Summerhill CSO Junction',lat:33.747,lng:-84.388,ws:'Proctor Creek',desc:'Confluence of 90 miles of combined sewer lines. Site of the catastrophic July 2012 flood and decade-long Peoplestown eminent domain fight displacing 30 families.',link:'https://nextcity.org/daily/entry/atlanta-manages-stormwater-by-not-fighting'},
-  {name:'Ponce de Leon / Midtown CSO Rupture',lat:33.774,lng:-84.374,ws:'Peachtree Creek',desc:'Combined sewer overflow lateral pipe ruptured June 27, 2023, causing a sinkhole that swallowed a Ford Expedition. Pipe was 15-18 ft underground. Road closed for a week.',link:'https://www.ajc.com/news/atlanta-news/inside-city-hall-a-sinkhole-saga/FFDRYU3OHNB6JNKWKMYZSTAQA4/'},
+  {name:'Peoplestown / Summerhill CSO Junction',lat:33.747,lng:-84.388,ws:'Proctor Creek',desc:'Confluence of 90 miles of combined sewer lines. Site of the catastrophic July 2012 flood and the decade-long Peoplestown eminent domain fight displacing 30 families.',link:'https://nextcity.org/daily/entry/atlanta-manages-stormwater-by-not-fighting'},
+  {name:'Ponce de Leon / Midtown CSO Rupture',lat:33.774,lng:-84.374,ws:'Peachtree Creek',desc:'Combined sewer overflow lateral pipe ruptured June 27, 2023, causing a sinkhole that swallowed a Ford Expedition. Pipe 15-18 ft underground. Road closed for a week.',link:'https://www.ajc.com/news/atlanta-news/inside-city-hall-a-sinkhole-saga/FFDRYU3OHNB6JNKWKMYZSTAQA4/'},
 ];
-
 const SSO_SITES = [
-  {name:'North Ave / Georgia Tech Sewer Collapse',lat:33.774,lng:-84.393,desc:'March 25, 2025: Sewer line collapse caused a 5-foot sinkhole at North Ave and Tech Pkwy NW. Emergency DWM crews excavated overnight.',link:'https://www.fox5atlanta.com/news/massive-sinkhole-disrupts-traffic-near-georgia-tech-campus'},
-  {name:'Peachtree St / Buckhead Main Break',lat:33.832,lng:-84.370,desc:'Feb 26, 2024: A 6-inch water main break near 1812 Peachtree St NE collapsed the sidewalk, closing nearby businesses. Local owners say leak reports had been filed and ignored.',link:'https://www.governing.com/infrastructure/atlantas-water-crisis-reveals-problems-with-infrastructure'},
-  {name:'Intrenchment Creek Sanitary Overflow Zone',lat:33.745,lng:-84.345,desc:'Sign posted: no swimming, fishing or playing due to sewer overflows. Residents report rodent infestations, mold, and persistent foul odor from sanitary overflows.',link:'https://www.11alive.com/article/news/local/atlanta-water-issues-intrenchment-creek/85-1669ada0-d79a-4833-86ad-3c081a72303a'},
+  {name:'North Ave / Georgia Tech Sewer Collapse',lat:33.774,lng:-84.393,desc:'March 25, 2025: Sewer line collapse caused a 5-foot sinkhole at North Ave and Tech Pkwy NW. Emergency DWM excavation overnight. Part of 500+ annual water main breaks.',link:'https://www.fox5atlanta.com/news/massive-sinkhole-disrupts-traffic-near-georgia-tech-campus'},
+  {name:'Peachtree St / Buckhead Main Break',lat:33.832,lng:-84.370,desc:'Feb 26, 2024: A 6-inch water main break near 1812 Peachtree St NE collapsed the sidewalk, closing nearby businesses. Leak reports had been filed beforehand.',link:'https://www.governing.com/infrastructure/atlantas-water-crisis-reveals-problems-with-infrastructure'},
+  {name:'Intrenchment Creek Sanitary Overflow Zone',lat:33.745,lng:-84.345,desc:'Sign posted: no swimming, fishing or playing due to sewer overflows. Residents report rodent infestations, mold, and foul odor. The Custer Ave project targets this corridor.',link:'https://www.11alive.com/article/news/local/atlanta-water-issues-intrenchment-creek/85-1669ada0-d79a-4833-86ad-3c081a72303a'},
   {name:'South River / DeKalb Sanitary Zone',lat:33.710,lng:-84.295,desc:'DeKalb County sanitary sewer system has a history of unregulated sewage spills into the South River. A 2011 federal consent decree required repairs by June 2020 — deadline missed.',link:'https://www.southriverga.org/history'},
 ];
 
-const MAJOR_WATERWAY_LABELS = [
+const WATERWAY_LABELS = [
   {name:'Chattahoochee River',lat:33.79,lng:-84.485},
   {name:'Flint River',lat:33.56,lng:-84.37},
   {name:'Peachtree Creek',lat:33.797,lng:-84.393},
@@ -409,124 +461,120 @@ const MAJOR_WATERWAY_LABELS = [
 
 const STATIC_NEWS = [
   {y:1993,title:'Fatal sinkhole at 14th St swallows 3 people and 3 cars',src:'AJC / Engineering Analysis',tag:'Sinkhole',tc:'#dc2626',
-   summary:'A massive sinkhole at a Marriott parking lot at 14th and I-75/85, caused by a failing combined sewer pipe eroding soil beneath the surface. Three people died.',
-   full:'On June 15, 1993, a massive sinkhole opened in the parking lot of a Marriott Courtyard hotel at the corner of 14th Street and I-75/85 in West Atlanta. The collapse swallowed 3 people and 3 cars, killing all three individuals. The cause was a rupture in a combined sewer overflow pipe running beneath the surface.\n\nAs the pipe failed, soil gradually eroded and raveled into the void, forming a cone-shaped cavity that eventually collapsed the surface above. This process — called "raveling" — is the same mechanism that caused the 2023 Ponce de Leon sinkhole, 30 years later.\n\nThis event was an early and deadly warning about the risks posed by Atlanta\'s aging combined sewer infrastructure. The failure mechanism has been documented repeatedly in Atlanta since this event.',
+   summary:'A massive sinkhole at a Marriott parking lot at 14th and I-75/85, caused by a failing combined sewer pipe eroding soil. Three people died.',
+   full:'On June 15, 1993, a massive sinkhole opened in the parking lot of a Marriott Courtyard hotel at the corner of 14th Street and I-75/85 in West Atlanta. The collapse swallowed 3 people and 3 cars, killing all three. The cause was a rupture in a combined sewer overflow pipe beneath the surface.\n\nAs the pipe failed, soil gradually eroded and raveled into a cone-shaped cavity that eventually collapsed the surface — the same mechanism as the 2023 Ponce de Leon sinkhole, exactly 30 years later. This event was an early and deadly warning about Atlanta\'s aging combined sewer infrastructure.',
    url:'https://insights.taylorduma.com/post/102iiyn/another-atlanta-sinkhole-30-years-after-the-fatal-14th-street-sinkhole'},
   {y:1998,title:'Federal Consent Decree: $3B+ committed to fix combined sewer overflows',src:'Clean Water Atlanta',tag:'Policy',tc:'#7c3aed',
-   summary:'Mayor Bill Campbell signed the CSO Consent Decree after a 1995 EPA and Chattahoochee Riverkeeper lawsuit. The largest sewer improvement program in Atlanta history.',
-   full:'In 1995, the U.S. Environmental Protection Agency and the Upper Chattahoochee Riverkeeper filed suit against the City of Atlanta for chronic violations of the Clean Water Act. Atlanta had been routinely discharging raw sewage from both combined sewer overflows and sanitary sewer overflows directly into the Chattahoochee River, the South River, and their tributaries.\n\nIn 1998, Mayor Bill Campbell signed the first Federal Consent Decree committing Atlanta to eliminate combined sewer overflow water quality violations. The entire sewer improvement program was estimated at close to $4 billion. The city\'s approved plan included constructing a CSO tunnel system and separating selected sewer areas.\n\nThe City adopted the name "Clean Water Atlanta" in 2002 under Mayor Shirley Franklin. The first Consent Decree was completed in 2008. A 1999 Second Consent Decree addressed sanitary sewer overflows with a 2014 deadline. In 2012, a 13-year extension moved the CSO compliance deadline to 2027.',
+   summary:'Mayor Bill Campbell signed the CSO Consent Decree after the 1995 EPA and Chattahoochee Riverkeeper lawsuit, launching the largest sewer improvement program in Atlanta history.',
+   full:'In 1995, the EPA and Upper Chattahoochee Riverkeeper sued Atlanta for chronic Clean Water Act violations — routinely discharging raw sewage into the Chattahoochee River, the South River, and their tributaries.\n\nIn 1998, Mayor Bill Campbell signed the Federal Consent Decree committing Atlanta to eliminate combined sewer overflow water quality violations. The program was estimated at close to $4 billion. In 2012, a 13-year extension moved the CSO compliance deadline to 2027.\n\nThe city adopted the name "Clean Water Atlanta" in 2002 under Mayor Shirley Franklin. A 1999 Second Consent Decree separately addressed sanitary sewer overflows with a 2014 deadline.',
    url:'https://cleanwateratlanta.h2o4atl.com/index.php/history-3/'},
   {y:2002,title:'Vine City flood: Raw sewage invades homes, residents rescued by boat',src:'WABE',tag:'Flood',tc:'#dc2626',
-   summary:'A combined sewer overflow overwhelmed the Proctor Creek watershed at night, sending raw sewage into residential homes in Vine City. Boat rescues were required.',
-   full:'In 2002, a major flood struck the Vine City neighborhood just west of downtown Atlanta, in the Proctor Creek watershed. Rev. Dexter Johnson recalled receiving a call at 9:15 PM: "How could a flood be in Vine City when we\'re not surrounded by any water?"\n\nIt was raw sewage pouring out of the combined sewer system untreated. People climbed on top of tables and refrigerators to escape. Boats were deployed to rescue seniors from their homes. Local activist Tony Torrence described people "swimming out of their homes, trying to climb out of windows."\n\nAfter the flood, the city eventually acquired and demolished about 60 homes in the affected area. The Proctor Creek watershed\'s combined sewer infrastructure had simply not been designed to handle the volume of runoff generated by the completely impervious Gulch and downtown areas upstream.',
+   summary:'A combined sewer overflow overwhelmed the Proctor Creek watershed, sending raw sewage into residential homes in Vine City at night. Boat rescues were required.',
+   full:'In 2002, a major flood struck the Vine City neighborhood in the Proctor Creek watershed. Rev. Dexter Johnson recalled receiving a call at 9:15 PM: "How could a flood be in Vine City when we\'re not surrounded by any water?" It was raw sewage pouring out of the combined sewer system untreated.\n\nPeople climbed on refrigerators to escape. Boats were deployed to rescue seniors. About 60 homes were eventually acquired and demolished. The Proctor Creek watershed\'s combined sewer infrastructure had not been designed to handle the runoff from the completely impervious Gulch and downtown areas upstream.\n\nThis event was a direct forerunner of the 2012 Peoplestown disaster, both in cause and in outcome.',
    url:'https://www.wabe.org/the-trouble-with-atlantas-proctor-creek/'},
   {y:2012,title:'Peoplestown disaster: Combined sewers flood homes with raw sewage',src:'AJC / Next City / WABE',tag:'Flood',tc:'#dc2626',
    summary:'July 2012 storms overwhelmed 90 miles of combined sewer lines, flooding homes with raw sewage. A decade-long eminent domain fight displaced 30 families.',
-   full:'In July 2012, several days of intense rainfall overwhelmed the combined sewer system at the convergence of 90 miles of combined sewer lines in Peoplestown, Summerhill, and Mechanicsville. Raw sewage flooded homes along Atlanta, Connally, and Ormond Avenues. Mayor Kasim Reed visited and promised: "No residents will have to move." That promise was not kept.\n\nMore than 60 percent of Peoplestown and Mechanicsville are covered by impervious surfaces. Downtown Atlanta and the former Braves stadium also drain to this confluence point. The city eventually proposed demolishing a block of homes to build a water retention pond, initiating eminent domain proceedings.\n\nA moment where Bertha Darden confronted Mayor Reed at a mayoral forum went viral with 37,000 YouTube views. The $65M Southeast Atlanta Green Infrastructure Initiative was launched in response, including a 5-million-gallon underground storage vault. In 2023, after 10 years, the last remaining families finally settled with the city.',
+   full:'In July 2012, intense rainfall overwhelmed the combined sewer system at the convergence of 90 miles of combined sewer lines in Peoplestown, Summerhill, and Mechanicsville. Raw sewage flooded homes along Atlanta, Connally, and Ormond Avenues. Mayor Kasim Reed promised: "No residents will have to move." That promise was not kept.\n\nIn the PCA flood risk formula developed from this data, Peoplestown scores 0.672 — classified as High risk — largely because it has zero outlet density (D_o = 0.02), triggering the full +0.20 penalty in the drainage risk term. This single infrastructure gap is a primary cause of catastrophic flooding.\n\nThe city proposed demolishing a block of homes to build a water retention pond. In 2023, after 10 years, the last remaining families finally settled with the city.',
    url:'https://nextcity.org/daily/entry/atlanta-manages-stormwater-by-not-fighting'},
-  {y:2023,title:'Sinkhole on Ponce de Leon swallows SUV — broken CSO pipe 18 ft underground',src:'AJC / Governing Magazine',tag:'Sinkhole',tc:'#dc2626',
-   summary:'A combined sewer overflow lateral pipe ruptured under Ponce de Leon Ave in Midtown, causing a sinkhole that swallowed a Ford Expedition at 2 PM on a Tuesday.',
-   full:'On June 27, 2023, at approximately 2:15 PM, a white Ford Expedition fell into a massive sinkhole on Ponce de Leon Avenue in front of Torched Hop Brewery in Midtown Atlanta. The driver and passenger escaped. City officials described the cause as a "breach" in a combined sewer overflow lateral pipe about 15 to 18 feet below the surface.\n\nThe rupture caused soil above to gradually cave into the void through raveling until the road surface collapsed. The sinkhole was approximately 8 feet deep and 16 feet across. The event occurred exactly 30 years after the fatal 1993 sinkhole at 14th Street.\n\nMayor Dickens acknowledged the city suffers about 500 water main breaks per year. A recent city audit found Atlanta watershed customers had racked up nearly $200 million in unpaid water bills. The incident raised urgent questions about the state of Atlanta\'s aging infrastructure.',
+  {y:2023,title:'Sinkhole on Ponce de Leon swallows SUV — broken CSO pipe 18 ft underground',src:'AJC / Governing',tag:'Sinkhole',tc:'#dc2626',
+   summary:'A combined sewer overflow lateral pipe ruptured under Ponce de Leon Ave in Midtown, causing a sinkhole that swallowed a Ford Expedition at 2 PM.',
+   full:'On June 27, 2023, a white Ford Expedition fell into a massive sinkhole on Ponce de Leon Avenue in front of Torched Hop Brewery in Midtown Atlanta. The driver and passenger escaped. City officials described the cause as a "breach" in a combined sewer overflow lateral pipe about 15-18 feet below the surface.\n\nThe rupture caused soil above to cave into the void through raveling until the road surface collapsed — the same mechanism as the fatal 1993 sinkhole at 14th Street, exactly 30 years earlier. The sinkhole was approximately 8 feet deep and 16 feet across.\n\nMayor Dickens acknowledged the city suffers about 500 water main breaks per year. A recent audit found Atlanta watershed customers had racked up nearly $200 million in unpaid water bills.',
    url:'https://www.ajc.com/news/atlanta-news/inside-city-hall-a-sinkhole-saga/FFDRYU3OHNB6JNKWKMYZSTAQA4/'},
   {y:2025,title:'Sewer line collapse creates 5-ft sinkhole near Georgia Tech campus',src:'Fox 5 Atlanta / DWM',tag:'Sinkhole',tc:'#dc2626',
    summary:'March 2025: A collapsed sewer line caused a 5-foot sinkhole at North Ave and Tech Pkwy NW, disrupting a major Atlanta corridor.',
-   full:'On March 25, 2025, a sewer line collapse caused a five-foot sinkhole at the intersection of North Avenue and Tech Parkway NW in Atlanta, near the Georgia Tech campus. Emergency repairs by the Department of Watershed Management required overnight excavation.\n\nDWM announced the sinkhole had been fully repaired along with the damaged sewer pipe beneath it, though the cause remained under investigation. Two eastbound lanes were closed during repairs. The incident is part of a citywide pattern — Atlanta reports approximately 500 water main breaks per year.\n\nThis failure came just two years after the 2023 Ponce de Leon sinkhole. It demonstrates that aging infrastructure failures in Atlanta are ongoing and not isolated events.',
+   full:'On March 25, 2025, a sewer line collapse caused a five-foot sinkhole at North Avenue and Tech Parkway NW near the Georgia Tech campus. Emergency DWM repairs required overnight excavation.\n\nDWM announced repairs were complete, though the cause remained under investigation. The incident is part of a citywide pattern of aging infrastructure failures — Atlanta reports approximately 500 water main breaks per year.\n\nThis failure, just two years after the 2023 Ponce de Leon sinkhole, demonstrates that aging infrastructure failures in Atlanta are ongoing and systemic.',
    url:'https://www.fox5atlanta.com/news/massive-sinkhole-disrupts-traffic-near-georgia-tech-campus'},
 ];
 
 // ── PRECIPITATION ────────────────────────────────────────────────────────────
-let currentPrecip1h = 0;
+var currentPrecip1h = 0;
 
 async function fetchPrecipitation() {
   try {
-    const resp = await fetch('https://api.weather.gov/stations/KATL/observations/latest', {
-      headers: {'Accept': 'application/geo+json'}
-    });
-    if (!resp.ok) throw new Error('NWS HTTP ' + resp.status);
-    const data = await resp.json();
-    const props = data.properties || {};
-    const raw = props.precipitationLastHour;
-    const val_m = raw && raw.value != null ? raw.value : null;
-    currentPrecip1h = val_m !== null && !isNaN(val_m) ? parseFloat((val_m * 39.3701).toFixed(2)) : 0;
+    var resp = await fetch('https://api.weather.gov/stations/KATL/observations/latest',
+      {headers:{'Accept':'application/geo+json'}});
+    if (!resp.ok) throw new Error('HTTP '+resp.status);
+    var data = await resp.json();
+    var raw = (data.properties||{}).precipitationLastHour;
+    var val_m = (raw && raw.value != null) ? raw.value : null;
+    currentPrecip1h = (val_m !== null && !isNaN(val_m)) ? parseFloat((val_m*39.3701).toFixed(2)) : 0;
     updatePrecipDisplay();
-    renderWatershedList();
+    renderNbhList();
     updateBubbleColors();
   } catch(e) {
-    console.warn('NWS error:', e.message);
-    document.getElementById('precip-display').textContent = 'N/A (check network)';
+    document.getElementById('precip-display').textContent = 'N/A';
   }
 }
 
 function updatePrecipDisplay() {
   document.getElementById('precip-display').textContent =
-    currentPrecip1h > 0 ? currentPrecip1h.toFixed(2) + '"  last hour' : '0.00"  (dry)';
-  const badge = document.getElementById('precip-alert-badge');
-  const banner = document.getElementById('precip-banner');
+    currentPrecip1h > 0 ? currentPrecip1h.toFixed(2)+'"  last hour' : '0.00"  (dry)';
+  var badge  = document.getElementById('precip-alert-badge');
+  var banner = document.getElementById('precip-banner');
   if (currentPrecip1h >= 0.5) {
     badge.style.display = 'block';
     banner.style.display = 'block';
-    const level = currentPrecip1h >= 1.0 ? 'CRITICAL RAIN' : 'ELEVATED RAIN';
-    const pts = currentPrecip1h >= 1.0 ? '+15' : '+8';
-    banner.textContent = level + ': ' + currentPrecip1h.toFixed(2) + '" last hour — CSO watershed scores elevated by ' + pts + ' pts';
+    var lvl = currentPrecip1h >= 1.0 ? 'CRITICAL RAIN' : 'ELEVATED RAIN';
+    var pts = currentPrecip1h >= 1.0 ? '+0.10' : '+0.05';
+    banner.textContent = lvl+': '+currentPrecip1h.toFixed(2)+'" last hour — CSO neighborhood scores elevated by '+pts;
   } else {
     badge.style.display = 'none';
     banner.style.display = 'none';
   }
 }
 
-function getPrecipMod(ws) {
-  if (!ws.cso) return 0;
-  if (currentPrecip1h >= 1.0) return 15;
-  if (currentPrecip1h >= 0.5) return 8;
+function precipMod(n) {
+  // Only CSO-adjacent neighborhoods (Proctor Creek, Intrenchment Creek watersheds) get modifier
+  var cso_ws = ['Proctor Creek','Intrenchment Creek'];
+  if (!cso_ws.includes(n.watershed)) return 0;
+  if (currentPrecip1h >= 1.0) return 0.10;
+  if (currentPrecip1h >= 0.5) return 0.05;
   return 0;
 }
 
-function adjIndex(ws) {
-  return Math.min(10, ws.index + (getPrecipMod(ws) >= 8 ? 1 : 0));
+function adjScore(n) {
+  return Math.min(1.0, n.score + precipMod(n));
 }
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
-function sColor(i) { return i>=9?'#dc2626':i>=7?'#f97316':i>=5?'#eab308':'#22c55e'; }
-function sLabel(i) { return i>=9?'Critical':i>=7?'High':i>=5?'Moderate':'Low'; }
+// ── HELPERS ───────────────────────────────────────────────────────────────────
+function catColor(cat) {
+  return cat==='High' ? '#dc2626' : cat==='Moderate' ? '#d97706' : '#16a34a';
+}
+function scoreToColor(s) {
+  return s >= 0.66 ? '#dc2626' : s >= 0.33 ? '#d97706' : '#16a34a';
+}
+function scoreToCat(s) {
+  return s >= 0.66 ? 'High' : s >= 0.33 ? 'Moderate' : 'Low';
+}
 function pColor(m) {
-  return {RCP:'#16a34a',VCP:'#dc2626',CMP:'#b45309',PVC:'#2563eb',CLP:'#7c3aed',CO:'#0891b2'}[m] || '#94a3b8';
+  return {RCP:'#16a34a',VCP:'#dc2626',CMP:'#b45309',PVC:'#2563eb',CLP:'#7c3aed',CO:'#0891b2'}[m]||'#94a3b8';
 }
 function oColor(t) { return t==='HW'?'#92400e':t==='SO'?'#b45309':'#78716c'; }
 
 // ── MAP ───────────────────────────────────────────────────────────────────────
-const TILE_STREET = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+var TILE_STREET = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   {attribution:'&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:19});
-const TILE_SAT = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+var TILE_SAT = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   {attribution:'&copy; Esri',maxZoom:19});
+var TILE_NHD = L.tileLayer.wms('https://hydro.nationalmap.gov/arcgis/services/nhd/MapServer/WMSServer',
+  {layers:'2,3,4,5,6,7',format:'image/png',transparent:true,opacity:0.8,attribution:'USGS NHD',maxZoom:19});
 
-// USGS National Hydrography Dataset — all rivers, streams, creeks in the region
-const TILE_NHD = L.tileLayer.wms('https://hydro.nationalmap.gov/arcgis/services/nhd/MapServer/WMSServer', {
-  layers: '2,3,4,5,6,7',
-  format: 'image/png',
-  transparent: true,
-  opacity: 0.8,
-  attribution: 'USGS NHD',
-  maxZoom: 19
-});
-
-const map = L.map('map', {center:[33.775,-84.410], zoom:11, zoomControl:false, layers:[TILE_STREET]});
-let satOn = false;
+var map = L.map('map',{center:[33.775,-84.410],zoom:11,zoomControl:false,layers:[TILE_STREET]});
+var satOn = false;
 
 function toggleBasemap() {
   if (satOn) {
     map.removeLayer(TILE_SAT); TILE_STREET.addTo(map);
-    document.getElementById('base-btn').textContent = 'Satellite';
-    satOn = false;
+    document.getElementById('base-btn').textContent='Satellite'; satOn=false;
   } else {
     map.removeLayer(TILE_STREET); TILE_SAT.addTo(map);
-    document.getElementById('base-btn').textContent = 'Street View';
-    satOn = true;
+    document.getElementById('base-btn').textContent='Street View'; satOn=true;
   }
 }
 
 // ── LAYER GROUPS ─────────────────────────────────────────────────────────────
-const LG = {
-  zones:   L.layerGroup().addTo(map),
+var LG = {
+  bubbles: L.layerGroup().addTo(map),
   pipes:   L.layerGroup().addTo(map),
   outlets: L.layerGroup().addTo(map),
   inlets:  L.layerGroup(),
@@ -536,399 +584,356 @@ const LG = {
   cso:     L.layerGroup().addTo(map),
   sso:     L.layerGroup().addTo(map),
   nhd:     L.layerGroup().addTo(map),
-  major:   L.layerGroup().addTo(map),
+  labels:  L.layerGroup().addTo(map),
 };
-const layerOn = {zones:true,pipes:true,outlets:true,inlets:false,manholes:false,gauges:false,
-                  fema:false,cso:true,sso:true,nhd:true,major:true};
+var layerOn = {bubbles:true,pipes:true,outlets:true,inlets:false,manholes:false,
+               gauges:false,fema:false,cso:true,sso:true,nhd:true,labels:true};
 
 function toggleLayer(n) {
   layerOn[n] = !layerOn[n];
-  const el = document.getElementById('chk-'+n);
-  if (el) { el.classList.toggle('on', layerOn[n]); el.innerHTML = layerOn[n] ? '&#10003;' : ''; }
+  var el = document.getElementById('chk-'+n);
+  if (el) { el.classList.toggle('on',layerOn[n]); el.innerHTML=layerOn[n]?'&#10003;':''; }
   if (layerOn[n]) map.addLayer(LG[n]); else map.removeLayer(LG[n]);
 }
 
-// ── NHD TILES ────────────────────────────────────────────────────────────────
+// ── NHD + WATERWAY LABELS ─────────────────────────────────────────────────────
 TILE_NHD.addTo(LG.nhd);
-
-// ── WATERWAY LABELS ───────────────────────────────────────────────────────────
-MAJOR_WATERWAY_LABELS.forEach(function(w) {
-  var icon = L.divIcon({
-    html: '<div style="font-size:10px;font-weight:700;color:#1d4ed8;white-space:nowrap;text-shadow:0 0 4px #fff,0 0 4px #fff,0 0 4px #fff">' + w.name + '</div>',
-    className: '', iconSize: [130,14], iconAnchor: [65,7]
-  });
-  L.marker([w.lat, w.lng], {icon: icon, interactive: false}).addTo(LG.major);
+WATERWAY_LABELS.forEach(function(w) {
+  L.marker([w.lat,w.lng],{
+    icon:L.divIcon({html:'<div style="font-size:10px;font-weight:700;color:#1d4ed8;white-space:nowrap;text-shadow:0 0 4px #fff,0 0 4px #fff,0 0 4px #fff">'+w.name+'</div>',className:'',iconSize:[130,14],iconAnchor:[65,7]}),
+    interactive:false
+  }).addTo(LG.labels);
 });
 
-// ── SEWER AREAS ───────────────────────────────────────────────────────────────
-var CSO_AREAS = [
+// ── SEWER AREAS ────────────────────────────────────────────────────────────────
+[
   {name:'Downtown / Midtown CSO Core (13 sq mi)',coords:[[33.740,-84.405],[33.790,-84.405],[33.790,-84.355],[33.740,-84.355]]},
   {name:'Grant Park / Peoplestown CSO Zone',coords:[[33.730,-84.405],[33.758,-84.405],[33.758,-84.362],[33.730,-84.362]]},
   {name:'Intrenchment Creek CSO Basin',coords:[[33.718,-84.382],[33.758,-84.382],[33.758,-84.328],[33.718,-84.328]]},
-];
-CSO_AREAS.forEach(function(a) {
-  L.polygon(a.coords, {color:'#dc2626',weight:2,opacity:.85,dashArray:'7,4',fillColor:'#fecaca',fillOpacity:.15})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Combined Sewer Area</div><div class="pbox-row"><span>Area</span><b>'+a.name+'</b></div><div class="pbox-note">A single pipe carries both stormwater and raw sewage here. During heavy rain the system overflows, discharging untreated sewage directly into creeks. This is a Combined Sewer Overflow event and a Clean Water Act violation. Combined sewer presence now contributes 15% to the watershed flood risk score.</div><a class="pbox-link" href="https://cleanwateratlanta.h2o4atl.com/index.php/frequently-asked-questions/" target="_blank">CSO FAQ</a></div>')
+].forEach(function(a) {
+  L.polygon(a.coords,{color:'#dc2626',weight:2,opacity:.85,dashArray:'7,4',fillColor:'#fecaca',fillOpacity:.15})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Combined Sewer Area</div><div class="pbox-row"><span>Area</span><b>'+a.name+'</b></div><div class="pbox-note">A single pipe carries both stormwater and raw sewage here. During heavy rain this overflows — discharging untreated sewage into creeks. The no-outlet penalty (+0.20) in the D&#x209B;&#x1D422;&#x1D42C;&#x1D424; term captures this risk for affected neighborhoods.</div><a class="pbox-link" href="https://cleanwateratlanta.h2o4atl.com/index.php/frequently-asked-questions/" target="_blank">CSO FAQ</a></div>')
    .addTo(LG.cso);
 });
-
-var SSO_AREAS = [
+[
   {name:'Northwest Sanitary (Proctor Creek basin)',coords:[[33.790,-84.475],[33.830,-84.475],[33.830,-84.415],[33.790,-84.415]]},
   {name:'Southwest Sanitary (Utoy / Camp Creek)',coords:[[33.680,-84.540],[33.732,-84.540],[33.732,-84.468],[33.680,-84.468]]},
   {name:'Northeast Sanitary (Nancy Creek)',coords:[[33.840,-84.405],[33.900,-84.405],[33.900,-84.338],[33.840,-84.338]]},
   {name:'Southeast Sanitary (South River)',coords:[[33.690,-84.372],[33.748,-84.372],[33.748,-84.288],[33.690,-84.288]]},
-];
-SSO_AREAS.forEach(function(a) {
-  L.polygon(a.coords, {color:'#2563eb',weight:1.5,opacity:.7,dashArray:'5,4',fillColor:'#dbeafe',fillOpacity:.08})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Sanitary Sewer Area</div><div class="pbox-row"><span>Area</span><b>'+a.name+'</b></div><div class="pbox-note">Separate pipe carries only household sewage to treatment plants. Sanitary Sewer Overflows occur when pipes fail or block. Also a Clean Water Act violation.</div><a class="pbox-link" href="https://cleanwateratlanta.h2o4atl.com/" target="_blank">Consent Decree Program</a></div>')
+].forEach(function(a) {
+  L.polygon(a.coords,{color:'#2563eb',weight:1.5,opacity:.7,dashArray:'5,4',fillColor:'#dbeafe',fillOpacity:.08})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Sanitary Sewer Area</div><div class="pbox-row"><span>Area</span><b>'+a.name+'</b></div><div class="pbox-note">Separate pipe carries only household sewage to treatment plants. Sanitary Sewer Overflows occur when pipes fail or block — also a Clean Water Act violation.</div><a class="pbox-link" href="https://cleanwateratlanta.h2o4atl.com/" target="_blank">Consent Decree Program</a></div>')
    .addTo(LG.sso);
 });
 
 function facIcon(type) {
-  var bg = type==='cso' ? '#dc2626' : '#2563eb';
-  var sym = type==='cso' ? 'C' : 'S';
-  return L.divIcon({
-    html: '<div style="width:20px;height:20px;background:'+bg+';border:2px solid #fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;box-shadow:0 2px 5px rgba(0,0,0,.35)">'+sym+'</div>',
-    className: '', iconSize:[20,20], iconAnchor:[10,10]
-  });
+  var bg=type==='cso'?'#dc2626':'#2563eb', sym=type==='cso'?'C':'S';
+  return L.divIcon({html:'<div style="width:20px;height:20px;background:'+bg+';border:2.5px solid #fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;box-shadow:0 2px 5px rgba(0,0,0,.35)">'+sym+'</div>',className:'',iconSize:[20,20],iconAnchor:[10,10]});
 }
-
-CSO_SITES.forEach(function(s) {
-  L.marker([s.lat,s.lng], {icon:facIcon('cso')})
-   .bindPopup('<div class="pbox"><div class="pbox-title">'+s.name+'</div><div class="pbox-row"><span>Type</span><b>Combined Sewer (CSO)</b></div>'+(s.ws?'<div class="pbox-row"><span>Watershed</span><b>'+s.ws+'</b></div>':'')+'<div class="pbox-note">'+s.desc+'</div><a class="pbox-link" href="'+s.link+'" target="_blank">Read source</a></div>', {maxWidth:275})
-   .addTo(LG.cso);
+CSO_SITES.forEach(function(s){
+  L.marker([s.lat,s.lng],{icon:facIcon('cso')}).bindPopup('<div class="pbox"><div class="pbox-title">'+s.name+'</div><div class="pbox-row"><span>Type</span><b>Combined Sewer (CSO)</b></div>'+(s.ws?'<div class="pbox-row"><span>Watershed</span><b>'+s.ws+'</b></div>':'')+'<div class="pbox-note">'+s.desc+'</div><a class="pbox-link" href="'+s.link+'" target="_blank">Read source</a></div>',{maxWidth:275}).addTo(LG.cso);
 });
-SSO_SITES.forEach(function(s) {
-  L.marker([s.lat,s.lng], {icon:facIcon('sso')})
-   .bindPopup('<div class="pbox"><div class="pbox-title">'+s.name+'</div><div class="pbox-row"><span>Type</span><b>Sanitary Sewer (SSO)</b></div><div class="pbox-note">'+s.desc+'</div><a class="pbox-link" href="'+s.link+'" target="_blank">Read source</a></div>', {maxWidth:275})
-   .addTo(LG.sso);
+SSO_SITES.forEach(function(s){
+  L.marker([s.lat,s.lng],{icon:facIcon('sso')}).bindPopup('<div class="pbox"><div class="pbox-title">'+s.name+'</div><div class="pbox-row"><span>Type</span><b>Sanitary Sewer (SSO)</b></div><div class="pbox-note">'+s.desc+'</div><a class="pbox-link" href="'+s.link+'" target="_blank">Read source</a></div>',{maxWidth:275}).addTo(LG.sso);
 });
 
 // ── STORM PIPES ───────────────────────────────────────────────────────────────
-PIPES_DATA.forEach(function(p) {
-  if (!p.c || p.c.length < 2) return;
-  L.polyline(p.c, {color:pColor(p.m), weight:(p.m==='VCP'||p.m==='CMP')?2.5:1.5, opacity:.75})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Pipe</div>'+
-     '<div class="pbox-row"><span>Diameter</span><b>'+(p.d||'?')+'&#34;</b></div>'+
-     '<div class="pbox-row"><span>Material</span><b>'+(MAT_NAMES[p.m]||'Unknown')+'</b></div>'+
-     '<div class="pbox-row"><span>Watershed</span><b>'+(p.w||'Unknown')+'</b></div>'+
-     ((p.m==='VCP'||p.m==='CMP')? '<div class="pbox-badge" style="background:#fef2f2;color:#dc2626">Aging — elevated failure risk</div>' : '')+
-     '</div>', {maxWidth:255})
-   .addTo(LG.pipes);
+PIPES_DATA.forEach(function(p){
+  if(!p.c||p.c.length<2)return;
+  L.polyline(p.c,{color:pColor(p.m),weight:(p.m==='VCP'||p.m==='CMP')?2.5:1.5,opacity:.75})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Pipe</div><div class="pbox-row"><span>Diameter</span><b>'+(p.d||'?')+'&#34;</b></div><div class="pbox-row"><span>Material</span><b>'+(MAT_NAMES[p.m]||'Unknown')+'</b></div><div class="pbox-row"><span>Watershed</span><b>'+(p.w||'Unknown')+'</b></div>'+((p.m==='VCP'||p.m==='CMP')?'<div style="margin-top:5px;font-size:10px;color:#dc2626;font-weight:600">Aging — elevated failure risk (raises D&#x209B;&#x1D422;&#x1D42C;&#x1D424;)</div>':'')+'</div>',{maxWidth:255}).addTo(LG.pipes);
+});
+OUTLETS_DATA.forEach(function(o){
+  L.circleMarker([o.lat,o.lng],{radius:5,color:'#fff',weight:1.5,fillColor:oColor(o.t),fillOpacity:.9})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Outlet &mdash; Discharge Point</div><div class="pbox-row"><span>Type</span><b>'+(OUT_NAMES[o.t]||'Unknown')+'</b></div><div class="pbox-row"><span>Watershed</span><b>'+(o.w||'Unknown')+'</b></div><div class="pbox-note">The endpoint of a storm pipe where stormwater discharges into a waterway. Outlet density (D<sub>o</sub>) is a component of D&#x209B;&#x1D422;&#x1D42C;&#x1D424; in the flood risk formula. Neighborhoods with no outlets receive a +0.20 drainage risk penalty.</div></div>',{maxWidth:265}).addTo(LG.outlets);
+});
+INLETS_DATA.forEach(function(i){
+  L.circleMarker([i.lat,i.lng],{radius:2.5,color:'#2563eb',weight:0,fillColor:'#60a5fa',fillOpacity:.7})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Inlet</div><div class="pbox-note">Entry point for stormwater runoff into the underground pipe system. Inlet density (D<sub>i</sub>) is a component of D&#x209B;&#x1D422;&#x1D42C;&#x1D424; in the flood risk formula — higher inlet density indicates better drainage capacity.</div></div>').addTo(LG.inlets);
+});
+MANHOLES_DATA.forEach(function(m){
+  L.circleMarker([m.lat,m.lng],{radius:2.5,color:'#7c3aed',weight:0,fillColor:'#a78bfa',fillOpacity:.7})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Manhole</div><div class="pbox-note">Access point into the underground stormwater system. During CSO and SSO events, manholes can erupt with raw sewage — documented during major storms in Proctor Creek and Intrenchment Creek watersheds.</div></div>').addTo(LG.manholes);
+});
+[[33.778,-84.455,'Proctor Creek'],[33.818,-84.374,'Peachtree Creek'],[33.872,-84.362,'Nancy Creek'],
+ [33.718,-84.325,'South River'],[33.728,-84.488,'Utoy Creek'],[33.737,-84.342,'Intrenchment Creek'],
+ [33.802,-84.435,'Shoal Creek'],[33.840,-84.410,'Sandy Creek']].forEach(function(g){
+  L.marker([g[0],g[1]],{icon:L.divIcon({html:'<div style="width:10px;height:10px;background:#2563eb;border:2px solid #fff;border-radius:50%;box-shadow:0 0 5px rgba(37,99,235,.5)"></div>',className:'',iconAnchor:[5,5]})})
+   .bindPopup('<div class="pbox"><div class="pbox-title">Rain Gauge</div><div class="pbox-row"><span>Location</span><b>'+g[2]+'</b></div><div class="pbox-note">One of 22 rain gauges operated by the City of Atlanta Department of Watershed Management. Live precipitation from NWS KATL station modifies flood risk scores for CSO-adjacent neighborhoods.</div></div>').addTo(LG.gauges);
 });
 
-// ── STORM OUTLETS ─────────────────────────────────────────────────────────────
-OUTLETS_DATA.forEach(function(o) {
-  L.circleMarker([o.lat,o.lng], {radius:5,color:'#fff',weight:1.5,fillColor:oColor(o.t),fillOpacity:.9})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Outlet — Discharge Point</div>'+
-     '<div class="pbox-row"><span>Type</span><b>'+(OUT_NAMES[o.t]||'Unknown')+'</b></div>'+
-     '<div class="pbox-row"><span>Watershed</span><b>'+(o.w||'Unknown')+'</b></div>'+
-     '<div class="pbox-note">The endpoint of a storm pipe where stormwater (and during CSO events, raw sewage) discharges into a creek or waterway. Brown/amber dots on the map.</div></div>', {maxWidth:260})
-   .addTo(LG.outlets);
-});
+// ── NEIGHBORHOOD BUBBLES ──────────────────────────────────────────────────────
+var selNbh = null;
 
-INLETS_DATA.forEach(function(i) {
-  L.circleMarker([i.lat,i.lng], {radius:2.5,color:'#2563eb',weight:0,fillColor:'#60a5fa',fillOpacity:.7})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Inlet</div><div class="pbox-note">Entry point for stormwater runoff — curb inlets, grates, or catch basins on streets. Water enters here and travels through underground pipes to outlets that discharge into waterways.</div></div>')
-   .addTo(LG.inlets);
-});
-MANHOLES_DATA.forEach(function(m) {
-  L.circleMarker([m.lat,m.lng], {radius:2.5,color:'#7c3aed',weight:0,fillColor:'#a78bfa',fillOpacity:.7})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Storm Manhole</div><div class="pbox-note">Access point into the underground stormwater system. During CSO and SSO events, manholes can erupt — geysers of raw sewage have been documented during major storms in Proctor Creek and Intrenchment Creek watersheds.</div></div>')
-   .addTo(LG.manholes);
-});
-
-var GAUGE_LOCS = [[33.778,-84.455,'Proctor Creek'],[33.818,-84.374,'Peachtree Creek'],[33.872,-84.362,'Nancy Creek'],
-  [33.718,-84.325,'South River'],[33.728,-84.488,'Utoy Creek'],[33.737,-84.342,'Intrenchment Creek'],
-  [33.802,-84.435,'Shoal Creek'],[33.840,-84.410,'Sandy Creek']];
-GAUGE_LOCS.forEach(function(g) {
-  var icon = L.divIcon({html:'<div style="width:10px;height:10px;background:#2563eb;border:2px solid #fff;border-radius:50%;box-shadow:0 0 5px rgba(37,99,235,.5)"></div>',className:'',iconAnchor:[5,5]});
-  L.marker([g[0],g[1]], {icon:icon})
-   .bindPopup('<div class="pbox"><div class="pbox-title">Rain Gauge</div><div class="pbox-row"><span>Location</span><b>'+g[2]+'</b></div><div class="pbox-note">One of 22 rain gauges operated by the City of Atlanta Department of Watershed Management.</div></div>')
-   .addTo(LG.gauges);
-});
-
-WATERSHEDS.filter(function(w){return w.fema>60;}).forEach(function(w) {
-  L.circle([w.lat+.01,w.lng-.01], {radius:w.area*380,color:'#eab308',weight:1.5,opacity:.8,fillColor:'#fef08a',fillOpacity:.14,dashArray:'6,4'})
-   .bindPopup('<div class="pbox"><div class="pbox-title">FEMA Flood Zone AE</div><div class="pbox-row"><span>Watershed</span><b>'+w.name+'</b></div><div class="pbox-row"><span>Zone overlap est.</span><b>'+w.fema+'%</b></div><div class="pbox-note">Approximate FEMA Zone AE boundary (1% annual chance flood). For accurate parcel-level data visit the FEMA Map Service Center.</div><a class="pbox-link" href="https://msc.fema.gov/portal/home" target="_blank">FEMA Map Service Center</a></div>', {maxWidth:255})
-   .addTo(LG.fema);
-});
-
-// ── WATERSHED BUBBLES ─────────────────────────────────────────────────────────
-var selWS = null;
-
-function buildPopup(ws) {
-  var mod = getPrecipMod(ws);
-  var effIdx = adjIndex(ws);
-  var col = sColor(effIdx);
-  var factors = [
-    {l:'FEMA Zone', v:ws.fema, w:'30%'},
-    {l:'Impervious', v:ws.imperv, w:'20%'},
-    {l:'Flood Events', v:ws.events, w:'20%'},
-    {l:'Combined Sewer', v:ws.cso_pct, w:'15%'},
-  ];
-  var barsHtml = factors.map(function(f) {
-    return '<div class="pbox-bar-row"><span class="pbox-bar-lbl">'+f.l+'</span>'+
-      '<div class="pbox-bar-bg"><div class="pbox-bar-fill" style="width:'+f.v+'%;background:'+col+'"></div></div>'+
-      '<span class="pbox-bar-val">'+f.v+'%&times;'+f.w+'</span></div>';
-  }).join('');
-  var precipHtml = mod > 0
-    ? '<div class="precip-alert-box">Live rain: '+currentPrecip1h.toFixed(2)+'" last hr — CSO score +'+mod+' pts</div>'
-    : '';
-  return '<div class="pbox" style="min-width:240px">'+
-    '<div class="pbox-title">'+ws.name+(ws.cso?'<span class="pbox-badge" style="background:#fecaca;color:#dc2626;margin-left:6px">CSO</span>':'')+'</div>'+
-    '<div class="pbox-row"><span>Flood Index</span><b style="color:'+col+'">'+effIdx+'/10 — '+sLabel(effIdx)+'</b></div>'+
-    '<div class="pbox-row"><span>Area</span><b>'+ws.area+' sq mi</b></div>'+
-    '<div class="pbox-row"><span>Storm pipes</span><b>'+ws.pipes.toLocaleString()+'</b></div>'+
-    '<div class="pbox-row"><span>Pipe material</span><b>'+ws.mat+'</b></div>'+
-    '<div class="pbox-bars"><div style="font-size:10px;font-weight:600;color:#374151;margin-bottom:4px">Score breakdown:</div>'+barsHtml+'</div>'+
-    precipHtml+
-    '<div class="pbox-note">'+ws.note+'</div></div>';
+function buildNbhPopup(n) {
+  var s = adjScore(n);
+  var cat = scoreToCat(s);
+  var col = scoreToColor(s);
+  var mod = precipMod(n);
+  var fema_line = '';
+  if (n.sfha_pct !== null && n.sfha_pct !== undefined) {
+    fema_line = '<div class="pbox-row"><span>SFHA (Zone AE)</span><b>'+n.sfha_pct+'%</b></div>';
+    fema_line += '<div class="pbox-row"><span>In any FEMA zone</span><b>'+(n.fema_pct||'—')+'%</b></div>';
+    if (n.zone_mix) fema_line += '<div class="pbox-row"><span>Zone mix</span><b style="font-size:9.5px">'+n.zone_mix+'</b></div>';
+  } else if (n.zone_mix) {
+    fema_line = '<div class="pbox-row"><span>FEMA status</span><b style="font-size:9.5px">'+n.zone_mix+'</b></div>';
+  }
+  return '<div class="pbox">'+
+    '<div class="pbox-title">'+n.name+
+      '<span class="pbox-badge" style="background:'+col+'">'+cat+'</span>'+
+      (n.no_outlet?'<span class="pbox-badge" style="background:#7c2d12">No Outlets</span>':'')+
+    '</div>'+
+    '<div class="pbox-row"><span>Risk Score</span><b style="color:'+col+'">'+s.toFixed(3)+(mod>0?' (+'+mod.toFixed(2)+' rain)':'')+'</b></div>'+
+    '<div class="pbox-row"><span>Watershed</span><b>'+n.watershed+'</b></div>'+
+    fema_line+
+    '<div class="pbox-formula">'+
+      '<b>Score</b> = 0.363&middot;I + 0.359&middot;D<sub>risk</sub> + 0.279&middot;E<br>'+
+      'I=<b>'+n.I+'</b> E=<b>'+n.E+'</b> D<sub>risk</sub>=<b>'+n.D_risk+'</b>'+
+      (n.no_outlet?'<br>Penalty: +0.20 (no outlets)':'')+
+    '</div>'+
+    (mod>0?'<div style="font-size:10px;color:#dc2626;font-weight:600;margin-top:4px">Live rain: '+currentPrecip1h.toFixed(2)+'" — CSO score elevated +'+mod.toFixed(2)+'</div>':'')+
+    '<div class="pbox-note">D<sub>d</sub>='+n.Dd+' (pipe density) &middot; D<sub>i</sub>='+n.Di+' (inlet density) &middot; D<sub>o</sub>='+n.Do+' (outlet density)</div>'+
+    '</div>';
 }
 
-WATERSHEDS.forEach(function(ws) {
-  var col = sColor(ws.index);
-  var r = 18 + ws.index * 3.5;
-  var circle = L.circleMarker([ws.lat,ws.lng],
-    {radius:r, color:'#fff', weight:2.5, fillColor:col, fillOpacity:.84, zIndexOffset:2000});
-  circle.bindPopup(buildPopup(ws), {maxWidth:285, closeButton:true});
-  circle.on('click', function() {
-    circle.setPopupContent(buildPopup(ws));
-    selectWS(ws, circle);
-  });
-  circle.on('mouseover', function() { if(selWS!==ws.name) circle.setStyle({fillOpacity:1,weight:3}); });
-  circle.on('mouseout',  function() { if(selWS!==ws.name) circle.setStyle({fillOpacity:.84,weight:2.5}); });
-  ws._circle = circle;
+// Bubble radius scaled by score
+function bubbleRadius(s) { return 10 + s * 22; }
 
+NBH_DATA.forEach(function(n) {
+  var s = n.score;
+  var col = scoreToColor(s);
+  var r = bubbleRadius(s);
+  var circle = L.circleMarker([n.lat,n.lng],
+    {radius:r, color:'#fff', weight:2, fillColor:col, fillOpacity:0.80, zIndexOffset:1000});
+  circle.bindPopup(buildNbhPopup(n),{maxWidth:290,closeButton:true});
+  circle.on('click', function() { circle.setPopupContent(buildNbhPopup(n)); selectNbh(n,circle); });
+  circle.on('mouseover', function() { if(selNbh!==n.name) circle.setStyle({fillOpacity:.95,weight:2.5}); });
+  circle.on('mouseout',  function() { if(selNbh!==n.name) circle.setStyle({fillOpacity:.80,weight:2}); });
+  n._circle = circle;
+
+  // Label inside bubble
   var nameIcon = L.divIcon({
-    html: '<div style="text-align:center;pointer-events:none;line-height:1.2">'+
-      '<div style="font-size:10px;font-weight:700;color:rgba(255,255,255,.95)">'+ws.name.split(' ')[0]+'</div>'+
-      '<div style="font-size:9px;color:rgba(255,255,255,.82)">'+ws.name.split(' ').slice(1).join(' ')+'</div></div>',
-    className:'', iconSize:[r*2-4,26], iconAnchor:[r-2,13]
+    html:'<div style="text-align:center;pointer-events:none;line-height:1.2;padding:0 2px">'+
+      '<div style="font-size:9px;font-weight:700;color:rgba(255,255,255,.95);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:'+(r*2-6)+'px">'+n.name+'</div>'+
+      '<div style="font-family:\'DM Mono\',monospace;font-size:9px;color:rgba(255,255,255,.85);font-weight:600">'+s.toFixed(2)+'</div>'+
+    '</div>',
+    className:'', iconSize:[r*2-4,28], iconAnchor:[r-2,14]
   });
-  var scoreIcon = L.divIcon({
-    html: '<div style="font-size:11px;font-weight:700;color:#1e293b;white-space:nowrap;text-shadow:0 1px 3px rgba(255,255,255,.9)" id="slbl-'+ws.name.replace(/\s+/g,'-')+'">Index: '+ws.index+'</div>',
-    className:'', iconSize:[80,14], iconAnchor:[40,-r-3]
-  });
-
-  LG.zones.addLayer(circle);
-  LG.zones.addLayer(L.marker([ws.lat,ws.lng], {icon:nameIcon, interactive:false}));
-  LG.zones.addLayer(L.marker([ws.lat,ws.lng], {icon:scoreIcon, interactive:false}));
+  LG.bubbles.addLayer(circle);
+  LG.bubbles.addLayer(L.marker([n.lat,n.lng],{icon:nameIcon,interactive:false}));
 });
 
 function updateBubbleColors() {
-  WATERSHEDS.forEach(function(ws) {
-    if (!ws._circle) return;
-    ws._circle.setStyle({fillColor: sColor(adjIndex(ws))});
+  NBH_DATA.forEach(function(n) {
+    if (!n._circle) return;
+    n._circle.setStyle({fillColor:scoreToColor(adjScore(n))});
+    n._circle.setPopupContent(buildNbhPopup(n));
   });
 }
 
-// ── WATERSHED SIDEBAR LIST ────────────────────────────────────────────────────
-function renderWatershedList() {
-  var listEl = document.getElementById('ws-list');
+// ── FEMA ZONES ────────────────────────────────────────────────────────────────
+NBH_DATA.filter(function(n){return n.sfha_pct && n.sfha_pct>20;}).forEach(function(n){
+  L.circle([n.lat+0.005,n.lng+0.005],{radius:600,color:'#eab308',weight:1.5,opacity:.8,fillColor:'#fef08a',fillOpacity:.15,dashArray:'6,4'})
+   .bindPopup('<div class="pbox"><div class="pbox-title">FEMA Zone AE</div><div class="pbox-row"><span>Neighborhood</span><b>'+n.name+'</b></div><div class="pbox-row"><span>SFHA (Zone AE)</span><b>'+n.sfha_pct+'%</b></div><div class="pbox-row"><span>Zone mix</span><b>'+n.zone_mix+'</b></div><a class="pbox-link" href="https://msc.fema.gov/portal/home" target="_blank">FEMA Map Service Center</a></div>',{maxWidth:255})
+   .addTo(LG.fema);
+});
+
+// ── NEIGHBORHOOD LIST ─────────────────────────────────────────────────────────
+var currentFilter = 'all';
+var currentSearch = '';
+
+function setFilter(cat) {
+  currentFilter = cat;
+  ['all','high','mod','low'].forEach(function(k) {
+    var el = document.getElementById('filt-'+k);
+    if (!el) return;
+    el.className = 'cat-btn';
+    if (k==='all'&&cat==='all') el.className='cat-btn active-all';
+    if (k==='high'&&cat==='High') el.className='cat-btn active-high';
+    if (k==='mod'&&cat==='Moderate') el.className='cat-btn active-mod';
+    if (k==='low'&&cat==='Low') el.className='cat-btn active-low';
+  });
+  renderNbhList();
+}
+
+function filterList() {
+  currentSearch = document.getElementById('nbh-search').value.toLowerCase();
+  renderNbhList();
+}
+
+function renderNbhList() {
+  var listEl = document.getElementById('nbh-list');
   listEl.innerHTML = '';
-  var sorted = WATERSHEDS.slice().sort(function(a,b) { return b.index - a.index; });
-  sorted.forEach(function(ws) {
-    var effIdx = adjIndex(ws);
-    var col = sColor(effIdx);
-    var mod = getPrecipMod(ws);
+  var sorted = NBH_DATA.slice().sort(function(a,b){ return adjScore(b)-adjScore(a); });
+  sorted.forEach(function(n) {
+    var s = adjScore(n);
+    var cat = scoreToCat(s);
+    if (currentFilter !== 'all' && cat !== currentFilter) return;
+    if (currentSearch && n.name.toLowerCase().indexOf(currentSearch)===-1) return;
+    var col = scoreToColor(s);
+    var mod = precipMod(n);
     var el = document.createElement('div');
-    el.className = 'ws-item';
-    el.id = 'ws-' + ws.name.replace(/\s+/g, '-');
+    el.className = 'nbh-item';
+    el.id = 'nbh-'+n.name.replace(/\s+/g,'-').replace(/\//g,'-');
     el.innerHTML =
-      '<div class="ws-badge" style="background:'+col+'">'+effIdx+'</div>'+
-      '<div class="ws-info">'+
-        '<div class="ws-name">'+ws.name+'</div>'+
-        '<div class="ws-sub">'+ws.pipes.toLocaleString()+' pipes &middot; '+ws.area+' mi&sup2;'+
-          (ws.cso?' &middot; CSO area':'')+
-          (mod>0?' &middot; <span style="color:#dc2626;font-weight:600">Rain alert</span>':'')+
-        '</div>'+
+      '<div class="nbh-score-badge" style="background:'+col+'">'+s.toFixed(2)+'</div>'+
+      '<div class="nbh-info">'+
+        '<div class="nbh-name">'+n.name+'</div>'+
+        '<div class="nbh-sub">'+cat+' &middot; '+n.watershed+(n.no_outlet?' &middot; <span style="color:#dc2626;font-weight:600">No outlets</span>':'')+(mod>0?' &middot; <span style="color:#dc2626;font-weight:600">Rain alert</span>':'')+'</div>'+
       '</div>'+
-      '<div class="ws-num" style="color:'+col+'">'+effIdx+'</div>';
-    el.onclick = function() { selectWS(ws, ws._circle); };
+      '<div class="nbh-bar-wrap"><div class="nbh-bar-bg"><div class="nbh-bar-fill" style="width:'+(s*100).toFixed(0)+'%;background:'+col+'"></div></div></div>';
+    el.onclick = function() { selectNbh(n, n._circle); };
+    if (selNbh === n.name) el.classList.add('selected');
     listEl.appendChild(el);
   });
 }
 
-function selectWS(ws, circle) {
-  if (selWS) {
-    var prev = WATERSHEDS.find(function(w){return w.name===selWS;});
-    if (prev && prev._circle) prev._circle.setStyle({fillOpacity:.84, weight:2.5, color:'#fff'});
-    var pe = document.getElementById('ws-'+selWS.replace(/\s+/g,'-'));
+function selectNbh(n, circle) {
+  if (selNbh) {
+    var prev = NBH_DATA.find(function(x){return x.name===selNbh;});
+    if (prev && prev._circle) prev._circle.setStyle({fillOpacity:.80,weight:2,color:'#fff'});
+    var pe = document.getElementById('nbh-'+selNbh.replace(/\s+/g,'-').replace(/\//g,'-'));
     if (pe) pe.classList.remove('selected');
   }
-  selWS = ws.name;
-  if (circle) circle.setStyle({fillOpacity:1, weight:3.5, color:'#1e293b'});
-  var el = document.getElementById('ws-'+ws.name.replace(/\s+/g,'-'));
+  selNbh = n.name;
+  if (circle) circle.setStyle({fillOpacity:.95,weight:3,color:'#1e293b'});
+  var el = document.getElementById('nbh-'+n.name.replace(/\s+/g,'-').replace(/\//g,'-'));
   if (el) { el.classList.add('selected'); el.scrollIntoView({behavior:'smooth',block:'nearest'}); }
-  map.flyTo([ws.lat,ws.lng], 13, {duration:.7});
+  map.flyTo([n.lat,n.lng],14,{duration:.65});
 
-  var mod = getPrecipMod(ws);
-  var effIdx = adjIndex(ws);
-  var col = sColor(effIdx);
-  var factors = [
-    {l:'FEMA Zone Overlap (30%)', v:ws.fema, c:'#dc2626'},
-    {l:'Impervious Surface (20%)', v:ws.imperv, c:'#f97316'},
-    {l:'Flood Event History (20%)', v:ws.events, c:'#eab308'},
-    {l:'Combined Sewer (15%)', v:ws.cso_pct, c:'#dc2626'},
-  ];
-  var barsHtml = factors.map(function(f) {
-    return '<div class="score-row"><span class="score-lbl">'+f.l+'</span>'+
-      '<div class="score-bg"><div class="score-fill" style="width:'+f.v+'%;background:'+f.c+'"></div></div>'+
-      '<span class="score-pct">'+f.v+'%</span></div>';
-  }).join('');
+  var s = adjScore(n);
+  var cat = scoreToCat(s);
+  var col = scoreToColor(s);
+  var mod = precipMod(n);
+
+  var femaHtml = '';
+  if (n.sfha_pct !== null && n.sfha_pct !== undefined) {
+    femaHtml = '<div class="fema-box">'+
+      '<b>FEMA Zone Data</b><br>'+
+      'In Special Flood Hazard Area (Zone AE): <b>'+n.sfha_pct+'%</b><br>'+
+      'In any FEMA polygon: <b>'+(n.fema_pct||'—')+'%</b><br>'+
+      'Zone mix: '+n.zone_mix+
+      '</div>';
+  } else if (n.zone_mix) {
+    femaHtml = '<div class="fema-box"><b>FEMA:</b> '+n.zone_mix+'</div>';
+  }
 
   document.getElementById('detail-panel').innerHTML =
-    '<div class="detail-name">'+ws.name+
-      (ws.cso?'<span style="background:#fecaca;color:#dc2626;font-size:9px;padding:2px 6px;border-radius:6px;font-weight:700">CSO</span>':'')+
+    '<div class="detail-name">'+n.name+
+      '<span class="cat-tag" style="background:'+col+'">'+cat+'</span>'+
+      (n.no_outlet?'<span class="cat-tag" style="background:#7c2d12;font-size:9px">No Outlets</span>':'')+
     '</div>'+
-    '<div class="dg">'+
-      '<div class="dc"><div class="dc-v" style="color:'+col+'">'+effIdx+'/10</div><div class="dc-l">Flood Index'+(mod>0?' +'+mod+' pts rain':'')+'</div></div>'+
-      '<div class="dc"><div class="dc-v">'+ws.pipes.toLocaleString()+'</div><div class="dc-l">Pipes (shapefile)</div></div>'+
-      '<div class="dc"><div class="dc-v">'+ws.fema+'%</div><div class="dc-l">FEMA Zone</div></div>'+
-      '<div class="dc"><div class="dc-v">'+ws.imperv+'%</div><div class="dc-l">Impervious</div></div>'+
+    '<div class="dg2">'+
+      '<div class="dc"><div class="dc-v" style="color:'+col+'">'+s.toFixed(3)+(mod>0?' <span style="font-size:9px">+'+mod.toFixed(2)+'</span>':'')+'</div><div class="dc-l">Risk Score</div></div>'+
+      '<div class="dc"><div class="dc-v">'+n.I+'</div><div class="dc-l">I Impervious</div></div>'+
+      '<div class="dc"><div class="dc-v">'+n.E+'</div><div class="dc-l">E Elevation</div></div>'+
     '</div>'+
-    '<div style="font-size:10px;font-weight:600;color:#374151;margin-bottom:4px">Score breakdown:</div>'+
-    barsHtml+
-    (mod>0?'<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:5px;padding:5px 8px;margin:5px 0;font-size:10px;color:#dc2626;font-weight:600">Live rain: '+currentPrecip1h.toFixed(2)+'" last hour — CSO score elevated +'+mod+' pts</div>':'')+
-    '<div class="detail-note">'+ws.note+'</div>';
+    '<div class="dg2-wide">'+
+      '<div class="dc"><div class="dc-v">'+n.D_risk.toFixed(3)+'</div><div class="dc-l">D&#x209B;&#x1D422;&#x1D42C;&#x1D424; Drainage Risk</div></div>'+
+      '<div class="dc"><div class="dc-v">'+n.watershed.split(' ')[0]+'</div><div class="dc-l">Watershed</div></div>'+
+    '</div>'+
+    '<div class="formula-box">'+
+      '<b>0.363</b>&times;'+n.I+' + <b>0.359</b>&times;'+n.D_risk.toFixed(3)+' + <b>0.279</b>&times;'+n.E+' = <b style="color:'+col+'">'+n.formula+'</b> (formula)<br>'+
+      'D<sub>d</sub>='+n.Dd+' &middot; D<sub>i</sub>='+n.Di+' &middot; D<sub>o</sub>='+n.Do+
+      (n.no_outlet?'<br><b style="color:#dc2626">Penalty: +0.20 applied (no outlets detected)</b>':'')+
+    '</div>'+
+    (mod>0?'<div class="rain-mod-box">Live rain '+currentPrecip1h.toFixed(2)+'" &mdash; CSO score elevated +'+mod.toFixed(2)+'</div>':'')+
+    femaHtml;
 }
 
 // ── TABS ──────────────────────────────────────────────────────────────────────
 function switchTab(name) {
   var names = ['flood','news','sewers','equation','layers'];
-  document.querySelectorAll('.tab').forEach(function(t,i) {
-    t.classList.toggle('active', names[i]===name);
-  });
-  document.querySelectorAll('.tab-panel').forEach(function(p) {
-    p.classList.toggle('active', p.id==='tab-'+name);
-  });
+  document.querySelectorAll('.tab').forEach(function(t,i){t.classList.toggle('active',names[i]===name);});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.toggle('active',p.id==='tab-'+name);});
 }
 
 // ── AI NEWS ───────────────────────────────────────────────────────────────────
-var CACHE_KEY = 'fx_news_v6';
-var CACHE_DATE = 'fx_news_date_v6';
+var CACHE_KEY='fx_news_v7', CACHE_DATE='fx_date_v7';
 
 async function fetchNews(force) {
   var today = new Date().toISOString().slice(0,10);
   if (!force) {
     try {
-      var cd = localStorage.getItem(CACHE_DATE);
-      var cn = localStorage.getItem(CACHE_KEY);
-      if (cd === today && cn) {
-        renderNews(JSON.parse(cn));
-        updateStatus('Updated today', '#4ade80');
-        return;
-      }
-    } catch(e) {}
+      var cd=localStorage.getItem(CACHE_DATE), cn=localStorage.getItem(CACHE_KEY);
+      if (cd===today && cn) { renderNews(JSON.parse(cn)); updateStatus('Updated today','#4ade80'); return; }
+    } catch(e){}
   }
-  document.getElementById('news-container').innerHTML =
-    '<div style="padding:20px;text-align:center;font-size:11px;color:var(--g400)"><span class="spin"></span>Searching latest Atlanta flood and infrastructure news...</div>';
-  document.getElementById('refresh-btn').disabled = true;
-  document.getElementById('news-label').textContent = 'Fetching...';
-  updateStatus('Fetching...', '#fbbf24');
+  document.getElementById('news-container').innerHTML='<div style="padding:20px;text-align:center;font-size:11px;color:var(--g400)"><span class="spin"></span>Searching latest Atlanta flood and infrastructure news...</div>';
+  document.getElementById('refresh-btn').disabled=true;
+  document.getElementById('news-label').textContent='Fetching...';
+  updateStatus('Fetching...','#fbbf24');
   try {
-    var today2 = new Date().toISOString().slice(0,10);
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        tools: [{type:'web_search_20250305',name:'web_search'}],
-        messages: [{
-          role: 'user',
-          content: 'Search for the 5 most recent 2024-2025 news articles about Atlanta Georgia flooding, sewer infrastructure failures, sinkholes from sewer pipes, stormwater problems, or Department of Watershed Management. Today is ' + today2 + '. Return a JSON array — each item: year (number), title (string), src (string), tag (Flood/Sinkhole/Infrastructure/Policy/Environment), tc (hex color: Flood=#dc2626 Sinkhole=#dc2626 Infrastructure=#b45309 Policy=#7c3aed Environment=#16a34a), summary (2 sentences), full (3-5 paragraph detailed summary), url (string). Return ONLY the JSON array with no markdown or preamble.'
-        }]
-      })
-    });
+    var t = new Date().toISOString().slice(0,10);
+    var resp = await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,tools:[{type:'web_search_20250305',name:'web_search'}],messages:[{role:'user',content:'Search for the 5 most recent 2024-2025 news articles about Atlanta Georgia flooding, sewer infrastructure failures, sinkholes from sewer pipes, stormwater problems, or Dept of Watershed Management. Today is '+t+'. Return a JSON array. Each item: year (number), title, src (source name), tag (Flood/Sinkhole/Infrastructure/Policy/Environment), tc (hex: Flood=#dc2626 Sinkhole=#dc2626 Infrastructure=#b45309 Policy=#7c3aed Environment=#16a34a), summary (2 sentences max), full (3-5 paragraphs), url. Return ONLY the JSON array with no markdown or preamble.'}]})});
     var data = await resp.json();
-    var textBlocks = (data.content || []).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
-    var match = textBlocks.match(/\[\s*\{[\s\S]*?\}\s*\]/);
-    if (!match) throw new Error('no JSON in response');
+    var txt = (data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
+    var match = txt.match(/\[\s*\{[\s\S]*?\}\s*\]/);
+    if (!match) throw new Error('no JSON');
     var aiNews = JSON.parse(match[0]);
-    localStorage.setItem(CACHE_KEY, JSON.stringify(aiNews));
-    localStorage.setItem(CACHE_DATE, today2);
+    localStorage.setItem(CACHE_KEY,JSON.stringify(aiNews));
+    localStorage.setItem(CACHE_DATE,t);
     renderNews(aiNews);
-    updateStatus('Updated today', '#4ade80');
-  } catch(err) {
-    console.error('News fetch error:', err);
+    updateStatus('Updated today','#4ade80');
+  } catch(e) {
+    console.error(e);
     renderNews([]);
-    updateStatus('Archived reports', '#f59e0b');
-    document.getElementById('news-label').textContent = 'Archived reports (live fetch unavailable)';
+    updateStatus('Archived reports','#f59e0b');
+    document.getElementById('news-label').textContent='Archived reports (live fetch unavailable)';
   } finally {
-    document.getElementById('refresh-btn').disabled = false;
+    document.getElementById('refresh-btn').disabled=false;
   }
 }
 
-function updateStatus(text, color) {
-  document.getElementById('status-text').textContent = text;
-  document.getElementById('status-dot').style.background = color;
-}
+function updateStatus(text,color){document.getElementById('status-text').textContent=text;document.getElementById('status-dot').style.background=color;}
 
 function renderNews(aiArticles) {
-  var container = document.getElementById('news-container');
-  container.innerHTML = '';
-  var all = aiArticles.map(function(a) { return Object.assign({}, a, {isAI:true}); })
-    .concat(STATIC_NEWS.map(function(a) { return Object.assign({}, a, {isAI:false}); }));
-  all.sort(function(a,b) { return b.y - a.y || a.title.localeCompare(b.title); });
-  var aiCount = aiArticles.length;
-  document.getElementById('news-label').textContent =
-    (aiCount > 0 ? aiCount + ' live + ' : '') + STATIC_NEWS.length + ' archived — newest first';
-  all.forEach(function(n, idx) {
-    var div = document.createElement('div');
-    div.className = 'news-item';
-    div.innerHTML =
-      '<div class="news-header" onclick="toggleArticle('+idx+')">'+
-        '<div class="news-meta">'+
-          '<span class="news-year">'+n.y+'</span>'+
-          '<span class="news-tag" style="background:'+n.tc+'22;color:'+n.tc+'">'+n.tag+'</span>'+
-          (n.isAI ? '<span class="ai-badge">Live</span>' : '')+
-        '</div>'+
-        '<div class="news-src">'+n.src+'</div>'+
-        '<div class="news-title">'+n.title+'</div>'+
-        '<div class="news-summary">'+n.summary+'</div>'+
-        '<button class="expand-btn" id="ebtn-'+idx+'">Read full article</button>'+
-      '</div>'+
+  var container=document.getElementById('news-container');
+  container.innerHTML='';
+  var all=aiArticles.map(function(a){return Object.assign({},a,{isAI:true});})
+    .concat(STATIC_NEWS.map(function(a){return Object.assign({},a,{isAI:false});}));
+  all.sort(function(a,b){return b.y-a.y||a.title.localeCompare(b.title);});
+  var aiCount=aiArticles.length;
+  document.getElementById('news-label').textContent=(aiCount>0?aiCount+' live + ':'')+STATIC_NEWS.length+' archived — newest first';
+  all.forEach(function(n,idx){
+    var div=document.createElement('div'); div.className='news-item';
+    div.innerHTML='<div class="news-header" onclick="toggleArticle('+idx+')">'+
+      '<div class="news-meta"><span class="news-year">'+n.y+'</span><span class="news-tag" style="background:'+n.tc+'22;color:'+n.tc+'">'+n.tag+'</span>'+(n.isAI?'<span class="ai-badge">Live</span>':'')+'</div>'+
+      '<div class="news-src">'+n.src+'</div><div class="news-title">'+n.title+'</div>'+
+      '<div class="news-summary">'+n.summary+'</div>'+
+      '<button class="expand-btn" id="ebtn-'+idx+'">Read full article</button></div>'+
       '<div class="news-body-full" id="body-'+idx+'">'+
-        '<div class="news-full-text">'+n.full+'</div>'+
-        '<a class="news-read-link" href="'+n.url+'" target="_blank">Open original source</a>'+
-      '</div>';
+      '<div class="news-full-text">'+n.full+'</div>'+
+      '<a class="news-read-link" href="'+n.url+'" target="_blank">Open original source</a></div>';
     container.appendChild(div);
   });
 }
 
-function toggleArticle(idx) {
-  var body = document.getElementById('body-'+idx);
-  var btn  = document.getElementById('ebtn-'+idx);
-  var open = body.classList.toggle('open');
-  btn.textContent = open ? 'Collapse' : 'Read full article';
+function toggleArticle(idx){
+  var b=document.getElementById('body-'+idx),btn=document.getElementById('ebtn-'+idx);
+  var open=b.classList.toggle('open'); btn.textContent=open?'Collapse':'Read full article';
 }
 
-// ── SEWER FACILITY SIDEBAR LISTS ──────────────────────────────────────────────
-['cso','sso'].forEach(function(type) {
-  var sites = type==='cso' ? CSO_SITES : SSO_SITES;
-  var el = document.getElementById(type+'-facility-list');
-  sites.forEach(function(s) {
-    var div = document.createElement('div');
-    div.className = 'fac-card';
-    div.style.cssText = 'background:#fff;border-color:'+(type==='cso'?'#fecaca':'#bfdbfe')+';';
-    div.innerHTML =
-      '<div class="fac-name" style="color:'+(type==='cso'?'#dc2626':'#2563eb')+'">'+s.name+'</div>'+
+// ── SEWER SIDEBAR LISTS ────────────────────────────────────────────────────────
+['cso','sso'].forEach(function(type){
+  var sites=type==='cso'?CSO_SITES:SSO_SITES;
+  var el=document.getElementById(type+'-facility-list');
+  sites.forEach(function(s){
+    var div=document.createElement('div'); div.className='fac-card';
+    div.style.cssText='background:#fff;border-color:'+(type==='cso'?'#fecaca':'#bfdbfe')+';';
+    div.innerHTML='<div class="fac-name" style="color:'+(type==='cso'?'#dc2626':'#2563eb')+'">'+s.name+'</div>'+
       '<div class="fac-desc">'+s.desc.substring(0,120)+'...</div>'+
       '<a href="'+s.link+'" target="_blank" style="font-size:10px;color:var(--blue)">Read source</a>';
-    div.onclick = function(e) {
-      if (e.target.tagName !== 'A') { map.setView([s.lat,s.lng],14); switchTab('flood'); }
-    };
+    div.onclick=function(e){if(e.target.tagName!=='A'){map.setView([s.lat,s.lng],14);switchTab('flood');}};
     el.appendChild(div);
   });
 });
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-renderWatershedList();
+renderNbhList();
 fetchPrecipitation();
 fetchNews(false);
-setInterval(fetchPrecipitation, 600000);
+setInterval(fetchPrecipitation,600000);
 </script>
 </body>
 </html>
