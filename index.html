@@ -202,16 +202,11 @@
       </div>
     </div>
 
-    <!-- ═══ NEWS ═══ -->
-    <div class="panel" id="tab-news">
-      <div class="news-bar">
-        <span id="news-label">Loading&#8230;</span>
-        <button class="rfbtn" id="rfbtn" onclick="fetchNews(true)">Refresh</button>
-      </div>
-      <div class="scroll" id="news-box">
-        <div style="padding:20px;text-align:center;font-size:11px;color:var(--g400)"><span class="spin"></span>Fetching&#8230;</div>
-      </div>
-    </div>
+    <!-- ═══ NEWS ═══
+         Markup is loaded from news-panel.html at runtime by loadNewsPanel() in app.js.
+         See that file for the full HTML structure and scraping documentation.
+    ═══ -->
+    <div id="news-panel-mount"></div>
 
     <!-- ═══ EVALUATION ═══ -->
     <div class="panel" id="tab-eval">

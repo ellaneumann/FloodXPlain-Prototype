@@ -759,11 +759,50 @@ function toggleSB() {
 }
 
 
+// ============ NEWS PANEL LOADER ============
+
+// loadNewsPanel: fetches news-panel.html and injects it into #news-panel-mount,
+// then kicks off the live news fetch once the markup is in the DOM.
+//
+// Why a separate file?
+//   news-panel.html contains both the tab markup AND its own documentation
+//   explaining exactly how the news scraping works. Keeping it separate makes
+//   the news system self-contained and easy to find, read, and modify without
+//   touching the main index.html.
+//
+// How it works:
+//   1. fetch('news-panel.html') — loads the HTML fragment (no full page, just the panel)
+//   2. .text() — reads it as a plain string
+//   3. innerHTML on #news-panel-mount — drops it into the DOM where index.html
+//      left the placeholder <div id="news-panel-mount"></div>
+//   4. fetchNews(false) — now that #news-box and #rfbtn exist in the DOM,
+//      the news fetch can safely run
+//
+// If the fetch fails (e.g. running index.html as a local file:// URL without a
+// server), the mount div stays empty and fetchNews() is skipped gracefully.
+async function loadNewsPanel() {
+  try {
+    var html = await fetch('news-panel.html').then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    });
+    document.getElementById('news-panel-mount').innerHTML = html;
+    fetchNews(false);
+  } catch (e) {
+    console.warn('news-panel.html could not be loaded:', e.message,
+      '— serve files via a local HTTP server (e.g. python3 -m http.server) to enable the News tab.');
+  }
+}
+
+
 // ============ INITIALIZATION ============
 
-// Run on page load: populate the neighborhood list, fetch live precipitation,
-// fetch today's news (from cache if available), and set a 10-minute precip refresh timer.
+// Run on page load:
+//   • renderList()      — populate the neighborhood list in the Flood Index tab
+//   • fetchPrecip()     — get live NWS rainfall and update the header widget
+//   • loadNewsPanel()   — fetch news-panel.html, inject it, then fetch news
+//   • setInterval(...)  — re-fetch precipitation every 10 minutes
 renderList();
 fetchPrecip();
-fetchNews(false);
+loadNewsPanel();
 setInterval(fetchPrecip, 600000);
