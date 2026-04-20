@@ -276,6 +276,41 @@ header{background:var(--ink);color:#fff;padding:9px 16px;display:flex;align-item
 .pa-item:last-child{margin-bottom:0}
 .pa-num{background:var(--riv);color:#fff;border-radius:50%;width:14px;height:14px;min-width:14px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;margin-top:1px}
 
+/* === LAYER DOWNLOAD BUTTONS === */
+
+.ldown{margin-left:auto;background:none;border:1px solid var(--g200);border-radius:3px;padding:1px 5px;font-size:9px;cursor:pointer;color:var(--g400);flex-shrink:0;line-height:1.5;font-family:var(--font)}
+.ldown:hover{background:var(--g50);color:var(--riv);border-color:var(--riv)}
+
+/* === PANEL PDF TOOLBAR === */
+
+.panel-toolbar{display:flex;justify-content:flex-end;padding:5px 10px;border-bottom:1px solid var(--g100);flex-shrink:0;background:var(--g50)}
+.tab-pdf-btn{display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--g200);border-radius:4px;padding:3px 9px;font-size:9px;font-weight:600;cursor:pointer;color:var(--g600);font-family:var(--font)}
+.tab-pdf-btn:hover{border-color:var(--riv);color:var(--riv)}
+
+/* === PRINT INFO OVERLAY (hidden until print) === */
+
+.print-info{display:none;position:absolute;bottom:14px;left:14px;z-index:1000;background:rgba(255,255,255,.95);border:1px solid #bbb;border-radius:6px;padding:10px 14px;max-width:270px;font-size:10.5px;line-height:1.5;font-family:var(--font);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pi-title{font-size:12px;font-weight:700;color:#1a1a2e;margin-bottom:2px}
+.pi-date{color:var(--g500);margin-bottom:6px}
+.pi-nbh{font-weight:600;color:var(--hi);margin-bottom:4px}
+.pi-layers-ttl{font-weight:600;color:#374151;margin-bottom:2px}
+.pi-layers{margin:0 0 6px 14px;padding:0;color:#374151}
+.pi-src{font-size:9px;color:var(--g400);border-top:1px solid var(--g100);padding-top:5px;margin-top:4px}
+
+/* === PRINT / SAVE AS PDF === */
+
+@media print {
+  .sidebar,.tabs,.sb-toggle,.zbtns,.map-btns,.tab-pdf-btn,.ldown,.panel-toolbar,
+  .cfilt,.srchwrap,.sub-btn,header .hdr-right{display:none!important}
+  header{background:#1a1a2e!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:6px 16px}
+  body,html{height:100%}
+  .layout{display:flex!important;height:calc(100vh - 48px)!important}
+  .map-area{flex:1!important;position:relative!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #map{width:100%!important;height:100%!important}
+  .map-legend{display:block!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .print-info{display:block!important}
+}
+
 /* === SCROLLBARS === */
 
 ::-webkit-scrollbar{width:4px}

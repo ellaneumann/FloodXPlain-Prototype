@@ -51,6 +51,31 @@ function getActions(props) {
 }
 
 
+// ============ SAVE MAP AS PDF ============
+
+var LAYER_LABELS = {
+  nbh:'Flood risk polygons', demo:'Demographics overlay',
+  cso:'Combined sewer (CSO) zones', sso:'Sanitary sewer (SSO) zones',
+  intrenchment:'Custer Watershed Boundary',
+  pipes:'Storm pipes', outlets:'Storm outlets', inlets:'Storm inlets',
+  rivers:'Rivers and streams', rlabels:'Waterway labels'
+};
+
+function savePDF() {
+  var active = Object.keys(LON).filter(function(k){ return LON[k]; })
+    .map(function(k){ return LAYER_LABELS[k] || k; });
+  var date = new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
+  var nbhHtml = selNbh ? '<div class="pi-nbh">Selected: <strong>' + selNbh + '</strong></div>' : '';
+  document.getElementById('print-info').innerHTML =
+    '<div class="pi-title">Atlanta FloodXPlain &mdash; Map Export</div>' +
+    '<div class="pi-date">' + date + '</div>' +
+    nbhHtml +
+    '<div class="pi-layers-ttl">Active layers:</div>' +
+    '<ul class="pi-layers">' + active.map(function(l){ return '<li>'+l+'</li>'; }).join('') + '</ul>' +
+    '<div class="pi-src">Georgia Tech Computing &amp; Sustainability &mdash; floodxplain.com</div>';
+  window.print();
+}
+
 // ============ EVALUATION FORM ============
 
 // Stores the current numeric score for each of the five evaluation questions.
@@ -792,6 +817,97 @@ async function loadNewsPanel() {
     console.warn('news-panel.html could not be loaded:', e.message,
       '— serve files via a local HTTP server (e.g. python3 -m http.server) to enable the News tab.');
   }
+}
+
+
+// ============ GEOJSON DOWNLOAD ============
+
+function downloadLayerGeoJSON(layerId) {
+  var fc, fname;
+  if (layerId === 'nbh') {
+    fc = NBH_GEOJSON;
+    fname = 'atlanta_neighborhoods_flood_risk.geojson';
+  } else if (layerId === 'demo') {
+    fc = {type:'FeatureCollection', features: NBH_GEOJSON.features.filter(function(f){return f.properties.env_justice;})};
+    fname = 'atlanta_ej_neighborhoods.geojson';
+  } else if (layerId === 'intrenchment') {
+    fc = INTRENCHMENT_OUTLINE;
+    fname = 'intrenchment_custer_watershed.geojson';
+  } else if (layerId === 'cso') {
+    var czones = [
+      {n:'Downtown/Midtown CSO Core',c:[[33.740,-84.405],[33.790,-84.405],[33.790,-84.355],[33.740,-84.355]]},
+      {n:'Grant Park/Peoplestown CSO Zone',c:[[33.730,-84.405],[33.758,-84.405],[33.758,-84.362],[33.730,-84.362]]},
+      {n:'Intrenchment Creek CSO Basin',c:[[33.718,-84.382],[33.758,-84.382],[33.758,-84.328],[33.718,-84.328]]},
+    ];
+    var cfeats = czones.map(function(z) {
+      var ring = z.c.map(function(pt){return [pt[1],pt[0]];}); ring.push(ring[0]);
+      return {type:'Feature', properties:{name:z.n, type:'CSO_zone'}, geometry:{type:'Polygon', coordinates:[ring]}};
+    });
+    CSO_SITES.forEach(function(s) {
+      cfeats.push({type:'Feature', properties:{name:s.name, type:'CSO_facility', watershed:s.ws||'', description:s.desc}, geometry:{type:'Point', coordinates:[s.lng,s.lat]}});
+    });
+    fc = {type:'FeatureCollection', features:cfeats};
+    fname = 'atlanta_cso_zones.geojson';
+  } else if (layerId === 'sso') {
+    var szones = [
+      {n:'NW Sanitary',c:[[33.790,-84.475],[33.830,-84.475],[33.830,-84.415],[33.790,-84.415]]},
+      {n:'SW Sanitary',c:[[33.680,-84.540],[33.732,-84.540],[33.732,-84.468],[33.680,-84.468]]},
+      {n:'NE Sanitary',c:[[33.840,-84.405],[33.900,-84.405],[33.900,-84.338],[33.840,-84.338]]},
+      {n:'SE Sanitary',c:[[33.690,-84.372],[33.748,-84.372],[33.748,-84.288],[33.690,-84.288]]},
+    ];
+    var sfeats = szones.map(function(z) {
+      var ring = z.c.map(function(pt){return [pt[1],pt[0]];}); ring.push(ring[0]);
+      return {type:'Feature', properties:{name:z.n, type:'SSO_zone'}, geometry:{type:'Polygon', coordinates:[ring]}};
+    });
+    SSO_SITES.forEach(function(s) {
+      sfeats.push({type:'Feature', properties:{name:s.name, type:'SSO_problem_site', description:s.desc}, geometry:{type:'Point', coordinates:[s.lng,s.lat]}});
+    });
+    fc = {type:'FeatureCollection', features:sfeats};
+    fname = 'atlanta_sso_zones.geojson';
+  } else if (layerId === 'pipes') {
+    var pfeats = PIPES_DATA.filter(function(p){return p.c && p.c.length >= 2;}).map(function(p) {
+      return {type:'Feature', properties:{material:p.m, diameter:p.d, watershed:p.w||''}, geometry:{type:'LineString', coordinates:p.c.map(function(pt){return [pt[1],pt[0]];})}};
+    });
+    fc = {type:'FeatureCollection', features:pfeats};
+    fname = 'atlanta_storm_pipes.geojson';
+  } else if (layerId === 'outlets') {
+    var ofeats = OUTLETS_DATA.map(function(o) {
+      return {type:'Feature', properties:{watershed:o.w||'', type:o.t||''}, geometry:{type:'Point', coordinates:[o.lng,o.lat]}};
+    });
+    fc = {type:'FeatureCollection', features:ofeats};
+    fname = 'atlanta_storm_outlets.geojson';
+  } else if (layerId === 'inlets') {
+    var ifeats = INLETS_DATA.map(function(i) {
+      return {type:'Feature', properties:{}, geometry:{type:'Point', coordinates:[i.lng,i.lat]}};
+    });
+    fc = {type:'FeatureCollection', features:ifeats};
+    fname = 'atlanta_storm_inlets.geojson';
+  } else if (layerId === 'rivers' || layerId === 'rlabels') {
+    var rdata = [
+      {n:'Chattahoochee River',p:[[33.850,-84.540],[33.820,-84.510],[33.797,-84.495],[33.775,-84.490],[33.750,-84.484],[33.720,-84.472],[33.690,-84.455]]},
+      {n:'Flint River',p:[[33.680,-84.505],[33.640,-84.440],[33.600,-84.390],[33.560,-84.368],[33.520,-84.340]]},
+      {n:'Peachtree Creek',p:[[33.887,-84.335],[33.865,-84.348],[33.840,-84.358],[33.820,-84.370],[33.808,-84.385],[33.800,-84.400],[33.795,-84.415]]},
+      {n:'Proctor Creek',p:[[33.810,-84.470],[33.800,-84.462],[33.790,-84.455],[33.782,-84.448],[33.775,-84.445],[33.762,-84.440]]},
+      {n:'South River',p:[[33.750,-84.280],[33.730,-84.295],[33.712,-84.315],[33.698,-84.330],[33.680,-84.348]]},
+      {n:'Intrenchment Creek',p:[[33.755,-84.310],[33.748,-84.325],[33.743,-84.340],[33.737,-84.358],[33.733,-84.372]]},
+      {n:'Utoy Creek',p:[[33.755,-84.510],[33.740,-84.498],[33.728,-84.485],[33.718,-84.468],[33.706,-84.452]]},
+      {n:'Nancy Creek',p:[[33.920,-84.395],[33.900,-84.382],[33.880,-84.372],[33.865,-84.365],[33.852,-84.368]]},
+      {n:'Camp Creek',p:[[33.730,-84.545],[33.715,-84.530],[33.702,-84.515],[33.690,-84.498]]},
+      {n:'Sugar Creek',p:[[33.762,-84.295],[33.750,-84.308],[33.740,-84.320],[33.728,-84.335]]},
+    ];
+    var rfeats = rdata.map(function(r) {
+      return {type:'Feature', properties:{name:r.n}, geometry:{type:'LineString', coordinates:r.p.map(function(pt){return [pt[1],pt[0]];})}};
+    });
+    fc = {type:'FeatureCollection', features:rfeats};
+    fname = 'atlanta_waterways.geojson';
+  } else { return; }
+
+  var blob = new Blob([JSON.stringify(fc, null, 2)], {type:'application/geo+json'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = fname;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
 }
 
 

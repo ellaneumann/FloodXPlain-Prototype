@@ -38,17 +38,20 @@
 
     <!-- ═══ LAYERS ═══ -->
     <div class="panel active" id="tab-layers">
+      <div class="panel-toolbar"><button class="tab-pdf-btn" onclick="savePDF()">&#8595; Save Map as PDF</button></div>
       <div class="scroll">
         <div class="lg-title">Neighborhood Risk</div>
         <div class="lrow" onclick="TL('nbh')">
           <div class="lchk on" id="chk-nbh"></div>
           <div class="lico"><div class="li-poly" style="background:rgba(230,81,0,.55);border:2px solid var(--hi)"></div></div>
           <div class="linfo"><div class="lname">Flood risk polygons</div><div class="lsub">248 neighborhoods, color by risk tier</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('nbh')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('demo')">
           <div class="lchk" id="chk-demo"></div>
           <div class="lico"><div class="li-poly" style="background:rgba(123,45,139,.35);border:2px solid var(--dem)"></div></div>
           <div class="linfo"><div class="lname">Demographics overlay</div><div class="lsub">Environmental justice neighborhoods (purple)</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('demo')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
 
         <div class="lg-title">Sewer Systems</div>
@@ -56,16 +59,19 @@
           <div class="lchk on" id="chk-cso"></div>
           <div class="lico"><div class="li-border" style="color:var(--cso);border-style:dashed"></div></div>
           <div class="linfo"><div class="lname">Combined sewer (CSO) zones</div><div class="lsub">Stormwater + sewage share one pipe</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('cso')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('sso')">
           <div class="lchk on" id="chk-sso"></div>
           <div class="lico"><div class="li-border" style="color:var(--riv);border-style:dashed"></div></div>
           <div class="linfo"><div class="lname">Sanitary sewer (SSO) zones</div><div class="lsub">Separate sewage pipe areas</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('sso')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('intrenchment')">
           <div class="lchk on" id="chk-intrenchment"></div>
           <div class="lico"><div class="li-dash" style="color:var(--ej)"></div></div>
           <div class="linfo"><div class="lname">Custer Sewer Watershed Boundary</div><div class="lsub">Intrenchment Creek (RedOutline shapefile)</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('intrenchment')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
 
         <div class="lg-title">Storm Infrastructure &mdash; COA Shapefile</div>
@@ -77,16 +83,19 @@
             <div class="li-line" style="background:#FFC107;width:14px"></div>
           </div>
           <div class="linfo"><div class="lname">Storm pipes</div><div class="lsub">RCP teal &middot; VCP rose &middot; CMP amber</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('pipes')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('outlets')">
           <div class="lchk on" id="chk-outlets"></div>
           <div class="lico"><div class="li-dot" style="background:#FFC107;width:10px;height:10px;border-radius:50%"></div></div>
           <div class="linfo"><div class="lname">Storm outlets</div><div class="lsub">Discharge points into waterways</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('outlets')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('inlets')">
           <div class="lchk" id="chk-inlets"></div>
           <div class="lico"><div class="li-dot" style="background:var(--riv);width:8px;height:8px;border-radius:50%"></div></div>
           <div class="linfo"><div class="lname">Storm inlets</div><div class="lsub">Street-level stormwater entry points</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('inlets')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
 
         <div class="lg-title">Waterways</div>
@@ -94,6 +103,7 @@
           <div class="lchk on" id="chk-rivers"></div>
           <div class="lico"><div class="li-line" style="background:var(--riv)"></div></div>
           <div class="linfo"><div class="lname">Rivers and streams</div><div class="lsub">Chattahoochee, Flint, Peachtree Creek + all</div></div>
+          <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('rivers')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('rlabels')">
           <div class="lchk on" id="chk-rlabels"></div>
@@ -116,6 +126,7 @@
 
     <!-- ═══ FLOOD INDEX (method + list combined) ═══ -->
     <div class="panel" id="tab-flood">
+      <div class="panel-toolbar"><button class="tab-pdf-btn" onclick="savePDF()">&#8595; Save Map as PDF</button></div>
       <!-- Collapsible method section -->
       <div style="flex-shrink:0;border-bottom:1px solid var(--g200)">
         <div class="method-hdr" onclick="toggleMethod()">
@@ -179,6 +190,7 @@
 
     <!-- ═══ SEWERS ═══ -->
     <div class="panel" id="tab-sewers">
+      <div class="panel-toolbar"><button class="tab-pdf-btn" onclick="savePDF()">&#8595; Save Map as PDF</button></div>
       <div class="scroll">
         <div class="sw-card" style="border-color:#b2dfdb;background:#e0f2f1">
           <h3>Combined Sewer System (CSO)</h3>
@@ -210,6 +222,7 @@
 
     <!-- ═══ EVALUATION ═══ -->
     <div class="panel" id="tab-eval">
+      <div class="panel-toolbar"><button class="tab-pdf-btn" onclick="savePDF()">&#8595; Save Map as PDF</button></div>
       <div class="scroll">
         <div class="eval-intro">
           <h3>Tool Evaluation</h3>
@@ -279,6 +292,7 @@
         <div class="leg-row"><div class="leg-ln" style="background:var(--riv)"></div><span class="leg-lbl">River / Stream</span></div>
       </div>
     </div>
+    <div class="print-info" id="print-info"></div>
   </div><!-- end .map-area -->
 
 </div><!-- end .layout -->
