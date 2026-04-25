@@ -138,46 +138,6 @@ function toggleMethod() {
 }
 
 
-// ============ PRECIPITATION (LIVE WEATHER) ============
-
-var precip = 0;
-
-// Fetches the most recent hourly precipitation reading from the NWS KATL station.
-// Converts from mm to inches, updates the header widget, and shows/hides the rain badge and precip banner.
-// Also triggers a polygon redraw so CSO-adjacent neighborhoods reflect the live rain boost.
-async function fetchPrecip() {
-  try {
-    var r = await fetch('https://api.weather.gov/stations/KATL/observations/latest', {headers:{'Accept':'application/geo+json'}});
-    if (!r.ok) throw new Error('HTTP '+r.status);
-    var d = await r.json();
-    var raw = ((d.properties||{}).precipitationLastHour||{}).value;
-    precip = (raw != null && !isNaN(raw)) ? parseFloat((raw*39.3701).toFixed(2)) : 0;
-    document.getElementById('wx-val').textContent = precip > 0 ? precip.toFixed(2)+'" last hr' : '0.00" (dry)';
-    var badge = document.getElementById('rain-badge');
-    var banner = document.getElementById('precip-banner');
-    if (precip >= 0.5) {
-      badge.style.display = 'block';
-      banner.style.display = 'block';
-      banner.textContent = (precip >= 1.0 ? 'CRITICAL RAIN' : 'ELEVATED RAIN') + ': ' + precip.toFixed(2) + '" last hr — CSO overflow risk elevated';
-    } else {
-      badge.style.display = 'none';
-      banner.style.display = 'none';
-    }
-    redrawPolygons();
-  } catch(e) {
-    document.getElementById('wx-val').textContent = 'N/A';
-  }
-}
-
-// Returns a live precipitation boost value for CSO-affected neighborhoods.
-// Used to elevate the visual warning in popups and detail panels during rain events.
-function csoBoost(name) {
-  var c = CSO_CLASSIFICATION[name] || {};
-  if (!c.in_cso && !c.low_adj_cso) return 0;
-  if (precip >= 1.0) return 0.10;
-  if (precip >= 0.5) return 0.05;
-  return 0;
-}
 
 
 // ============ COLOR HELPERS ============
@@ -360,8 +320,6 @@ function buildPopupHTML(props) {
   var cls  = CSO_CLASSIFICATION[name] || {};
   var ejTop = props.ej_top;
   var noOut = props.outlet_count === 0;
-  var boost = csoBoost(name);
-
   var interp = cat==='High'
     ? 'This neighborhood is at <b>high risk of flooding</b> during significant rain events. Streets and yards can flood quickly. If in or near the combined sewer zone, raw sewage may enter homes.'
     : cat==='Moderate'
@@ -379,7 +337,6 @@ function buildPopupHTML(props) {
   if (ejTop)                  h += '<div class="pop-warn pw-ej">Highest EJ concern: high flood risk + majority Black + income below city median. Top priority for infrastructure investment.</div>';
   if (cls.in_cso)             h += '<div class="pop-warn pw-cso">Inside combined sewer zone: stormwater and raw sewage share one pipe. Any heavy rain can trigger raw sewage overflow.</div>';
   if (cls.low_adj_cso && !cls.in_cso) h += '<div class="pop-warn pw-adj">At lower elevation than adjacent CSO zone ('+( cls.adj_zone||'nearby')+'). CSO overflow sewage flows downhill into this neighborhood.</div>';
-  if (boost > 0)              h += '<div class="pop-warn pw-rain">Current rain: '+precip.toFixed(2)+'" last hr — CSO overflow risk elevated.</div>';
   if (noOut && !cls.in_cso)   h += '<div class="pop-warn pw-noout">No storm outlets detected. +0.20 drainage penalty applied. Stormwater has no direct exit path.</div>';
 
   h += '<div class="pop-row"><span>Impervious surface</span><b>'+(props.impervious_pct||0).toFixed(1)+'%</b></div>';
@@ -409,10 +366,7 @@ function buildPopupHTML(props) {
   return h;
 }
 
-// Uses event delegation on the document to handle action button clicks inside popups and the detail panel.
-// This avoids attaching onclick handlers to dynamically-generated HTML.
 document.addEventListener('click', function(e) {
-  // Popup actions button
   if (e.target && (e.target.classList.contains('pop-act-btn') || e.target.closest('.pop-act-btn'))) {
     var btn = e.target.classList.contains('pop-act-btn') ? e.target : e.target.closest('.pop-act-btn');
     var panel = btn.nextElementSibling;
@@ -420,14 +374,6 @@ document.addEventListener('click', function(e) {
       panel.classList.toggle('open');
       var arrow = btn.querySelector('span');
       if (arrow) arrow.style.transform = panel.classList.contains('open') ? 'rotate(180deg)' : '';
-    }
-  }
-  // Sidebar actions button
-  if (e.target && e.target.id === 'dp-act-btn') {
-    var p = document.getElementById('dp-act-panel');
-    if (p) {
-      p.classList.toggle('open');
-      e.target.querySelector('span').style.transform = p.classList.contains('open') ? 'rotate(180deg)' : '';
     }
   }
 });
@@ -543,7 +489,6 @@ function renderList() {
   });
 }
 
-// Selects a neighborhood: highlights its polygon, scrolls the list to it, and renders the detail panel.
 function selectNbh(name, props) {
   if (selNbh && polyLayers[selNbh]) {
     var pf = NBH_GEOJSON.features.find(function(f){return f.properties.NAME===selNbh;});
@@ -555,72 +500,12 @@ function selectNbh(name, props) {
   if (polyLayers[name]) {
     polyLayers[name].setStyle({weight:3.5, fillOpacity:.92, color:'#1a1a2e'});
     try { map.fitBounds(polyLayers[name].getBounds(), {padding:[20,20], maxZoom:15}); } catch(e){}
+    polyLayers[name].openPopup();
   }
   var li = document.getElementById('nr-'+name.replace(/[^a-z0-9]/gi,'-'));
   if (li) { li.classList.add('sel'); li.scrollIntoView({behavior:'smooth',block:'nearest'}); }
-  renderDetail(props);
 }
 
-// Renders the full detail panel for a selected neighborhood in the sidebar.
-// Mirrors the popup content but in a larger, non-scrolling layout with bar charts.
-function renderDetail(props) {
-  var name = props.NAME, cat = props.risk_pca_category||'Moderate';
-  var cls  = CSO_CLASSIFICATION[name]||{};
-  var ejTop = props.ej_top, noOut = props.outlet_count===0, boost = csoBoost(name);
-  var col = nbhBorder(name, cat);
-
-  var interp = cat==='High'
-    ? '<b>What this means for you:</b> High risk of street and yard flooding during significant rain. If in or near the combined sewer zone, raw sewage may back up into homes. Water can accumulate faster than it drains.'
-    : cat==='Moderate'
-    ? '<b>What this means for you:</b> Moderate flood risk. Flooding is possible during heavy or prolonged rainfall, particularly near low-lying areas.'
-    : '<b>What this means for you:</b> Lower flood risk relative to Atlanta. Flooding can still occur during extreme events.';
-
-  var h = '<div class="dp-scroll">';
-  h += '<div class="dp-name">'+name;
-  h += '<span class="dbadge" style="background:'+col+'">'+cat+'</span>';
-  if (ejTop) h += '<span class="dbadge" style="background:#D81B60">EJ Priority</span>';
-  if (noOut) h += '<span class="dbadge" style="background:#E65100">No Outlets</span>';
-  h += '</div>';
-  h += '<div class="dp-explain '+cat.toLowerCase()+'">'+interp+'</div>';
-  if (ejTop) h += '<div class="warn warn-ej">Highest EJ concern: high flood risk + majority Black + income below city median. Top priority for infrastructure investment.</div>';
-  if (cls.in_cso) h += '<div class="warn warn-cso">Inside combined sewer zone. CSO overflow risk compounds the baseline score.</div>';
-  if (cls.low_adj_cso&&!cls.in_cso) h += '<div class="warn warn-adj">At lower elevation than adjacent CSO zone ('+( cls.adj_zone||'nearby')+'). CSO overflow sewage flows downhill here.</div>';
-  if (boost>0) h += '<div class="warn warn-rain">Live rain: '+precip.toFixed(2)+'" last hr — CSO overflow risk elevated.</div>';
-
-  function fcard(lbl, norm, disp, c) {
-    var pct = Math.round(Math.min(1, norm||0)*100);
-    return '<div class="fc"><div class="fc-lbl">'+lbl+'</div><div class="fc-bar"><div class="fc-fill" style="width:'+pct+'%;background:'+c+'"></div></div><div class="fc-val">'+disp+'</div></div>';
-  }
-  h += '<div class="fgrid">';
-  h += fcard('Impervious', props.impervious_norm||0, (props.impervious_pct||0).toFixed(1)+'%', '#E65100');
-  h += fcard('Drainage Risk', Math.min(1,props.drainage_risk_pca||0), (props.drainage_risk_pca||0).toFixed(3), '#D81B60');
-  h += fcard('Elevation Risk', props.elevation_risk||0, (props.mean_elev||0).toFixed(0)+'ft', '#F9A825');
-  h += fcard('No Outlets', noOut?1:0, props.outlet_count+' outlets', noOut?'#E65100':'#004D40');
-  h += '</div>';
-
-  if (props.pct_black !== undefined) {
-    h += '<div style="font-size:9.5px;font-weight:700;color:#202124;margin-bottom:5px">Demographics (ACS 2020)</div>';
-    h += '<div class="demo-grid">';
-    h += '<div class="dcard"><div class="dcard-v">'+props.pct_black+'%</div><div class="dcard-l">Black</div></div>';
-    h += '<div class="dcard"><div class="dcard-v">'+props.pct_white+'%</div><div class="dcard-l">White</div></div>';
-    h += '<div class="dcard"><div class="dcard-v">$'+Math.round((props.med_income||0)/1000)+'k</div><div class="dcard-l">Med. Income</div></div>';
-    h += '<div class="dcard"><div class="dcard-v">'+props.pct_poverty+'%</div><div class="dcard-l">Poverty</div></div>';
-    h += '<div class="dcard"><div class="dcard-v">'+props.pop.toLocaleString()+'</div><div class="dcard-l">Population</div></div>';
-    h += '<div class="dcard"><div class="dcard-v">'+(props.NPU||'—')+'</div><div class="dcard-l">NPU</div></div>';
-    h += '</div>';
-  }
-
-  var acts = getActions(props);
-  h += '<button class="act-btn" id="dp-act-btn" type="button">Actions to Take <span class="act-btn-arrow">&#x25BE;</span></button>';
-  h += '<div class="act-panel" id="dp-act-panel">';
-  acts.forEach(function(a, i) {
-    h += '<div class="act-item"><div class="act-num">'+(i+1)+'</div><div><b>'+a.t+'</b> '+a.b+'</div></div>';
-  });
-  h += '</div>';
-  h += '</div>';
-
-  document.getElementById('detail-panel').innerHTML = h;
-}
 
 
 // ============ TAB SWITCHING ============
@@ -635,106 +520,17 @@ function ST(name) {
 
 // ============ NEWS FETCHING ============
 
-// localStorage keys used to cache the AI-fetched news results for the day.
-// Changing these keys (e.g. fx_v10 -> fx_v11) will bust the cache and force a fresh fetch.
-var NK='fx_v10_news', ND='fx_v10_date';
 
-// fetchNews: The main function that retrieves live Atlanta flood/sewer news via the Claude API.
-//
-// How it works, step by step:
-//
-//   1. CACHE CHECK — If "force" is false (called on page load), we first check localStorage.
-//      If we already fetched today's news and it's stored, we use that cached result and skip
-//      the API call entirely. This avoids unnecessary API costs on page reload.
-//
-//   2. SHOW LOADING STATE — Sets the news panel to a spinner, disables the Refresh button,
-//      and updates the status dot in the header to "Fetching..." in amber.
-//
-//   3. API CALL — POSTs to the Anthropic Claude API (/v1/messages endpoint).
-//      The model is prompted to return a JSON array of recent Atlanta flood news articles.
-//      Each article should have: y (year), title, src, tag, tc (tag color), sum (summary),
-//      full (full text), and url. max_tokens is kept low (1000) to stay fast.
-//      NOTE: This call requires a valid Anthropic API key configured server-side or via a proxy.
-//
-//   4. PARSE RESPONSE — Extracts the text block from the API response, then uses a regex
-//      to find the JSON array inside the returned text. This is needed because the model
-//      may include brief explanation text before/after the JSON.
-//
-//   5. CACHE RESULT — Saves the parsed JSON array and today's date to localStorage
-//      so subsequent page loads within the same day skip the API call.
-//
-//   6. RENDER — Calls renderNews() with the AI results. This function merges them with
-//      STATIC_NEWS (archived stories) and renders all cards sorted newest-first.
-//
-//   7. ERROR FALLBACK — If the API call fails for any reason (network error, bad response,
-//      JSON parse failure), the catch block calls renderNews([]) with an empty AI array.
-//      The page still shows the STATIC_NEWS archived stories. The status dot turns amber
-//      and the label changes to "Archived reports" so users know they're seeing old data.
-//
-async function fetchNews(force) {
-  // Step 1: Cache check — return early if we already fetched today
-  var today = new Date().toISOString().slice(0,10);
-  if (!force) {
-    try {
-      var cd=localStorage.getItem(ND), cn=localStorage.getItem(NK);
-      if (cd===today&&cn) { renderNews(JSON.parse(cn)); setSt('Updated today','#4CAF50'); return; }
-    } catch(e){}
-  }
-
-  // Step 2: Show loading state in the news panel and header
-  document.getElementById('news-box').innerHTML='<div style="padding:20px;text-align:center;font-size:11px;color:var(--g400)"><span class="spin"></span>Searching&#8230;</div>';
-  document.getElementById('rfbtn').disabled=true;
-  document.getElementById('news-label').textContent='Fetching&#8230;';
-  setSt('Fetching&#8230;','#FFC107');
-
-  try {
-    // Step 3: POST to the Claude API — request a JSON array of recent Atlanta flood/sewer news
-    var t=new Date().toISOString().slice(0,10);
-    var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,tools:[{name:'web_search',description:'Search the web',input_schema:{type:'object',properties:{query:{type:'string'}},required:['query']}}],messages:[{role:'user',content:'Search for recent Atlanta Georgia flood sewer news from '+t+'. Return ONLY a JSON array (no other text) of up to 5 articles, each with fields: y (year as number), title, src, tag (e.g. Flood/Policy/Sinkhole), tc (hex color for tag), sum (2-sentence summary), full (3-4 sentence detail), url. Focus on flooding, sewer overflows, CSOs, sinkholes, infrastructure failures.'}]})});
-    var data=await r.json();
-
-    // Step 4: Extract the text content from the response, then find the JSON array inside it
-    var txt=(data.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('');
-    var m=txt.match(/\[\s*\{[\s\S]*?\}\s*\]/); // regex: find [...] containing at least one {...}
-    if(!m)throw new Error('no JSON');
-    var ai=JSON.parse(m[0]);
-
-    // Step 5: Cache the result in localStorage so today's page reloads skip the API
-    localStorage.setItem(NK,JSON.stringify(ai)); localStorage.setItem(ND,t);
-
-    // Step 6: Render the merged news feed and update the header status to green
-    renderNews(ai); setSt('Updated today','#4CAF50');
-
-  } catch(e) {
-    // Step 7: Fallback — show only archived stories if the API call or parse fails
-    console.error(e); renderNews([]); setSt('Archived','#FFC107');
-    document.getElementById('news-label').textContent='Archived reports';
-  } finally {
-    // Always re-enable the Refresh button when done, whether successful or not
-    document.getElementById('rfbtn').disabled=false;
-  }
-}
-
-// Updates the status dot color and text in the page header.
-function setSt(t,c){document.getElementById('stext').textContent=t;document.getElementById('sdot').style.background=c;}
-
-// Renders the news feed: merges AI-fetched articles with STATIC_NEWS, sorts newest-first,
-// and builds card HTML for each story.
-function renderNews(ai) {
+function renderNews() {
   var box=document.getElementById('news-box'); box.innerHTML='';
-  // Merge AI articles (flagged isAI:true) with static archived articles (isAI:false)
-  var all=ai.map(function(a){return Object.assign({},a,{isAI:true});})
-    .concat(STATIC_NEWS.map(function(a){return Object.assign({},a,{isAI:false});}));
-  // Sort all articles newest first by year
-  all.sort(function(a,b){return (b.y||0)-(a.y||0);});
-  document.getElementById('news-label').textContent=(ai.length>0?ai.length+' live + ':'')+STATIC_NEWS.length+' archived';
+  var all=STATIC_NEWS.slice().sort(function(a,b){return (b.y||0)-(a.y||0);});
+  document.getElementById('news-label').textContent=STATIC_NEWS.length+' stories';
   all.forEach(function(n,i){
     var d=document.createElement('div'); d.className='n-card';
     var tc=n.tc||'#607D8B';
     d.innerHTML='<div class="n-hdr" onclick="xNews('+i+')">'
       +'<div class="n-meta"><span class="n-yr">'+(n.y||'?')+'</span>'
-      +'<span class="n-tg" style="background:'+tc+'22;color:'+tc+'">'+(n.tag||'')+'</span>'
-      +(n.isAI?'<span class="ai-tg">Live</span>':'')+'</div>'
+      +'<span class="n-tg" style="background:'+tc+'22;color:'+tc+'">'+(n.tag||'')+'</span></div>'
       +'<div class="n-src">'+(n.src||'')+'</div>'
       +'<div class="n-ttl">'+(n.title||'')+'</div>'
       +'<div class="n-sum">'+(n.sum||n.summary||'')+'</div>'
@@ -786,25 +582,6 @@ function toggleSB() {
 
 // ============ NEWS PANEL LOADER ============
 
-// loadNewsPanel: fetches news-panel.html and injects it into #news-panel-mount,
-// then kicks off the live news fetch once the markup is in the DOM.
-//
-// Why a separate file?
-//   news-panel.html contains both the tab markup AND its own documentation
-//   explaining exactly how the news scraping works. Keeping it separate makes
-//   the news system self-contained and easy to find, read, and modify without
-//   touching the main index.html.
-//
-// How it works:
-//   1. fetch('news-panel.html') — loads the HTML fragment (no full page, just the panel)
-//   2. .text() — reads it as a plain string
-//   3. innerHTML on #news-panel-mount — drops it into the DOM where index.html
-//      left the placeholder <div id="news-panel-mount"></div>
-//   4. fetchNews(false) — now that #news-box and #rfbtn exist in the DOM,
-//      the news fetch can safely run
-//
-// If the fetch fails (e.g. running index.html as a local file:// URL without a
-// server), the mount div stays empty and fetchNews() is skipped gracefully.
 async function loadNewsPanel() {
   try {
     var html = await fetch('news-panel.html').then(function(r) {
@@ -812,10 +589,9 @@ async function loadNewsPanel() {
       return r.text();
     });
     document.getElementById('news-panel-mount').innerHTML = html;
-    fetchNews(false);
+    renderNews();
   } catch (e) {
-    console.warn('news-panel.html could not be loaded:', e.message,
-      '— serve files via a local HTTP server (e.g. python3 -m http.server) to enable the News tab.');
+    console.warn('news-panel.html could not be loaded:', e.message);
   }
 }
 
@@ -913,12 +689,5 @@ function downloadLayerGeoJSON(layerId) {
 
 // ============ INITIALIZATION ============
 
-// Run on page load:
-//   • renderList()      — populate the neighborhood list in the Flood Index tab
-//   • fetchPrecip()     — get live NWS rainfall and update the header widget
-//   • loadNewsPanel()   — fetch news-panel.html, inject it, then fetch news
-//   • setInterval(...)  — re-fetch precipitation every 10 minutes
 renderList();
-fetchPrecip();
 loadNewsPanel();
-setInterval(fetchPrecip, 600000);
