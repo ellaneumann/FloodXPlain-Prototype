@@ -14,7 +14,7 @@
 <header>
   <div>
     <div class="hdr-title">Atlanta FloodXPlain</div>
-    <div class="hdr-sub">Georgia Tech Computing and Sustainability | Aarushi Wagh, Ella Neumann, Tiger Peng, John Schmidt</div>
+    <div class="hdr-sub">Georgia Tech Computing and Sustainability</div>
   </div>
 </header>
 
@@ -51,7 +51,7 @@
         <div class="lrow" onclick="TL('cso')">
           <div class="lchk on" id="chk-cso"></div>
           <div class="lico"><div class="li-border" style="color:var(--cso);border-style:dashed"></div></div>
-          <div class="linfo"><div class="lname">Combined sewer (CSO) zones</div><div class="lsub">Stormwater + sewage share one pipe</div></div>
+          <div class="linfo"><div class="lname">Combined Sewer Areas</div><div class="lsub">Stormwater + sewage share one pipe</div></div>
           <button class="ldown" onclick="event.stopPropagation();downloadLayerGeoJSON('cso')" title="Download GeoJSON">&#8595; GeoJSON</button>
         </div>
         <div class="lrow" onclick="TL('sso')">
@@ -107,8 +107,8 @@
         <div class="layer-note">
           <b>Color encoding (colorblind-accessible, Okabe-Ito):</b><br>
           <span style="color:var(--ej)">&#9632;</span> EJ Priority (rose) &nbsp;
-          <span style="color:var(--cso)">&#9632;</span> CSO zone (dark teal) &nbsp;
-          <span style="color:var(--adj)">&#9632;</span> Downhill from CSO (teal-blue)<br>
+          <span style="color:var(--cso)">&#9632;</span> Combined Sewer Area (dark teal) &nbsp;
+          <span style="color:var(--adj)">&#9632;</span> Downhill from Combined Sewer (teal-blue)<br>
           <span style="color:var(--hi)">&#9632;</span> High risk (deep orange) &nbsp;
           <span style="color:#B8860B">&#9632;</span> Moderate (amber) &nbsp;
           <span style="color:var(--lo)">&#9632;</span> Low (navy)<br>
@@ -142,7 +142,7 @@
               <tr><td>D<sub>o</sub></td><td>Outlet density</td><td>0.015</td></tr>
               <tr><td>E</td><td>Elevation risk</td><td>0.279</td></tr>
             </table>
-            <div class="eq-card" style="margin-top:6px"><h4>CSO Elevation Rule</h4><p>Neighborhoods adjacent to the CSO area AND at lower elevation than the CSO zone median (305.9 ft) receive a darker color — CSO overflow sewage flows downhill into them (2002 Vine City, 2012 Peoplestown).</p></div>
+            <div class="eq-card" style="margin-top:6px"><h4>Combined Sewer Elevation Rule</h4><p>Neighborhoods adjacent to the combined sewer area AND at lower elevation than the combined sewer zone median (305.9 ft) receive a darker color — combined sewer overflow sewage flows downhill into them (2002 Vine City, 2012 Peoplestown).</p></div>
             <div class="eq-card"><h4>EJ Priority</h4><p>EJ score = 0.4&times;flood_risk + 0.35&times;(pct_Black/100) + 0.25&times;(1&minus;income/100k). Top EJ = High risk + majority Black + below city median income ($68k).</p></div>
             <div style="font-size:10.5px;font-weight:700;color:var(--g800);margin:10px 0 6px">Academic Sources</div>
             <div class="paper"><h5>Li et al. (2021) — Urbanization impacts on flood risks — Natural Hazards</h5><p>Validates impervious surface as dominant urban flood risk predictor. <a href="https://link.springer.com/article/10.1007/s11069-020-04480-0" target="_blank">doi:10.1007/s11069-020-04480-0</a></p></div>
@@ -163,7 +163,7 @@
           <div class="cfilt">
             <button class="cf on-all" id="filt-all"  onclick="setFilter('all')">All</button>
             <button class="cf"        id="filt-ej"   onclick="setFilter('ej')">EJ Priority</button>
-            <button class="cf"        id="filt-cso"  onclick="setFilter('cso')">In CSO Zone</button>
+            <button class="cf"        id="filt-cso"  onclick="setFilter('cso')">Combined Sewer</button>
             <button class="cf"        id="filt-hi"   onclick="setFilter('High')">High Risk</button>
             <button class="cf"        id="filt-mod"  onclick="setFilter('Moderate')">Moderate</button>
             <button class="cf"        id="filt-lo"   onclick="setFilter('Low')">Low</button>
@@ -182,7 +182,7 @@
       <div class="panel-toolbar"><button class="tab-pdf-btn" onclick="savePDF()">&#8595; Save Map as PDF</button></div>
       <div class="scroll">
         <div class="sw-card" style="border-color:#b2dfdb;background:#e0f2f1">
-          <h3>Combined Sewer System (CSO)</h3>
+          <h3>Combined Sewer System</h3>
           <p><span class="sw-badge" style="background:#b2dfdb;color:var(--cso)">COMBINED</span> One pipe carries both stormwater and raw sewage. During heavy rain it overflows — untreated sewage discharges directly into creeks. Shown as dashed dark teal on the map. Neighborhoods <em>inside</em> the CSO area are colored dark teal; those at <em>lower elevation</em> adjacent to it are teal-blue.</p>
           <a href="https://cleanwateratlanta.h2o4atl.com/index.php/history-3/" target="_blank">Clean Water Atlanta: consent decree history</a>
         </div>
@@ -196,7 +196,7 @@
           <p>The Intrenchment Creek / Custer Avenue drainage area from <code>RedOutline_Project.shp</code>. Shown as a dashed rose outline on the map. This watershed is subject to the 2024 Custer Ave Multi-Benefit Capacity Relief Project under federal consent decree.</p>
           <a href="https://undergroundinfrastructure.com/news/2024/february/atlanta-progresses-underground-sewer-infrastructure-project-to-mitigate-flooding" target="_blank">Read about the Custer Ave project</a>
         </div>
-        <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#374151;margin:10px 0 6px">CSO Facilities</div>
+        <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#374151;margin:10px 0 6px">Combined Sewer Facilities</div>
         <div id="cso-fac-list"></div>
         <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#374151;margin:12px 0 6px">Sanitary Sewer Problem Sites</div>
         <div id="sso-fac-list"></div>
@@ -271,8 +271,8 @@
       <div class="leg-sec">
         <div class="leg-sec-ttl">Flood Risk</div>
         <div class="leg-row"><div class="leg-sq" style="background:var(--ej)"></div><span class="leg-lbl">EJ Priority</span></div>
-        <div class="leg-row"><div class="leg-sq" style="background:var(--cso)"></div><span class="leg-lbl">In CSO zone</span></div>
-        <div class="leg-row"><div class="leg-sq" style="background:var(--adj)"></div><span class="leg-lbl">Downhill from CSO</span></div>
+        <div class="leg-row"><div class="leg-sq" style="background:var(--cso)"></div><span class="leg-lbl">In Combined Sewer Area</span></div>
+        <div class="leg-row"><div class="leg-sq" style="background:var(--adj)"></div><span class="leg-lbl">Downhill from Combined Sewer</span></div>
         <div class="leg-row"><div class="leg-sq" style="background:var(--hi);opacity:.7"></div><span class="leg-lbl">High (&ge;0.66)</span></div>
         <div class="leg-row"><div class="leg-sq" style="background:#F9A825;opacity:.7"></div><span class="leg-lbl">Moderate</span></div>
       </div>

@@ -55,7 +55,7 @@ function getActions(props) {
 
 var LAYER_LABELS = {
   nbh:'Flood risk polygons', demo:'Demographics overlay',
-  cso:'Combined sewer (CSO) zones', sso:'Sanitary sewer (SSO) zones',
+  cso:'Combined Sewer Areas', sso:'Sanitary sewer (SSO) zones',
   intrenchment:'Custer Watershed Boundary',
   pipes:'Storm pipes', outlets:'Storm outlets', inlets:'Storm inlets',
   rivers:'Rivers and streams', rlabels:'Waterway labels'
@@ -474,7 +474,7 @@ function renderList() {
     if (selNbh === p.NAME) div.classList.add('sel');
     var tags = '';
     if (p.ej_top)       tags += '<span class="nt nt-ej">EJ Priority</span>';
-    if (cls.in_cso)     tags += '<span class="nt nt-cso">CSO zone</span>';
+    if (cls.in_cso)     tags += '<span class="nt nt-cso">Combined Sewer</span>';
     if (cls.low_adj_cso)tags += '<span class="nt nt-adj">Downhill CSO</span>';
     if (p.outlet_count===0) tags += '<span class="nt nt-no">No outlets</span>';
     div.innerHTML =
