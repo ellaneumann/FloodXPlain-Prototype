@@ -153,12 +153,69 @@
           </div>
         </div>
       </div>
+      <!-- Weight customizer -->
+      <div style="flex-shrink:0;border-bottom:1px solid var(--g200)">
+        <div class="method-hdr" onclick="toggleWP()">
+          <span class="method-hdr-txt">&#9881; Customize Score Weights</span>
+          <span class="method-chevron" id="wpchev" style="transform:rotate(-90deg)">&#x25BE;</span>
+        </div>
+        <div id="wp-body" style="max-height:0;overflow:hidden;transition:max-height .3s ease;background:#fff">
+          <div style="padding:10px 12px">
+            <div class="ws-row">
+              <div class="ws-lbl">Impervious Surface <span class="ws-pct" id="wp-I-pct">36%</span></div>
+              <input class="ws-slider" id="wp-I" type="range" min="0" max="100" value="36" step="1" oninput="updateW('I',this.value)">
+            </div>
+            <div class="ws-row">
+              <div class="ws-lbl">Drainage Risk <span class="ws-pct" id="wp-D-pct">36%</span></div>
+              <input class="ws-slider" id="wp-D" type="range" min="0" max="100" value="36" step="1" oninput="updateW('D',this.value)">
+            </div>
+            <div class="ws-row">
+              <div class="ws-lbl">Elevation Risk <span class="ws-pct" id="wp-E-pct">28%</span></div>
+              <input class="ws-slider" id="wp-E" type="range" min="0" max="100" value="28" step="1" oninput="updateW('E',this.value)">
+            </div>
+            <div class="ws-opt-hdr">
+              <label><input type="checkbox" id="wp-sewer-en" onchange="toggleWOpt('sewer')"> Include Sewer Type</label>
+              <span style="font-size:9px;color:var(--g600)">CSO=high &middot; Adj=mid &middot; Sep=none</span>
+            </div>
+            <div id="wp-sewer-row" class="ws-row" style="display:none">
+              <div class="ws-lbl">Sewer Type <span class="ws-pct" id="wp-sewer-pct">0%</span></div>
+              <input class="ws-slider" id="wp-sewer" type="range" min="0" max="100" value="0" step="1" oninput="updateW('sewer',this.value)" disabled>
+            </div>
+            <div class="ws-opt-hdr">
+              <label><input type="checkbox" id="wp-ej-en" onchange="toggleWOpt('ej')"> Include EJ Score</label>
+              <span style="font-size:9px;color:var(--g600)">Race + income + flood risk</span>
+            </div>
+            <div id="wp-ej-row" class="ws-row" style="display:none">
+              <div class="ws-lbl">EJ Score <span class="ws-pct" id="wp-ej-pct">0%</span></div>
+              <input class="ws-slider" id="wp-ej" type="range" min="0" max="100" value="0" step="1" oninput="updateW('ej',this.value)" disabled>
+            </div>
+            <div style="margin-top:10px;margin-bottom:2px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--g600)">Total</span>
+                <span id="wp-total-txt" style="font-size:11px;font-weight:700;font-family:var(--mono);color:var(--g800)">100%</span>
+              </div>
+              <div style="height:5px;background:var(--g100);border-radius:3px;overflow:hidden">
+                <div id="wp-total-bar" style="height:100%;width:100%;background:#2e7d32;border-radius:3px;transition:width .15s,background .15s"></div>
+              </div>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:10px">
+              <button class="wp-btn" onclick="resetW()">&#8635; Reset</button>
+              <button class="wp-btn wp-btn-apply" onclick="applyW()">Apply Weights</button>
+            </div>
+            <div id="wp-status" style="font-size:9px;color:var(--g600);margin-top:5px;min-height:13px;text-align:center"></div>
+          </div>
+        </div>
+      </div>
       <!-- Neighborhood list section -->
       <div class="fi-list-wrap">
         <div class="fi-scroll">
           <div class="fi-intro">
             <h3>Neighborhood Flood Risk Index</h3>
             <p>Click any neighborhood on the map or in the list below for flood risk details, contributing factors, demographics, and specific actions to take.</p>
+          </div>
+          <div id="wp-active-banner" class="wp-active-banner" style="display:none">
+            <span>&#9881; Custom weights active &mdash; list re-sorted</span>
+            <button onclick="resetW()">Reset to default</button>
           </div>
           <div class="cfilt">
             <button class="cf on-all" id="filt-all"  onclick="setFilter('all')">All</button>

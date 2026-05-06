@@ -138,6 +138,123 @@ function toggleMethod() {
 }
 
 
+// ============ WEIGHT CUSTOMIZER ============
+
+var wpOpen = false;
+// Weights as integers 0-100 (percent). I+D+E+sewer+ej must not exceed 100.
+var CW = {I:36, D:36, E:28, sewer:0, ej:0};
+var CW_EN = {sewer:false, ej:false};
+var usingCustom = false;
+
+function toggleWP() {
+  wpOpen = !wpOpen;
+  var body = document.getElementById('wp-body');
+  var chev = document.getElementById('wpchev');
+  body.style.maxHeight = wpOpen ? '440px' : '0';
+  chev.style.transform = wpOpen ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+function totalW() {
+  return CW.I + CW.D + CW.E + (CW_EN.sewer ? CW.sewer : 0) + (CW_EN.ej ? CW.ej : 0);
+}
+
+function updateW(key, val) {
+  val = Math.round(parseFloat(val));
+  var otherTotal = totalW() - CW[key];
+  val = Math.min(val, Math.max(0, 100 - otherTotal));
+  CW[key] = val;
+  var sl = document.getElementById('wp-' + key);
+  if (sl && parseInt(sl.value) !== val) sl.value = val;
+  var pct = document.getElementById('wp-' + key + '-pct');
+  if (pct) pct.textContent = val + '%';
+  updateWBar();
+}
+
+function toggleWOpt(key) {
+  CW_EN[key] = document.getElementById('wp-' + key + '-en').checked;
+  var row = document.getElementById('wp-' + key + '-row');
+  var sl = document.getElementById('wp-' + key);
+  if (CW_EN[key]) {
+    row.style.display = 'flex';
+    sl.disabled = false;
+    if (CW[key] === 0) {
+      var avail = Math.max(0, 100 - totalW());
+      var init = Math.min(10, avail);
+      CW[key] = init;
+      sl.value = init;
+      document.getElementById('wp-' + key + '-pct').textContent = init + '%';
+      if (avail === 0) {
+        var s = document.getElementById('wp-status');
+        if (s) { s.textContent = 'Reduce other weights to allocate to this factor.'; s.style.color = 'var(--g600)'; }
+      }
+    }
+  } else {
+    row.style.display = 'none';
+    sl.disabled = true;
+  }
+  updateWBar();
+}
+
+function updateWBar() {
+  var tot = totalW();
+  var bar = document.getElementById('wp-total-bar');
+  var txt = document.getElementById('wp-total-txt');
+  if (!bar || !txt) return;
+  bar.style.width = Math.min(100, tot) + '%';
+  bar.style.background = tot > 100 ? '#E65100' : (tot >= 98 ? '#2e7d32' : 'var(--riv)');
+  txt.style.color = tot > 100 ? '#E65100' : 'var(--g800)';
+  txt.textContent = tot + '%';
+  var s = document.getElementById('wp-status');
+  if (!s) return;
+  if (tot > 100) { s.textContent = 'Total over 100% — reduce weights before applying.'; s.style.color = 'var(--hi)'; }
+  else if (usingCustom) { s.textContent = 'Custom weights active.'; s.style.color = '#2e7d32'; }
+  else { s.textContent = ''; }
+}
+
+function applyW() {
+  if (totalW() > 100) {
+    var s = document.getElementById('wp-status');
+    s.textContent = 'Cannot apply: total exceeds 100%.'; s.style.color = 'var(--hi)'; return;
+  }
+  usingCustom = true;
+  updateWBar();
+  renderList();
+}
+
+function resetW() {
+  CW.I = 36; CW.D = 36; CW.E = 28; CW.sewer = 0; CW.ej = 0;
+  CW_EN.sewer = false; CW_EN.ej = false;
+  usingCustom = false;
+  ['I','D','E'].forEach(function(k) {
+    var sl = document.getElementById('wp-'+k), pct = document.getElementById('wp-'+k+'-pct');
+    if (sl) sl.value = CW[k]; if (pct) pct.textContent = CW[k]+'%';
+  });
+  ['sewer','ej'].forEach(function(k) {
+    var en = document.getElementById('wp-'+k+'-en'), row = document.getElementById('wp-'+k+'-row');
+    var sl = document.getElementById('wp-'+k), pct = document.getElementById('wp-'+k+'-pct');
+    if (en) en.checked = false; if (row) row.style.display = 'none';
+    if (sl) { sl.disabled = true; sl.value = 0; } if (pct) pct.textContent = '0%';
+  });
+  updateWBar();
+  var s = document.getElementById('wp-status');
+  if (s) { s.textContent = 'Reset to original flood risk calculation.'; s.style.color = 'var(--g600)'; }
+  renderList();
+}
+
+function computeCustomScore(props) {
+  var cls = CSO_CLASSIFICATION[props.NAME] || {};
+  var imperv = Math.min(1, (props.impervious_pct || 0) / 100);
+  var drain = props.drainage_risk_pca || 0;
+  var elev = props.elevation_risk || 0;
+  var sewerVal = cls.in_cso ? 1.0 : cls.low_adj_cso ? 0.7 : 0;
+  var ejVal = Math.min(1, props.ej_score || 0);
+  var wS = CW_EN.sewer ? CW.sewer : 0, wEJ = CW_EN.ej ? CW.ej : 0;
+  var tot = CW.I + CW.D + CW.E + wS + wEJ;
+  if (tot <= 0) return 0;
+  return (CW.I * imperv + CW.D * drain + CW.E * elev + wS * sewerVal + wEJ * ejVal) / tot;
+}
+
+
 
 
 // ============ COLOR HELPERS ============
@@ -448,16 +565,29 @@ function setFilter(f) {
 }
 
 // Renders the scrollable neighborhood list in the Flood Index tab.
-// Applies the current filter, sorts by EJ score or flood risk, and filters by search text.
+// Applies the current filter, sorts by EJ score, custom weights, or default flood risk.
 function renderList() {
   var el = document.getElementById('nbh-list');
   el.innerHTML = '';
   var q = document.getElementById('nbh-search').value.toLowerCase();
   var feats = NBH_GEOJSON.features.slice();
+
   if (curFilter === 'ej') feats.sort(function(a,b){return (b.properties.ej_score||0)-(a.properties.ej_score||0);});
+  else if (usingCustom) feats.sort(function(a,b){return (computeCustomScore(b.properties)||0)-(computeCustomScore(a.properties)||0);});
   else feats.sort(function(a,b){return (b.properties.flood_risk_pca||0)-(a.properties.flood_risk_pca||0);});
+
+  var banner = document.getElementById('wp-active-banner');
+  if (banner) banner.style.display = usingCustom ? 'flex' : 'none';
+
   feats.forEach(function(feat) {
-    var p = feat.properties, cat = p.risk_pca_category;
+    var p = feat.properties;
+    var cat, cs;
+    if (usingCustom) {
+      cs = computeCustomScore(p);
+      cat = cs >= 0.66 ? 'High' : cs >= 0.33 ? 'Moderate' : 'Low';
+    } else {
+      cat = p.risk_pca_category;
+    }
     if (!cat) return;
     var cls = CSO_CLASSIFICATION[p.NAME] || {};
     if (curFilter==='High'     && cat!=='High') return;
@@ -473,10 +603,11 @@ function renderList() {
     div.id = 'nr-'+p.NAME.replace(/[^a-z0-9]/gi,'-');
     if (selNbh === p.NAME) div.classList.add('sel');
     var tags = '';
-    if (p.ej_top)       tags += '<span class="nt nt-ej">EJ Priority</span>';
-    if (cls.in_cso)     tags += '<span class="nt nt-cso">Combined Sewer</span>';
-    if (cls.low_adj_cso)tags += '<span class="nt nt-adj">Downhill CSO</span>';
+    if (p.ej_top)        tags += '<span class="nt nt-ej">EJ Priority</span>';
+    if (cls.in_cso)      tags += '<span class="nt nt-cso">Combined Sewer</span>';
+    if (cls.low_adj_cso) tags += '<span class="nt nt-adj">Downhill CSO</span>';
     if (p.outlet_count===0) tags += '<span class="nt nt-no">No outlets</span>';
+    if (usingCustom) tags += '<span class="nt" style="background:#e8f4fd;color:var(--riv);border:1px solid #bfdbfe">&#9881; '+cs.toFixed(3)+'</span>';
     div.innerHTML =
       '<div class="nbh-sw" style="background:'+sw+';border-left:3px solid '+bd+'"></div>'+
       '<div class="nbh-body">'+
